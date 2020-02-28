@@ -3,7 +3,14 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import myTheme from './utils/theme';
 
+// React router
+import { Router, Route, Switch } from 'react-router-dom';
+import PrivateRoute from './utils/PrivateRoute';
+import history from './utils/history';
+
 import SignIn from './components/auth/SignIn';
+import SignUp from './components/auth/SignUp';
+import Dashboard from './components/notes/Dashboard';
 
 const App = () => {
   const [prefersDarkMode, setPrefersDarkMode] = useState('dark');
@@ -15,15 +22,23 @@ const App = () => {
   );
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <div>
-        <button type="button" onClick={onClick}>TEST</button>
-        <div className="App">
-          <SignIn />
-        </div>
-      </div>
-    </ThemeProvider>
+    <Router history={history}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        {/* <div>
+          <div>
+            <SignIn />
+          </div>
+        </div> */}
+        {/* <button type="button" onClick={onClick}>TEST</button> */}
+
+        <Switch>
+          <Route path="/" exact component={Dashboard} />
+          <PrivateRoute path="/login" component={SignIn} />
+          <PrivateRoute path="/signup" component={SignUp} />
+        </Switch>
+      </ThemeProvider>
+    </Router>
   );
 };
 

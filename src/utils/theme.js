@@ -1,15 +1,10 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
 const spreadThis = {
-  form: {
-    flexGrow: 1,
-    textAlign: 'center',
-    padding: '12px',
-    margin: 'auto auto',
-    maxWidth: '400px',
-    // height: '500px',
-    marginTop: '50px',
-  },
+  // form: {
+  //   flexGrow: 1,
+  //   // marginTop: '20px',
+  // },
 };
 
 export default (typeOfTheme) => {
