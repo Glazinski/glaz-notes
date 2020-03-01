@@ -44,13 +44,6 @@ const useStyles = makeStyles((theme) => ({
   bottomContainer: {
     marginTop: '20px',
   },
-  progress: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
-  },
 }));
 
 const SignIn = (props) => {
@@ -150,7 +143,7 @@ const SignIn = (props) => {
               >
                 Login
                 {loading && (
-                  <CircularProgress color="primary" size={24} className={classes.progress} />
+                  <CircularProgress color="primary" size={24} className={classes.buttonProgress} />
                 )}
               </Button>
             </Grid>
@@ -163,7 +156,6 @@ const SignIn = (props) => {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  firebaseAuth: state.firebase.auth,
 });
 
 SignIn.propTypes = {

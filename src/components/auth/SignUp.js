@@ -1,4 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import validate from '../../utils/validate';
+
+// Redux
+import { connect } from 'react-redux';
+import { signUp } from '../../store/actions/authActions';
 
 // React router
 import { Link } from 'react-router-dom';
@@ -11,6 +17,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import MuiLink from '@material-ui/core/Link';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 // MUI Icons
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -47,6 +54,24 @@ const SignUp = (props) => {
     lastName: '',
   });
 
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    props.signUp(formData);
+  };
+
+  const { auth: { loading, authErrors } } = props;
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    const err = validate(authErrors);
+    setErrors({ ...err });
+  }, [authErrors]);
+
   return (
     <Grid
       container
@@ -64,6 +89,9 @@ const SignUp = (props) => {
           </Grid>
           <Grid item xs={6}>
             <TextField
+              onChange={handleChange}
+              value={formData.firstName}
+              name="firstName"
               variant="outlined"
               label="First Name"
               size="small"
@@ -71,6 +99,9 @@ const SignUp = (props) => {
           </Grid>
           <Grid item xs={6}>
             <TextField
+              onChange={handleChange}
+              value={formData.lastName}
+              name="lastName"
               variant="outlined"
               label="Last Name"
               size="small"
@@ -78,6 +109,10 @@ const SignUp = (props) => {
           </Grid>
           <Grid item xs={12}>
             <TextField
+              error={!!errors.email}
+              helperText={errors.email}
+              onChange={handleChange}
+              value={formData.email}
               name="email"
               type="email"
               variant="outlined"
@@ -88,6 +123,10 @@ const SignUp = (props) => {
           </Grid>
           <Grid item xs={12}>
             <TextField
+              error={!!errors.password}
+              helperText={errors.password}
+              onChange={handleChange}
+              value={formData.password}
               name="password"
               type="password"
               variant="outlined"
@@ -117,10 +156,15 @@ const SignUp = (props) => {
             </Grid>
             <Grid item>
               <Button
+                onClick={handleSubmit}
                 variant="contained"
                 color="primary"
+                disabled={loading}
               >
                 Sign up
+                {loading && (
+                  <CircularProgress color="primary" size={24} className={classes.buttonProgress} />
+                )}
               </Button>
             </Grid>
           </Grid>
@@ -130,4 +174,13 @@ const SignUp = (props) => {
   );
 };
 
-export default SignUp;
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+SignUp.propTypes = {
+  auth: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  signUp: PropTypes.func.isRequired,
+};
+
+export default connect(mapStateToProps, { signUp })(SignUp);

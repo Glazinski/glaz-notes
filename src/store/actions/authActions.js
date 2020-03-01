@@ -30,7 +30,7 @@ export const signUp = (newUser) => (dispatch, getState, { getFirebase, getFirest
   const firebase = getFirebase();
   const firestore = getFirestore();
 
-  firebase.auth().createUserWithEmailAndPaswword(
+  firebase.auth().createUserWithEmailAndPassword(
     newUser.email,
     newUser.password,
   )

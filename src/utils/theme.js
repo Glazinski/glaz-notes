@@ -5,6 +5,13 @@ const spreadThis = {
     color: 'red',
     marginTop: 20,
   },
+  buttonProgress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 };
 
 export default (typeOfTheme) => {

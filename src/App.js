@@ -10,6 +10,7 @@ import history from './utils/history';
 
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
+import Home from './components/Home';
 import Dashboard from './components/notes/Dashboard';
 
 const App = () => {
@@ -33,7 +34,7 @@ const App = () => {
         {/* <button type="button" onClick={onClick}>TEST</button> */}
 
         <Switch>
-          <Route path="/" exact component={Dashboard} />
+          <Route path="/" exact component={Home} />
           <PrivateRoute path="/login" component={SignIn} />
           <PrivateRoute path="/signup" component={SignUp} />
         </Switch>
