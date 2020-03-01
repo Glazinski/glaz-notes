@@ -1,10 +1,10 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
 const spreadThis = {
-  // form: {
-  //   flexGrow: 1,
-  //   // marginTop: '20px',
-  // },
+  customError: {
+    color: 'red',
+    marginTop: 20,
+  },
 };
 
 export default (typeOfTheme) => {

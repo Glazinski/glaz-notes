@@ -13,7 +13,7 @@ import SignUp from './components/auth/SignUp';
 import Dashboard from './components/notes/Dashboard';
 
 const App = () => {
-  const [prefersDarkMode, setPrefersDarkMode] = useState('dark');
+  const [prefersDarkMode, setPrefersDarkMode] = useState('light');
   const onClick = () => setPrefersDarkMode(prefersDarkMode === 'dark' ? 'light' : 'dark');
 
   const theme = React.useMemo(

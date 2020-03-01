@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // React router
 import { Link } from 'react-router-dom';
@@ -20,87 +20,109 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     minHeight: '80vh',
-    // textAlign: 'center',
+    textAlign: 'center',
   },
   avatarIcon: {
     fontSize: 100,
   },
   paper: {
     padding: theme.spacing(4),
-    width: '750px',
+    width: '450px',
     [theme.breakpoints.down('xs')]: {
       backgroundColor: theme.palette.background.default,
       border: 'none',
     },
-  },
-  textField: {
-    marginTop: '20px',
   },
   bottomContainer: {
     marginTop: '20px',
   },
 }));
 
-const SignUp = () => {
+const SignUp = (props) => {
   const classes = useStyles();
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+  });
 
   return (
-    <Grid className={classes.root} container justify="center" alignItems="center">
-      <Paper className={classes.paper}>
-        <Grid container justify="center">
-          <Grid item xs={8}>
-            <Grid container justify="center">
-              <Grid item xs={12}>
-                <Typography variant="h5">Sign Up</Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  className={classes.textField}
-                  type="email"
-                  variant="outlined"
-                  label="Email"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  className={classes.textField}
-                  type="password"
-                  variant="outlined"
-                  label="Password"
-                  color="primary"
-                  fullWidth
-                />
-              </Grid>
-              <Grid
-                container
-                alignItems="center"
-                justify="space-between"
-                className={classes.bottomContainer}
-              >
-                <Grid item>
-                  <MuiLink
-                    to="/login"
-                    component={Link}
-                    color="primary"
-                    variant="body2"
-                  >
-                    Sign in instead
-                  </MuiLink>
-                </Grid>
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                  >
-                    Signup
-                  </Button>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={4} style={{ textAlign: 'center' }}>
+    <Grid
+      container
+      alignItems="center"
+      justify="center"
+      className={classes.root}
+    >
+      <Paper className={classes.paper} variant="outlined">
+        <Grid container justify="center" spacing={2}>
+          <Grid item xs={12}>
             <AccountCircleIcon className={classes.avatarIcon} />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h5">Sign Up</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              variant="outlined"
+              label="First Name"
+              size="small"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              variant="outlined"
+              label="Last Name"
+              size="small"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              name="email"
+              type="email"
+              variant="outlined"
+              label="Email"
+              size="small"
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              name="password"
+              type="password"
+              variant="outlined"
+              label="Password"
+              color="primary"
+              size="small"
+              fullWidth
+            />
+          </Grid>
+          <Grid
+            container
+            className={classes.bottomContainer}
+            justify="space-between"
+            alignItems="center"
+          >
+            <Grid item>
+              <Typography color="primary">
+                <MuiLink
+                  to="/login"
+                  component={Link}
+                  color="primary"
+                  variant="body2"
+                >
+                  Sign in instead
+                </MuiLink>
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="primary"
+              >
+                Sign up
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </Paper>

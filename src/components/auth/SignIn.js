@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+/* eslint-disable no-nested-ternary */
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import validate from '../../utils/validate';
 
 // Redux
 import { connect } from 'react-redux';
@@ -16,6 +18,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import MuiLink from '@material-ui/core/Link';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 // MUI Icons
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -38,11 +41,15 @@ const useStyles = makeStyles((theme) => ({
       border: 'none',
     },
   },
-  textField: {
-    marginTop: '20px',
-  },
   bottomContainer: {
     marginTop: '20px',
+  },
+  progress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
   },
 }));
 
@@ -63,6 +70,13 @@ const SignIn = (props) => {
   };
 
   const classes = useStyles();
+  const { auth: { loading, authErrors } } = props;
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    const err = validate(authErrors);
+    setErrors({ ...err });
+  }, [authErrors]);
 
   return (
     <Grid
@@ -71,8 +85,8 @@ const SignIn = (props) => {
       justify="center"
       className={classes.root}
     >
-      <Paper className={classes.paper}>
-        <Grid container justify="center">
+      <Paper className={classes.paper} variant="outlined">
+        <Grid container justify="center" spacing={2}>
           <Grid item xs={12}>
             <AccountCircleIcon className={classes.avatarIcon} />
           </Grid>
@@ -81,9 +95,11 @@ const SignIn = (props) => {
           </Grid>
           <Grid item xs={12}>
             <TextField
+              error={!!errors.email}
+              helperText={errors.email}
               onChange={handleChange}
-              className={classes.textField}
               name="email"
+              value={formData.email}
               type="email"
               variant="outlined"
               label="Email"
@@ -92,9 +108,11 @@ const SignIn = (props) => {
           </Grid>
           <Grid item xs={12}>
             <TextField
+              error={!!errors.password}
+              helperText={errors.password}
               onChange={handleChange}
-              className={classes.textField}
               name="password"
+              value={formData.password}
               type="password"
               variant="outlined"
               label="Password"
@@ -102,6 +120,9 @@ const SignIn = (props) => {
               fullWidth
             />
           </Grid>
+          {errors.general && (
+            <Typography className={classes.customError} variant="body2">{errors.general}</Typography>
+          )}
           <Grid
             container
             className={classes.bottomContainer}
@@ -125,8 +146,12 @@ const SignIn = (props) => {
                 onClick={handleSubmit}
                 variant="contained"
                 color="primary"
+                disabled={loading}
               >
                 Login
+                {loading && (
+                  <CircularProgress color="primary" size={24} className={classes.progress} />
+                )}
               </Button>
             </Grid>
           </Grid>
@@ -137,12 +162,13 @@ const SignIn = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  authErrors: state.auth.authErrors,
-  auth: state.firebase.auth,
+  auth: state.auth,
+  firebaseAuth: state.firebase.auth,
 });
 
 SignIn.propTypes = {
   signIn: PropTypes.func.isRequired,
+  auth: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default connect(mapStateToProps, { signIn })(SignIn);
