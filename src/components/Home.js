@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import CreateNote from './notes/CreateNote';
 
 // Redux
 import { connect } from 'react-redux';
@@ -22,8 +23,6 @@ import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -31,8 +30,9 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Tooltip from '@material-ui/core/Tooltip';
+import Hidden from '@material-ui/core/Hidden';
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -51,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
+    borderRight: 'none',
   },
   drawerHeader: {
     display: 'flex',
@@ -60,6 +61,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
   },
   content: {
+    backgroundColor: theme.palette.background.paper,
+    height: '100vh',
     flexGrow: 1,
     padding: theme.spacing(3),
     marginLeft: -drawerWidth,
@@ -67,6 +70,9 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: 0,
+    },
   },
   contentShift: {
     transition: theme.transitions.create('margin', {
@@ -76,18 +82,21 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 0,
   },
   toolbar: theme.mixins.toolbar,
+  item: {
+    borderRadius: '0 50px 50px 0',
+  },
 }));
 
 const Home = (props) => {
   const classes = useStyles();
-  const [open, setOpen] = useState(true);
 
+  const [open, setOpen] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const handleDrawerToggle = () => setOpen(!open);
+  const handleMobileDrawerToggle = () => setMobileOpen(!mobileOpen);
 
   const [anchorEl, setAnchorEl] = useState(null);
-
   const handleClick = (event) => setAnchorEl(event.currentTarget);
-
   const handleClose = () => setAnchorEl(null);
 
   const handleSignOut = () => {
@@ -100,15 +109,28 @@ const Home = (props) => {
       <CssBaseline />
       <AppBar color="inherit" variant="outlined" position="fixed" className={classes.appBar}>
         <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerToggle}
-            // className={clsx(open && classes.hide)}
-          >
-            <MenuIcon />
-          </IconButton>
+          {/* Desktop */}
+          <Hidden only={['xs', 'sm']}>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerToggle}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Hidden>
+          {/* /Mobile */}
+          <Hidden only={['md', 'lg', 'xl']} implementation="css">
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleMobileDrawerToggle}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Hidden>
           <Typography variant="h6">
             Notes
           </Typography>
@@ -133,30 +155,61 @@ const Home = (props) => {
           </div>
         </Toolbar>
       </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="left"
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.toolbar} />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-      <main className={clsx(classes.content, {
-        [classes.contentShift]: open,
-      })}
+      {/* Desktop */}
+      <Hidden only={['xs', 'sm']}>
+        <Drawer
+          className={classes.drawer}
+          variant="persistent"
+          anchor="left"
+          open={open}
+        // open={matches}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <div className={classes.toolbar} />
+          <List>
+            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+              <ListItem className={classes.item} button key={text}>
+                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
+      </Hidden>
+      {/* Mobile */}
+      <Hidden only={['md', 'lg', 'xl']} implementation="css">
+        <Drawer
+          className={classes.drawer}
+          variant="temporary"
+          // anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+          anchor="left"
+          open={mobileOpen}
+          onClose={handleMobileDrawerToggle}
+        // open={matches}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <div className={classes.toolbar} />
+          <List>
+            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+              <ListItem className={classes.item} button key={text}>
+                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
+      </Hidden>
+      <main
+        className={clsx(classes.content, {
+          [classes.contentShift]: open,
+        })}
       >
         <div className={classes.drawerHeader} />
+        <CreateNote />
         <Typography paragraph>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
           ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
@@ -180,6 +233,7 @@ const Home = (props) => {
           nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
           accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
         </Typography>
+
       </main>
     </div>
   );
