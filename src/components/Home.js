@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import NotesList from './notes/NotesList';
 import CreateNote from './notes/CreateNote';
 
 // Redux
@@ -28,7 +29,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
-import SettingsIcon from '@material-ui/icons/Settings';
+import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
 import Hidden from '@material-ui/core/Hidden';
 
@@ -138,7 +139,7 @@ const Home = (props) => {
           <div>
             <Tooltip title="settings" aria-label="settings" placement="bottom">
               <IconButton edge="end" color="inherit" onClick={handleClick}>
-                <SettingsIcon />
+                <SettingsOutlinedIcon />
               </IconButton>
             </Tooltip>
             <Menu
@@ -162,7 +163,6 @@ const Home = (props) => {
           variant="persistent"
           anchor="left"
           open={open}
-        // open={matches}
           classes={{
             paper: classes.drawerPaper,
           }}
@@ -187,7 +187,6 @@ const Home = (props) => {
           anchor="left"
           open={mobileOpen}
           onClose={handleMobileDrawerToggle}
-        // open={matches}
           classes={{
             paper: classes.drawerPaper,
           }}
@@ -210,6 +209,7 @@ const Home = (props) => {
       >
         <div className={classes.drawerHeader} />
         <CreateNote />
+        <NotesList />
         <Typography paragraph>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
           ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
@@ -233,7 +233,6 @@ const Home = (props) => {
           nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
           accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
         </Typography>
-
       </main>
     </div>
   );
