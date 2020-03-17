@@ -4,30 +4,35 @@ import {
   LOADING_SUCCESS,
 } from '../types';
 
-// eslint-disable-next-line import/prefer-default-export
-export const fetchNotes = () => (dispatch, getState, { getFirebase, getFirestore }) => {
-  dispatch({ type: LOADING_UI });
-  const firebase = getFirebase();
-  const firestore = getFirestore();
-  const userId = firebase.auth().currentUser.uid;
-  console.log(userId);
+// I found it unnecessary because i could fetch notes via firestoreConnect
+// from react-redux-firebase but I'll leave it here, maybe it'll help somehow
+// export const fetchNotes = () => (dispatch, getState, { getFirebase, getFirestore }) => {
+//   dispatch({ type: LOADING_UI });
+//   const firebase = getFirebase();
+//   const firestore = getFirestore();
+//   const userId = firebase.auth().currentUser.uid;
+//   console.log(userId);
 
-  firestore.collection('notes').where('userId', '==', userId).get()
-    .then((snapshot) => {
-      if (snapshot.empty) {
-        console.log('No matching documents.');
-        return;
-      }
+//   firestore.collection('notes').where('userId', '==', userId).get()
+//     .then((snapshot) => {
+//       if (snapshot.empty) {
+//         console.log('No matching documents.');
+//         return;
+//       }
 
-      let data = {};
+//       let data = {};
 
-      snapshot.forEach((doc) => {
-        // console.log(doc.data());
-        data = { ...data, [doc.data().id]: { ...doc.data() } };
-      });
+//       snapshot.forEach((doc) => {
+//         // console.log(doc.data());
+//         data = { ...data, [doc.data().id]: { ...doc.data() } };
+//       });
 
-      dispatch({ type: FETCH_NOTES, payload: data });
-      dispatch({ type: LOADING_SUCCESS });
-    })
-    .catch((err) => console.log('Error getting documents', err));
+//       dispatch({ type: FETCH_NOTES, payload: data });
+//       dispatch({ type: LOADING_SUCCESS });
+//     })
+//     .catch((err) => console.log('Error getting documents', err));
+// };
+
+export const createNote = () => (dispatch, getState, { getFirebase, getFirestore }) => {
+
 };

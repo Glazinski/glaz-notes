@@ -6,8 +6,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import calculateLayout from '../../utils/calculateLayout';
 
 // Redux
+import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { fetchNotes } from '../../store/actions/notesActions';
+import { firestoreConnect } from 'react-redux-firebase';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -16,25 +17,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 const NoteList = (props) => {
   const [colNum, setColNum] = useState(2);
   const [layout, setLayout] = useState(null);
   const classes = useStyles();
   const { notes } = props;
 
-  window.addEventListener('resize', (event) => {
-    // console.log(`${document.body.clientWidth} wide by ${document.body.clientHeight} high`);
+  const specifyColNum = () => {
     const { clientWidth } = document.body;
     if (clientWidth <= 1100) setColNum(2);
     if (clientWidth > 1100 && clientWidth < 1350) setColNum(3);
     if (clientWidth >= 1350 && clientWidth < 1570) setColNum(4);
     if (clientWidth >= 1570) setColNum(5);
+  };
 
-    // changeLayout()
+  window.addEventListener('resize', (event) => {
+    specifyColNum();
   });
 
   useEffect(() => {
-    props.fetchNotes();
+    specifyColNum();
   }, []);
 
   useEffect(() => {
@@ -57,7 +60,8 @@ const NoteList = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  notes: state.notes.notes,
+  auth: state.firebase.auth,
+  notes: state.firestore.data.notes,
 });
 
 NoteList.defaultProps = {
@@ -65,8 +69,15 @@ NoteList.defaultProps = {
 };
 
 NoteList.propTypes = {
-  fetchNotes: PropTypes.func.isRequired,
   notes: PropTypes.oneOfType([PropTypes.object]),
 };
 
-export default connect(mapStateToProps, { fetchNotes })(NoteList);
+export default compose(
+  connect(mapStateToProps),
+  firestoreConnect((props) => [
+    {
+      collection: 'notes',
+      where: [['userId', '==', props.auth.uid]],
+    },
+  ]),
+)(NoteList);

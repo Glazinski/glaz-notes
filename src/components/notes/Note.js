@@ -1,10 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { Draggable } from 'react-beautiful-dnd';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    minHeight: 100,
+    padding: '10px',
+    margin: '10px 0',
+  },
   paper: {
     width: 238,
     height: 56,
@@ -12,17 +20,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Note = () => {
+const Note = (props) => {
   const classes = useStyles();
+  const { index, note: { id, title, content } } = props;
 
   return (
-    // <Paper className={classes.paper} variant="outlined" style={{ height: props.height }}>
-    //   <h4>Notka</h4>
-    // </Paper>
-    <div className={classes.paper}>
-      <h4>notka</h4>
-    </div>
+    <Draggable
+      draggableId={id}
+      index={index}
+    >
+      {(provided, snapshot) => (
+        <Paper
+          className={classes.container}
+          {...provided.dragHandleProps}
+          {...provided.draggableProps}
+          ref={provided.innerRef}
+          variant="outlined"
+          // isDragging={snapshot.isDragging}
+        >
+          <Typography variant="h6">{title}</Typography>
+          {content}
+        </Paper>
+      )}
+    </Draggable>
   );
+};
+
+Note.propTypes = {
+  index: PropTypes.number.isRequired,
+  note: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default Note;

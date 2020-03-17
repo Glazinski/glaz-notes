@@ -1,13 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Droppable } from 'react-beautiful-dnd';
-import Task from './Task';
+import Note from '../components/notes/Note';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    width: '220px',
-    margin: '8px',
-    border: '1px solid black',
+    width: '256px',
+    // border: '1px solid black',
+    // margin: '8px 0',
     borderRadius: '4px',
     display: 'flex',
     flexDirection: 'colunn',
@@ -20,12 +21,13 @@ const useStyles = makeStyles((theme) => ({
 
 const Column = (props) => {
   const classes = useStyles();
+  const { notes, column: { id } } = props;
 
   return (
     <div className={classes.container}>
       <Droppable
-        droppableId={props.column.id}
-        isDropDisabled={props.isDropDisabled}
+        droppableId={id}
+        // isDropDisabled={props.isDropDisabled}
       >
         {(provided, snapshot) => (
           <div
@@ -34,13 +36,18 @@ const Column = (props) => {
             {...provided.droppableProps}
             // isDraggingOver={snapshot.isDraggingOver}
           >
-            {props.notes.map((note, index) => <Task key={note.id} note={note} index={index} />)}
+            {notes.map((note, index) => <Note key={note.id} note={note} index={index} />)}
             {provided.placeholder}
           </div>
         )}
       </Droppable>
     </div>
   );
+};
+
+Column.propTypes = {
+  notes: PropTypes.array.isRequired,
+  column: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default Column;
