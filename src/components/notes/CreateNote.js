@@ -1,5 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import CreateList from './CreateList';
+import uniqid from 'uniqid';
+
+// Redux
+import { connect } from 'react-redux';
+import { createNote } from '../../store/actions/notesActions';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -41,7 +47,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CreateNote = () => {
+const CreateNote = (props) => {
+  const [formData, setFormData] = useState({
+    title: '',
+    content: '',
+  });
   const classes = useStyles();
   const [isFocused, setIsFocused] = useState(false);
   const textFieldEl = useRef(null);
@@ -56,6 +66,19 @@ const CreateNote = () => {
     setIsListMode(false);
     setIsFocused(false);
   };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  useEffect(() => {
+    const { title, content } = formData;
+    if (!isFocused && (title.length > 0 || content.length > 0)) {
+      props.createNote(uniqid(), formData);
+      setFormData({ title: '', content: '' });
+    }
+  }, [isFocused]);
 
   return (
     <ClickAwayListener onClickAway={() => handleMode()}>
@@ -74,6 +97,9 @@ const CreateNote = () => {
           {isFocused ? (
             <Grid item>
               <TextField
+                onChange={handleChange}
+                name="title"
+                value={formData.title}
                 className={classes.textField}
                 InputProps={{ disableUnderline: true, classes: { input: classes.textFieldLabel } }}
                 placeholder="Title"
@@ -89,6 +115,9 @@ const CreateNote = () => {
             ) : (
               <Grid item>
                 <TextField
+                  onChange={handleChange}
+                  name="content"
+                  value={formData.content}
                   id={`${isFocused ? 'resized-label' : null}`}
                   className={classes.textField}
                   InputProps={{
@@ -138,4 +167,8 @@ const CreateNote = () => {
   );
 };
 
-export default CreateNote;
+CreateNote.propTypes = {
+  createNote: PropTypes.func.isRequired,
+};
+
+export default connect(null, { createNote })(CreateNote);

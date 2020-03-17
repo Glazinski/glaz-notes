@@ -5,6 +5,8 @@ export const LOADING_UI = 'LOADING_UI';
 
 // Notes types
 export const FETCH_NOTES = 'FETCH_NOTES';
+export const CREATE_NOTE = 'CREATE_NOTE';
+export const CREATE_NOTE_ERROR = 'CREATE_NOTE_ERROR';
 
 // UI types
 export const LOADING_SUCCESS = 'LOADING_SUCCESS';

@@ -32,7 +32,6 @@ const App = () => {
           </div>
         </div> */}
         {/* <button type="button" onClick={onClick}>TEST</button> */}
-
         <Switch>
           <Route path="/" exact component={Home} />
           <PrivateRoute path="/login" component={SignIn} />

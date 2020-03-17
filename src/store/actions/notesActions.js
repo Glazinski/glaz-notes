@@ -1,7 +1,6 @@
 import {
-  LOADING_UI,
-  FETCH_NOTES,
-  LOADING_SUCCESS,
+  CREATE_NOTE,
+  CREATE_NOTE_ERROR,
 } from '../types';
 
 // I found it unnecessary because i could fetch notes via firestoreConnect
@@ -33,6 +32,20 @@ import {
 //     .catch((err) => console.log('Error getting documents', err));
 // };
 
-export const createNote = () => (dispatch, getState, { getFirebase, getFirestore }) => {
-
+// eslint-disable-next-line import/prefer-default-export
+export const createNote = (noteId, note) => (dispatch, getState, { getFirebase, getFirestore }) => {
+  const firebase = getFirebase();
+  const firestore = getFirestore();
+  const userId = firebase.auth().currentUser.uid;
+  // console.log(noteId);
+  firestore.collection('notes')
+    .doc(noteId)
+    .set({
+      ...note,
+      id: noteId,
+      userId,
+      createdAt: new Date(),
+    })
+    .then(() => dispatch({ type: CREATE_NOTE }))
+    .catch((err) => dispatch({ type: CREATE_NOTE_ERROR, payload: err }));
 };
