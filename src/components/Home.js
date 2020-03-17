@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { signOut } from '../store/actions/authActions';
 
 // React router
-import { Link } from 'react-router-dom';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -27,11 +26,13 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
 import Hidden from '@material-ui/core/Hidden';
+
+// MUI icons
+import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
+import EmojiObjectsOutlinedIcon from '@material-ui/icons/EmojiObjectsOutlined';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 
 const drawerWidth = 280;
 
@@ -88,6 +89,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 const Home = (props) => {
   const classes = useStyles();
 
@@ -104,6 +106,26 @@ const Home = (props) => {
     props.signOut();
     handleClose();
   };
+
+  const DrawerList = () => (
+    <List>
+      {/* {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+              <ListItem className={classes.item} button key={text}>
+                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))} */}
+      <ListItem className={classes.item} button>
+        <ListItemIcon><EmojiObjectsOutlinedIcon /></ListItemIcon>
+        <ListItemText primary="Notes" />
+      </ListItem>
+      <Divider />
+      <ListItem className={classes.item} button>
+        <ListItemIcon><EditOutlinedIcon /></ListItemIcon>
+        <ListItemText primary="Edit label" />
+      </ListItem>
+    </List>
+  );
 
   return (
     <div className={classes.root}>
@@ -168,14 +190,7 @@ const Home = (props) => {
           }}
         >
           <div className={classes.toolbar} />
-          <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-              <ListItem className={classes.item} button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
+          <DrawerList />
         </Drawer>
       </Hidden>
       {/* Mobile */}
@@ -192,14 +207,7 @@ const Home = (props) => {
           }}
         >
           <div className={classes.toolbar} />
-          <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-              <ListItem className={classes.item} button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
+          <DrawerList />
         </Drawer>
       </Hidden>
       <main

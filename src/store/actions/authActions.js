@@ -23,6 +23,8 @@ export const signOut = () => async (dispatch, getState, { getFirebase }) => {
   await firebase.auth().signOut();
   dispatch({ type: CLEAR_ERRORS });
   history.push('/login');
+  // Reload the page to clear dom
+  window.location.reload();
 };
 
 export const signUp = (newUser) => (dispatch, getState, { getFirebase, getFirestore }) => {
