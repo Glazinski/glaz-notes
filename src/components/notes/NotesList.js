@@ -43,7 +43,7 @@ const NoteList = (props) => {
   useEffect(() => {
     if (notes && colNum) {
       const lay = calculateLayout(notes, colNum);
-      console.log('noooo', colNum);
+      // console.log('noooo', colNum);
 
       setLayout(lay);
     }
@@ -59,11 +59,17 @@ const NoteList = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  auth: state.firebase.auth,
-  notes: state.firestore.data.notes,
-});
+// const mapStateToProps = (state) => ({
+//   auth: state.firebase.auth,
+//   notes: state.firestore.data.notes,
+// });
 
+const mapStateToProps = (state) =>
+  // console.log(state);
+  ({
+    auth: state.firebase.auth,
+    notes: state.firestore.data.notes,
+  });
 NoteList.defaultProps = {
   notes: null,
 };
@@ -78,6 +84,7 @@ export default compose(
     {
       collection: 'notes',
       where: [['userId', '==', props.auth.uid]],
+      // orderBy: ['position', 'asc'],
     },
   ]),
 )(NoteList);

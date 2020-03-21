@@ -38,7 +38,17 @@ const DragContainer = (props) => {
     const start = initData.columns[source.droppableId];
     const finish = initData.columns[destination.droppableId];
 
+    // let notePosition = 0;
+    // const colNum = 3;
+    // const startColIndex = start.index;
+    // const finishColIndex = finish.index;
+    // console.log(source, destination);
+    // console.log(start, finish);
+    // console.log(startColIndex, finishColIndex);
+
     if (start === finish) {
+      // notePosition = finishColIndex + (destination.index * colNum);
+      // console.log('POZYCJA', notePosition);
       const newNoteIds = Array.from(start.noteIds);
       newNoteIds.splice(source.index, 1);
       newNoteIds.splice(destination.index, 0, draggableId);
@@ -56,10 +66,13 @@ const DragContainer = (props) => {
         },
       };
 
-      console.log(newState);
+      console.log('same col', newState);
       setInitData(newState);
       return;
     }
+
+    // notePosition = finishColIndex + (destination.index * colNum);
+    // console.log('POZYCJA', notePosition);
 
     const startNoteIds = Array.from(start.noteIds);
     startNoteIds.splice(source.index, 1);
@@ -84,7 +97,7 @@ const DragContainer = (props) => {
       },
     };
 
-    console.log(newState);
+    // console.log('new col', newState);
     setInitData(newState);
   };
 

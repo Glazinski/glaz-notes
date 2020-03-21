@@ -4,7 +4,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import myTheme from './utils/theme';
 
 // React router
-import { Router, Route, Switch } from 'react-router-dom';
+import {
+  Router, Route, Switch, Redirect,
+} from 'react-router-dom';
 import PrivateRoute from './utils/PrivateRoute';
 import history from './utils/history';
 
@@ -32,10 +34,12 @@ const App = () => {
           </div>
         </div> */}
         {/* <button type="button" onClick={onClick}>TEST</button> */}
+        <Home />
         <Switch>
-          <Route path="/" exact component={Home} />
+          {/* <Route path="/" exact component={Home} /> */}
           <PrivateRoute path="/login" component={SignIn} />
           <PrivateRoute path="/signup" component={SignUp} />
+          <Redirect to="/" />
         </Switch>
       </ThemeProvider>
     </Router>

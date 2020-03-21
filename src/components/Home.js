@@ -3,12 +3,16 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import NotesList from './notes/NotesList';
 import CreateNote from './notes/CreateNote';
+import DrawerList from '../Layout/DrawerList';
 
 // Redux
 import { connect } from 'react-redux';
 import { signOut } from '../store/actions/authActions';
 
 // React router
+import {
+  Switch, Route, Redirect,
+} from 'react-router-dom';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -21,18 +25,11 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import Tooltip from '@material-ui/core/Tooltip';
 import Hidden from '@material-ui/core/Hidden';
 
 // MUI icons
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
-import EmojiObjectsOutlinedIcon from '@material-ui/icons/EmojiObjectsOutlined';
-import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 
 const drawerWidth = 280;
 
@@ -64,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     backgroundColor: theme.palette.background.paper,
-    height: '100vh',
+    minHeight: '100vh',
     flexGrow: 1,
     padding: theme.spacing(3),
     marginLeft: -drawerWidth,
@@ -84,9 +81,6 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 0,
   },
   toolbar: theme.mixins.toolbar,
-  item: {
-    borderRadius: '0 50px 50px 0',
-  },
 }));
 
 
@@ -107,25 +101,7 @@ const Home = (props) => {
     handleClose();
   };
 
-  const DrawerList = () => (
-    <List>
-      {/* {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-              <ListItem className={classes.item} button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))} */}
-      <ListItem className={classes.item} button>
-        <ListItemIcon><EmojiObjectsOutlinedIcon /></ListItemIcon>
-        <ListItemText primary="Notes" />
-      </ListItem>
-      <Divider />
-      <ListItem className={classes.item} button>
-        <ListItemIcon><EditOutlinedIcon /></ListItemIcon>
-        <ListItemText primary="Edit label" />
-      </ListItem>
-    </List>
-  );
+  if (!props.auth.uid) return <Redirect to="/login" />;
 
   return (
     <div className={classes.root}>
@@ -217,7 +193,11 @@ const Home = (props) => {
         >
           <div className={classes.drawerHeader} />
           <CreateNote />
-          <NotesList />
+          {/* <NotesList /> */}
+          <Switch>
+            <Route exact path="/" component={NotesList} />
+            <Route path="/test" render={() => <h1>Elo</h1>} />
+          </Switch>
         </main>
       </div>
     </div>
@@ -226,6 +206,11 @@ const Home = (props) => {
 
 Home.propTypes = {
   signOut: PropTypes.func.isRequired,
+  auth: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
-export default connect(null, { signOut })(Home);
+const mapStateToProps = (state) => ({
+  auth: state.firebase.auth,
+});
+
+export default connect(mapStateToProps, { signOut })(Home);
