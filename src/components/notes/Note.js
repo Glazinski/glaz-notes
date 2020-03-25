@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
     },
     // transition: 'opacity .3s ease',
   },
+  // title: {
+  //   minHeight: '32px',
+  // },
   btn: {
     position: 'absolute',
     top: '0',
@@ -53,8 +56,11 @@ const Note = (props) => {
   };
 
   const handleHover = () => {
+    console.log('siema');
     setIsHovered(!isHovered);
   };
+
+  // console.log(title.length <= 0 ? { content } : { title });
 
   return (
     <Draggable
@@ -78,11 +84,20 @@ const Note = (props) => {
               <ModalNote noteId={id} title={title} content={content} />
             </DialogeWindow>
           ) : null}
-          <Typography variant="h6">{title}</Typography>
+          {/* {title} */}
+          {title.length <= 0 ? (
+            <div className={classes.content}>
+              {content}
+            </div>
+          ) : (
+            <Typography variant="h6">
+              {title}
+            </Typography>
+          )}
           <div className={classes.content}>
-            {content}
+            {title.length <= 0 ? null : content}
           </div>
-          <NoteSettings isHovered={isHovered} />
+          <NoteSettings noteId={id} isHovered={isHovered} />
         </Paper>
       )}
     </Draggable>

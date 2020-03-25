@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 const Column = (props) => {
   const classes = useStyles();
   const { notes, column: { id } } = props;
-
+  console.log(notes);
   return (
     <div className={classes.container}>
       <Droppable
@@ -36,7 +36,7 @@ const Column = (props) => {
             {...provided.droppableProps}
             // isDraggingOver={snapshot.isDraggingOver}
           >
-            {notes.map((note, index) => <Note key={note.id} note={note} index={index} />)}
+            {!notes.includes(null) ? notes.map((note, index) => <Note key={note.id} note={note} index={index} />) : null}
             {provided.placeholder}
           </div>
         )}
@@ -45,8 +45,12 @@ const Column = (props) => {
   );
 };
 
+Column.defaultProps = {
+  notes: null,
+};
+
 Column.propTypes = {
-  notes: PropTypes.array.isRequired,
+  notes: PropTypes.array,
   column: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 

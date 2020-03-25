@@ -196,6 +196,7 @@ const Home = (props) => {
           {/* <NotesList /> */}
           <Switch>
             <Route exact path="/" component={NotesList} />
+            <Route path="/bin" component={NotesList} />
             <Route path="/test" render={() => <h1>Elo</h1>} />
           </Switch>
         </main>

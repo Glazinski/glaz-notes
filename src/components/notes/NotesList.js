@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import Note from './Note';
 import DragContainer from '../../Layout/Container';
 import { makeStyles } from '@material-ui/core/styles';
@@ -9,6 +10,7 @@ import calculateLayout from '../../utils/calculateLayout';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
+import { fetchNotes } from '../../store/actions/notesActions';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -41,12 +43,13 @@ const NoteList = (props) => {
   }, []);
 
   useEffect(() => {
-    if (notes && colNum) {
+    if (notes === null || (notes && colNum)) {
       const lay = calculateLayout(notes, colNum);
-      // console.log('noooo', colNum);
 
       setLayout(lay);
     }
+
+    return () => {};
   }, [notes, colNum]);
 
   return (
@@ -59,17 +62,21 @@ const NoteList = (props) => {
   );
 };
 
-// const mapStateToProps = (state) => ({
-//   auth: state.firebase.auth,
-//   notes: state.firestore.data.notes,
-// });
-
-const mapStateToProps = (state) =>
-  // console.log(state);
-  ({
-    auth: state.firebase.auth,
-    notes: state.firestore.data.notes,
+const mapStateToProps = (state, ownProps) => {
+  const { userNotes } = state.firestore.data;
+  let data = {};
+  _.forIn(userNotes, (value, key) => {
+    if (value !== null) {
+      data = { ...data, [key]: value };
+    }
   });
+
+  return ({
+    auth: state.firebase.auth,
+    notes: data,
+  });
+};
+
 NoteList.defaultProps = {
   notes: null,
 };
@@ -80,11 +87,21 @@ NoteList.propTypes = {
 
 export default compose(
   connect(mapStateToProps),
-  firestoreConnect((props) => [
-    {
-      collection: 'notes',
-      where: [['userId', '==', props.auth.uid]],
+  firestoreConnect((props) => {
+    const { pathname } = props.location;
+    const coll = pathname === '/bin' ? 'bin' : 'notes';
+
+    return [
+      {
+        collection: `${coll}`,
+        doc: `${props.auth.uid}`,
+        subcollections: [
+          { collection: 'userNotes' },
+        ],
+        storeAs: 'userNotes',
+        // where: [['userId', '==', props.auth.uid]],
       // orderBy: ['position', 'asc'],
-    },
-  ]),
+      },
+    ];
+  }),
 )(NoteList);
