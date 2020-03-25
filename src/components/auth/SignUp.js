@@ -4,7 +4,7 @@ import validate from '../../utils/validate';
 
 // Redux
 import { connect } from 'react-redux';
-import { signUp } from '../../store/actions/authActions';
+import { signUp, clearForm } from '../../store/actions/authActions';
 
 // React router
 import { Link } from 'react-router-dom';
@@ -66,6 +66,8 @@ const SignUp = (props) => {
 
   const { auth: { loading, authErrors } } = props;
   const [errors, setErrors] = useState({});
+
+  useEffect(() => () => props.clearForm(), []);
 
   useEffect(() => {
     const err = validate(authErrors);
@@ -183,6 +185,7 @@ const mapStateToProps = (state) => ({
 SignUp.propTypes = {
   auth: PropTypes.oneOfType([PropTypes.object]).isRequired,
   signUp: PropTypes.func.isRequired,
+  clearForm: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, { signUp })(SignUp);
+export default connect(mapStateToProps, { signUp, clearForm })(SignUp);

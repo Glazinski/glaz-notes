@@ -49,14 +49,15 @@ const Note = (props) => {
 
   const handleClickOpen = () => {
     setOpen(true);
+    setIsHovered(false);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleHover = () => {
-    console.log('siema');
+  const handleHover = (event) => {
+    event.stopPropagation();
     setIsHovered(!isHovered);
   };
 
@@ -69,16 +70,22 @@ const Note = (props) => {
     >
       {(provided, snapshot) => (
         <Paper
-          // onClick={handleClickOpen}
-          onMouseEnter={handleHover}
-          onMouseLeave={handleHover}
+          onMouseOver={handleHover}
+          onMouseOut={handleHover}
+          // onMouseEnter={handleHover}
+          // onMouseLeave={handleHover}
+          onFocus={() => null}
+          onBlur={() => null}
           className={classes.container}
           {...provided.dragHandleProps}
           {...provided.draggableProps}
           ref={provided.innerRef}
           variant="outlined"
         >
-          <div className={classes.btn} onClick={handleClickOpen} />
+          <div
+            className={classes.btn}
+            onClick={handleClickOpen}
+          />
           {open ? (
             <DialogeWindow onClose={handleClose} open={open}>
               <ModalNote noteId={id} title={title} content={content} />

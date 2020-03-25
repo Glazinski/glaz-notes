@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import NotesList from './notes/NotesList';
-import CreateNote from './notes/CreateNote';
 import DrawerList from '../Layout/DrawerList';
+import Bin from '../pages/Bin';
+import Notes from '../pages/Notes';
 
 // Redux
 import { connect } from 'react-redux';
@@ -84,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Home = (props) => {
+const Home = ({ signOut, auth: { uid } }) => {
   const classes = useStyles();
 
   const [open, setOpen] = useState(true);
@@ -97,11 +97,18 @@ const Home = (props) => {
   const handleClose = () => setAnchorEl(null);
 
   const handleSignOut = () => {
-    props.signOut();
+    signOut();
     handleClose();
   };
 
-  if (!props.auth.uid) return <Redirect to="/login" />;
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const handleListItemClick = (event, index) => {
+    setMobileOpen(false);
+    setSelectedIndex(index);
+  };
+
+  if (!uid) return <Redirect to="/login" />;
 
   return (
     <div className={classes.root}>
@@ -166,7 +173,7 @@ const Home = (props) => {
           }}
         >
           <div className={classes.toolbar} />
-          <DrawerList />
+          <DrawerList selectedIndex={selectedIndex} handleListItemClick={handleListItemClick} />
         </Drawer>
       </Hidden>
       {/* Mobile */}
@@ -182,7 +189,7 @@ const Home = (props) => {
           }}
         >
           <div className={classes.toolbar} />
-          <DrawerList />
+          <DrawerList selectedIndex={selectedIndex} handleListItemClick={handleListItemClick} />
         </Drawer>
       </Hidden>
       <div style={{ width: '100%', margin: '0 auto' }}>
@@ -192,11 +199,11 @@ const Home = (props) => {
           })}
         >
           <div className={classes.drawerHeader} />
-          <CreateNote />
-          {/* <NotesList /> */}
           <Switch>
-            <Route exact path="/" component={NotesList} />
-            <Route path="/bin" component={NotesList} />
+            {/* <Route exact path="/" component={NotesList} /> */}
+            <Route exact path="/" component={Notes} />
+            {/* <Route path="/bin" component={NotesList} /> */}
+            <Route path="/bin" component={Bin} />
             <Route path="/test" render={() => <h1>Elo</h1>} />
           </Switch>
         </main>

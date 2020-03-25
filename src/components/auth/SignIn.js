@@ -1,11 +1,11 @@
 /* eslint-disable no-nested-ternary */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import validate from '../../utils/validate';
 
 // Redux
 import { connect } from 'react-redux';
-import { signIn } from '../../store/actions/authActions';
+import { signIn, clearForm } from '../../store/actions/authActions';
 
 // React router
 import { Link } from 'react-router-dom';
@@ -48,6 +48,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SignIn = (props) => {
+  const form = useRef(null);
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -67,13 +69,18 @@ const SignIn = (props) => {
   const { auth: { loading, authErrors } } = props;
   const [errors, setErrors] = useState({});
 
+  useEffect(() => () => props.clearForm(), []);
+
   useEffect(() => {
+    console.log(authErrors);
     const err = validate(authErrors);
     setErrors({ ...err });
+
+    // return () => console.log('elo');
   }, [authErrors]);
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form ref={form} onSubmit={handleSubmit}>
       <Grid
         container
         alignItems="center"
@@ -162,8 +169,9 @@ const mapStateToProps = (state) => ({
 });
 
 SignIn.propTypes = {
+  clearForm: PropTypes.func.isRequired,
   signIn: PropTypes.func.isRequired,
   auth: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
-export default connect(mapStateToProps, { signIn })(SignIn);
+export default connect(mapStateToProps, { signIn, clearForm })(SignIn);

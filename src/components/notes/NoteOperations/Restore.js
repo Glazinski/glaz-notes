@@ -17,10 +17,13 @@ const useStyles = makeStyles((theme) => ({
 
 const DeleteForever = ({ noteId, restore }) => {
   const classes = useStyles();
+  const onRestore = () => {
+    restore(noteId);
+  };
 
   return (
     <Tooltip title="Restore" aria-label="Restore">
-      <IconButton onClick={() => restore(noteId)} className={classes.iconBtn}>
+      <IconButton onClick={onRestore} className={classes.iconBtn}>
         <RestoreFromTrashIcon fontSize="small" color="inherit" />
       </IconButton>
     </Tooltip>

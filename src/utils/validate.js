@@ -13,6 +13,10 @@ export default (error) => {
     errors.general = 'User not found';
   }
 
+  if (error && error.code === 'auth/too-many-requests') {
+    errors.general = 'Too many unsuccessful login attempts. Please try again later.';
+  }
+
   if (error && error.code === 'auth/weak-password') {
     errors.password = 'The password must be 6 characters long or more';
   }

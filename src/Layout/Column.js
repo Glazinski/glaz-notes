@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 const Column = (props) => {
   const classes = useStyles();
   const { notes, column: { id } } = props;
-  console.log(notes);
+
   return (
     <div className={classes.container}>
       <Droppable

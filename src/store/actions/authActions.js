@@ -43,3 +43,5 @@ export const signUp = (newUser) => (dispatch, getState, { getFirebase, getFirest
     .then(() => dispatch({ type: CLEAR_ERRORS }))
     .catch((err) => dispatch({ type: SET_ERRORS, err }));
 };
+
+export const clearForm = () => ({ type: CLEAR_ERRORS });

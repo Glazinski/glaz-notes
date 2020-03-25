@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 // React router
 import {
@@ -31,13 +32,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DrawerList = () => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+const DrawerList = ({ selectedIndex, handleListItemClick }) => {
   const classes = useStyles();
-
-  const handleListItemClick = (event, index) => {
-    setSelectedIndex(index);
-  };
 
   return (
     <List>
@@ -91,6 +87,11 @@ const DrawerList = () => {
       </ListItem>
     </List>
   );
+};
+
+DrawerList.propTypes = {
+  selectedIndex: PropTypes.number.isRequired,
+  handleListItemClick: PropTypes.func.isRequired,
 };
 
 export default DrawerList;

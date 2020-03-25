@@ -23,13 +23,13 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     justifyContent: 'space-between',
     marginTop: '5px',
-    transition: 'opacity .3s ease',
+    // transition: 'opacity .3s ease',
   },
   binContainer: {
     display: 'flex',
     marginTop: '5px',
     marginLeft: '-6px',
-    transition: 'opacity .2s ease',
+    // transition: 'opacity .2s ease',
   },
   iconBtn: {
     padding: '7px',
@@ -70,6 +70,7 @@ const NoteSettings = (props) => {
       <div
         className={classes.container}
         style={isHovered ? { opacity: '1', pointerEvents: 'auto' } : { opacity: '0', pointerEvents: 'none' }}
+        // style={isHovered ? { display: 'block' } : { display: 'none' }}
       >
         <Tooltip title="Change color" aria-label="Change color">
           <IconButton

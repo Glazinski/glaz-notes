@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import Note from './Note';
 import DragContainer from '../../Layout/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import calculateLayout from '../../utils/calculateLayout';
@@ -10,7 +9,6 @@ import calculateLayout from '../../utils/calculateLayout';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
-import { fetchNotes } from '../../store/actions/notesActions';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -62,7 +60,7 @@ const NoteList = (props) => {
   );
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const { userNotes } = state.firestore.data;
   let data = {};
   _.forIn(userNotes, (value, key) => {
