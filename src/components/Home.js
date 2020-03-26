@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import DrawerList from '../Layout/DrawerList';
 import Bin from '../pages/Bin';
 import Notes from '../pages/Notes';
+import Settings from './settings/Menu';
 
 // Redux
 import { connect } from 'react-redux';
@@ -19,17 +20,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Tooltip from '@material-ui/core/Tooltip';
 import Hidden from '@material-ui/core/Hidden';
-
-// MUI icons
-import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 
 const drawerWidth = 280;
 
@@ -142,7 +137,8 @@ const Home = ({ signOut, auth: { uid } }) => {
           </Typography>
           <div className={classes.grow} />
           <div>
-            <Tooltip title="settings" aria-label="settings" placement="bottom">
+            <Settings />
+            {/* <Tooltip title="settings" aria-label="settings" placement="bottom">
               <IconButton edge="end" color="inherit" onClick={handleClick}>
                 <SettingsOutlinedIcon />
               </IconButton>
@@ -157,7 +153,7 @@ const Home = ({ signOut, auth: { uid } }) => {
               <MenuItem onClick={handleClose}>Profile</MenuItem>
               <MenuItem onClick={handleClose}>My account</MenuItem>
               <MenuItem onClick={handleSignOut}>Logout</MenuItem>
-            </Menu>
+            </Menu> */}
           </div>
         </Toolbar>
       </AppBar>

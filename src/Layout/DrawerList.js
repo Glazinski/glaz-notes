@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
   subtitle: {
     margin: '15px 0 15px 15px',
   },
+  selected: {
+    backgroundColor: 'red',
+  },
 }));
 
 const DrawerList = ({ selectedIndex, handleListItemClick }) => {
@@ -51,7 +54,6 @@ const DrawerList = ({ selectedIndex, handleListItemClick }) => {
         button
         selected={selectedIndex === 0}
         onClick={(event) => handleListItemClick(event, 0)}
-        style={selectedIndex === 0 ? { backgroundColor: '#feefc3' } : null}
       >
         <ListItemIcon><EmojiObjectsOutlinedIcon /></ListItemIcon>
         <ListItemText primary="Notes" />
@@ -67,7 +69,6 @@ const DrawerList = ({ selectedIndex, handleListItemClick }) => {
         to="/test"
         selected={selectedIndex === 1}
         onClick={(event) => handleListItemClick(event, 1)}
-        style={selectedIndex === 1 ? { backgroundColor: '#feefc3' } : null}
       >
         <ListItemIcon><EditOutlinedIcon /></ListItemIcon>
         <ListItemText primary="Edit label" />
@@ -80,7 +81,6 @@ const DrawerList = ({ selectedIndex, handleListItemClick }) => {
         to="/bin"
         selected={selectedIndex === 2}
         onClick={(event) => handleListItemClick(event, 2)}
-        style={selectedIndex === 2 ? { backgroundColor: '#feefc3' } : null}
       >
         <ListItemIcon><DeleteOutlinedIcon /></ListItemIcon>
         <ListItemText primary="Bin" />

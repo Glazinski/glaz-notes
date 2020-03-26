@@ -11,3 +11,4 @@ export const CREATE_NOTE_ERROR = 'CREATE_NOTE_ERROR';
 // UI types
 export const LOADING_SUCCESS = 'LOADING_SUCCESS';
 export const LOADING_FAILURE = 'LOADING_FAILURE';
+export const FETCH_THEME = 'FETCH_THEME';

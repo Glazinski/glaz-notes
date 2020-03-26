@@ -17,16 +17,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DeleteNote = ({ noteId, moveToBin }) => {
-  const onDeleteClick = () => moveToBin(noteId);
+const DeleteNote = (props) => {
   const classes = useStyles();
+  const { noteId, moveToBin } = props;
+
+  const onDeleteClick = () => {
+    moveToBin(noteId);
+  };
 
   return (
-    <Tooltip title="Delete" aria-label="Delete">
-      <IconButton onClick={onDeleteClick} className={classes.iconBtn}>
-        <DeleteOutlineOutlinedIcon fontSize="small" />
-      </IconButton>
-    </Tooltip>
+    <>
+      <Tooltip title="Delete" aria-label="Delete">
+        <IconButton onClick={onDeleteClick} className={classes.iconBtn}>
+          <DeleteOutlineOutlinedIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
+    </>
   );
 };
 

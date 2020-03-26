@@ -22,6 +22,9 @@ export default (typeOfTheme) => {
         primary: {
           main: '#fff',
         },
+        action: {
+          selected: 'rgba(163, 137, 60, .5)',
+        },
       },
       spreadThis,
     });
@@ -29,6 +32,12 @@ export default (typeOfTheme) => {
   return createMuiTheme({
     palette: {
       type: 'light',
+      primary: {
+        main: '#fff',
+      },
+      action: {
+        selected: '#feefc3',
+      },
     },
     spreadThis,
   });

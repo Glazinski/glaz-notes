@@ -46,8 +46,6 @@ const NoteList = (props) => {
 
       setLayout(lay);
     }
-
-    return () => {};
   }, [notes, colNum]);
 
   return (
