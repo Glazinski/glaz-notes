@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const NoteSettings = (props) => {
-  const { isHovered, noteId } = props;
+  const { isHovered, noteId, handleHoverClose } = props;
   const classes = useStyles();
   const location = useLocation();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -60,7 +60,7 @@ const NoteSettings = (props) => {
           className={classes.binContainer}
           style={isHovered ? { opacity: '1', pointerEvents: 'auto' } : { opacity: '0', pointerEvents: 'none' }}
         >
-          <DeleteForever noteId={noteId} />
+          <DeleteForever noteId={noteId} handleHoverClose={handleHoverClose} />
           <Restore noteId={noteId} />
         </div>
       );

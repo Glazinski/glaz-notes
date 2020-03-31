@@ -12,8 +12,9 @@ import { signOut } from '../store/actions/authActions';
 
 // React router
 import {
-  Switch, Route, Redirect,
+  Switch, Route, Redirect, useLocation,
 } from 'react-router-dom';
+import PrivateRoute from '../utils/PrivateRoute';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -38,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+    backgroundColor: theme.palette.background.default,
   },
   drawer: {
     width: drawerWidth,
@@ -46,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth,
     borderRight: 'none',
+    backgroundColor: theme.palette.background.default,
   },
   drawerHeader: {
     display: 'flex',
@@ -55,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
   },
   content: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.default,
     minHeight: '100vh',
     flexGrow: 1,
     padding: theme.spacing(3),
@@ -79,22 +82,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Home = ({ signOut, auth: { uid } }) => {
+const Home = ({ signOut, auth: { uid }, children }) => {
   const classes = useStyles();
 
   const [open, setOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
   const handleDrawerToggle = () => setOpen(!open);
   const handleMobileDrawerToggle = () => setMobileOpen(!mobileOpen);
-
-  const [anchorEl, setAnchorEl] = useState(null);
-  const handleClick = (event) => setAnchorEl(event.currentTarget);
-  const handleClose = () => setAnchorEl(null);
-
-  const handleSignOut = () => {
-    signOut();
-    handleClose();
-  };
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -138,22 +132,6 @@ const Home = ({ signOut, auth: { uid } }) => {
           <div className={classes.grow} />
           <div>
             <Settings />
-            {/* <Tooltip title="settings" aria-label="settings" placement="bottom">
-              <IconButton edge="end" color="inherit" onClick={handleClick}>
-                <SettingsOutlinedIcon />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              id="simple-menu"
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
-              <MenuItem onClick={handleSignOut}>Logout</MenuItem>
-            </Menu> */}
           </div>
         </Toolbar>
       </AppBar>
@@ -195,13 +173,12 @@ const Home = ({ signOut, auth: { uid } }) => {
           })}
         >
           <div className={classes.drawerHeader} />
-          <Switch>
-            {/* <Route exact path="/" component={NotesList} /> */}
+          {children}
+          {/* <Switch>
             <Route exact path="/" component={Notes} />
-            {/* <Route path="/bin" component={NotesList} /> */}
             <Route path="/bin" component={Bin} />
-            <Route path="/test" render={() => <h1>Elo</h1>} />
-          </Switch>
+
+          </Switch> */}
         </main>
       </div>
     </div>

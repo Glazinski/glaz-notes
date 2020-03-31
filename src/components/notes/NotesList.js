@@ -41,7 +41,8 @@ const NoteList = (props) => {
   }, []);
 
   useEffect(() => {
-    if (notes === null || (notes && colNum)) {
+    // console.log(props);
+    if (notes && colNum) {
       const lay = calculateLayout(notes, colNum);
 
       setLayout(lay);

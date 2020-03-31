@@ -26,7 +26,8 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     maxWidth: 520,
-    // padding: theme.spacing(1),
+    backgroundColor: theme.palette.background.default,
+    boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
     margin: '0 auto 80px auto',
   },
   textField: {
@@ -90,6 +91,7 @@ const CreateNote = (props) => {
         onClick={!isFocused ? handleFocus : null}
         className={classes.paper}
         elevation={5}
+        variant="outlined"
         // style={isFocused ? { padding: '10px' } : null}
       >
         <Grid
@@ -131,6 +133,8 @@ const CreateNote = (props) => {
                   placeholder="Take a note..."
                   inputRef={textFieldEl}
                   style={!isFocused ? { marginLeft: '20px' } : null}
+                  multiline
+                  fullWidth
                 />
               </Grid>
             )}

@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
 
 const DialogWindow = (props) => {
   const {
-    open, onClose, children,
+    open, handleClose, children,
   } = props;
   const classes = useStyles();
 
@@ -24,7 +24,7 @@ const DialogWindow = (props) => {
     <Dialog
       className={classes.dialog}
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
     >
       {children}
     </Dialog>
@@ -32,7 +32,7 @@ const DialogWindow = (props) => {
 };
 
 DialogWindow.propTypes = {
-  onClose: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
 };
 

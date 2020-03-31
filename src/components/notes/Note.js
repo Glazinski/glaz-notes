@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Draggable } from 'react-beautiful-dnd';
-import DialogeWindow from '../DialogeWindow';
+import DialogWindow from '../DialogWindow';
 import ModalNote from './ModalNote';
 import NoteSettings from './NoteSettings';
 
@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     position: 'relative',
     minHeight: 100,
+    backgroundColor: theme.palette.background.default,
     padding: '10px',
     margin: '10px 0',
     '&:hover': {
@@ -61,6 +62,15 @@ const Note = (props) => {
     setIsHovered(!isHovered);
   };
 
+  // const handleHoverOpen = (event) => {
+  //   event.stopPropagation();
+  //   setIsHovered(true);
+  // };
+  // const handleHoverClose = (event) => {
+  //   event.stopPropagation();
+  //   setIsHovered(false);
+  // };
+
   // console.log(title.length <= 0 ? { content } : { title });
 
   return (
@@ -87,9 +97,9 @@ const Note = (props) => {
             onClick={handleClickOpen}
           />
           {open ? (
-            <DialogeWindow onClose={handleClose} open={open}>
+            <DialogWindow handleClose={handleClose} open={open}>
               <ModalNote noteId={id} title={title} content={content} />
-            </DialogeWindow>
+            </DialogWindow>
           ) : null}
           {/* {title} */}
           {title.length <= 0 ? (
@@ -104,7 +114,7 @@ const Note = (props) => {
           <div className={classes.content}>
             {title.length <= 0 ? null : content}
           </div>
-          <NoteSettings noteId={id} isHovered={isHovered} />
+          <NoteSettings noteId={id} isHovered={isHovered} handleHoverClose={handleHover} />
         </Paper>
       )}
     </Draggable>

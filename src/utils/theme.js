@@ -32,9 +32,6 @@ export default (typeOfTheme) => {
   return createMuiTheme({
     palette: {
       type: 'light',
-      primary: {
-        main: '#fff',
-      },
       action: {
         selected: '#feefc3',
       },
