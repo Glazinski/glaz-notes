@@ -38,7 +38,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const NoteSettings = (props) => {
-  const { isHovered, noteId, handleHoverClose } = props;
+  const {
+    isHovered, noteId, handleHoverClose, isRemovable,
+  } = props;
   const classes = useStyles();
   const location = useLocation();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -95,7 +97,9 @@ const NoteSettings = (props) => {
             <ArchiveOutlinedIcon fontSize="small" />
           </IconButton>
         </Tooltip>
-        <DeleteNote noteId={noteId} />
+        {isRemovable ? (
+          <DeleteNote noteId={noteId} />
+        ) : null}
         {/* <Tooltip title="Delete" aria-label="Delete">
         <IconButton className={classes.iconBtn}>
           <DeleteOutlineOutlinedIcon fontSize="small" />
@@ -117,8 +121,16 @@ const NoteSettings = (props) => {
   );
 };
 
+NoteSettings.defaultProps = {
+  noteId: null,
+  handleHoverClose: null,
+};
+
 NoteSettings.propTypes = {
   isHovered: PropTypes.bool.isRequired,
+  noteId: PropTypes.string,
+  handleHoverClose: PropTypes.func,
+  isRemovable: PropTypes.bool.isRequired,
 };
 
 export default NoteSettings;

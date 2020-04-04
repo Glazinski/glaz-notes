@@ -36,6 +36,7 @@ const Column = (props) => {
             {...provided.droppableProps}
             // isDraggingOver={snapshot.isDraggingOver}
           >
+            {/* // TODO: Maybe I can put snackbar here */}
             {!notes.includes(null) ? notes.map((note, index) => <Note key={note.id} note={note} index={index} />) : null}
             {provided.placeholder}
           </div>

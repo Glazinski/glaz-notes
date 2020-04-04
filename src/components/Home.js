@@ -2,19 +2,15 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import DrawerList from '../Layout/DrawerList';
-import Bin from '../pages/Bin';
-import Notes from '../pages/Notes';
 import Settings from './settings/Menu';
 
 // Redux
 import { connect } from 'react-redux';
-import { signOut } from '../store/actions/authActions';
 
 // React router
 import {
-  Switch, Route, Redirect, useLocation,
+  Redirect,
 } from 'react-router-dom';
-import PrivateRoute from '../utils/PrivateRoute';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -82,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Home = ({ signOut, auth: { uid }, children }) => {
+const Home = ({ auth: { uid }, children }) => {
   const classes = useStyles();
 
   const [open, setOpen] = useState(true);
@@ -92,8 +88,7 @@ const Home = ({ signOut, auth: { uid }, children }) => {
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const handleListItemClick = (event, index) => {
-    setMobileOpen(false);
+  const handleListItemClick = (index) => {
     setSelectedIndex(index);
   };
 
@@ -163,7 +158,11 @@ const Home = ({ signOut, auth: { uid }, children }) => {
           }}
         >
           <div className={classes.toolbar} />
-          <DrawerList selectedIndex={selectedIndex} handleListItemClick={handleListItemClick} />
+          <DrawerList
+            handleMobileDrawerToggle={handleMobileDrawerToggle}
+            selectedIndex={selectedIndex}
+            handleListItemClick={handleListItemClick}
+          />
         </Drawer>
       </Hidden>
       <div style={{ width: '100%', margin: '0 auto' }}>
@@ -186,7 +185,6 @@ const Home = ({ signOut, auth: { uid }, children }) => {
 };
 
 Home.propTypes = {
-  signOut: PropTypes.func.isRequired,
   auth: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
@@ -194,4 +192,4 @@ const mapStateToProps = (state) => ({
   auth: state.firebase.auth,
 });
 
-export default connect(mapStateToProps, { signOut })(Home);
+export default connect(mapStateToProps)(Home);

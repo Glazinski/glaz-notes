@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import EditLabels from '../components/notes/labels/EditLabels';
 
 // React router
 import {
-  Link,
+  Link, useLocation,
 } from 'react-router-dom';
 
 // MUI
@@ -35,8 +36,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DrawerList = ({ selectedIndex, handleListItemClick }) => {
+const DrawerList = (props) => {
   const classes = useStyles();
+  const { selectedIndex, handleListItemClick, handleMobileDrawerToggle } = props;
+  const { pathname } = useLocation();
+  const [open, setOpen] = useState(false);
+
+  const handleItemClick = (index) => {
+    if (handleMobileDrawerToggle) handleMobileDrawerToggle();
+    handleListItemClick(index);
+  };
+
+  useEffect(() => {
+    if (pathname === '/') {
+      handleListItemClick(0);
+    } else if (pathname === '/bin') {
+      handleListItemClick(2);
+    }
+  }, []);
+
+  const handleOpenClick = () => setOpen(true);
+
+  const handleClose = () => setOpen(false);
 
   return (
     <List>
@@ -53,7 +74,8 @@ const DrawerList = ({ selectedIndex, handleListItemClick }) => {
         to="/"
         button
         selected={selectedIndex === 0}
-        onClick={(event) => handleListItemClick(event, 0)}
+        // onClick={() => handleListItemClick(0)}
+        onClick={() => handleItemClick(0)}
       >
         <ListItemIcon><EmojiObjectsOutlinedIcon /></ListItemIcon>
         <ListItemText primary="Notes" />
@@ -65,14 +87,13 @@ const DrawerList = ({ selectedIndex, handleListItemClick }) => {
       <ListItem
         className={classes.item}
         button
-        component={Link}
-        to="/test"
-        selected={selectedIndex === 1}
-        onClick={(event) => handleListItemClick(event, 1)}
+        onClick={handleOpenClick}
       >
         <ListItemIcon><EditOutlinedIcon /></ListItemIcon>
         <ListItemText primary="Edit label" />
       </ListItem>
+      <EditLabels open={open} handleClose={handleClose} />
+
       <Divider className={classes.divider} />
       <ListItem
         className={classes.item}
@@ -80,7 +101,7 @@ const DrawerList = ({ selectedIndex, handleListItemClick }) => {
         component={Link}
         to="/bin"
         selected={selectedIndex === 2}
-        onClick={(event) => handleListItemClick(event, 2)}
+        onClick={() => handleItemClick(2)}
       >
         <ListItemIcon><DeleteOutlinedIcon /></ListItemIcon>
         <ListItemText primary="Bin" />
@@ -89,9 +110,14 @@ const DrawerList = ({ selectedIndex, handleListItemClick }) => {
   );
 };
 
+DrawerList.defaultProps = {
+  handleMobileDrawerToggle: null,
+};
+
 DrawerList.propTypes = {
   selectedIndex: PropTypes.number.isRequired,
   handleListItemClick: PropTypes.func.isRequired,
+  handleMobileDrawerToggle: PropTypes.func,
 };
 
 export default DrawerList;

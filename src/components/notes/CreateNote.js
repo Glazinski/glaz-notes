@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import CreateList from './CreateList';
 import uniqid from 'uniqid';
+import NoteForm from './NoteForm';
 
 // Redux
 import { connect } from 'react-redux';
@@ -9,11 +10,9 @@ import { createNote } from '../../store/actions/notesActions';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 
@@ -30,9 +29,21 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
     margin: '0 auto 80px auto',
   },
+  content: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  title: {
+    color: theme.palette.text.disabled,
+    marginLeft: '10px',
+  },
   textField: {
+    // width: 400,
     borderBottom: 'none',
-    marginLeft: 10,
+    // marginLeft: 10,
+    // marginRight: 10,
+    padding: '0 10px 0 10px',
   },
   button: {
     color: theme.palette.text.primary,
@@ -55,17 +66,19 @@ const CreateNote = (props) => {
   });
   const classes = useStyles();
   const [isFocused, setIsFocused] = useState(false);
-  const textFieldEl = useRef(null);
   const [isListMode, setIsListMode] = useState(false);
 
   const handleFocus = () => {
-    textFieldEl.current.focus();
     setIsFocused(true);
   };
 
-  const handleMode = () => {
+  const handleClose = () => {
     setIsListMode(false);
     setIsFocused(false);
+  };
+
+  const handleList = () => {
+    setIsListMode(true);
   };
 
   const handleChange = (event) => {
@@ -86,90 +99,30 @@ const CreateNote = (props) => {
   }, [isFocused]);
 
   return (
-    <ClickAwayListener onClickAway={() => handleMode()}>
+    <ClickAwayListener onClickAway={() => handleClose()}>
       <Paper
         onClick={!isFocused ? handleFocus : null}
         className={classes.paper}
         elevation={5}
         variant="outlined"
-        // style={isFocused ? { padding: '10px' } : null}
       >
-        <Grid
-          style={isFocused ? { padding: '10px' } : null}
-          container
-          justif="center"
-          direction="column"
-        >
-          {isFocused ? (
-            <Grid item>
-              <TextField
-                onChange={handleChange}
-                name="title"
-                value={formData.title}
-                className={classes.textField}
-                InputProps={{ disableUnderline: true, classes: { input: classes.textFieldLabel } }}
-                placeholder="Title"
-                style={{ marginBottom: '20px' }}
-              />
-            </Grid>
-          ) : null}
-          <Grid container justify="space-between" alignItems="center">
-            {isListMode ? (
-              <Grid item>
-                <CreateList />
-              </Grid>
-            ) : (
-              <Grid item>
-                <TextField
-                  onChange={handleChange}
-                  name="content"
-                  value={formData.content}
-                  id={`${isFocused ? 'resized-label' : null}`}
-                  className={classes.textField}
-                  InputProps={{
-                    disableUnderline: true,
-                    classes: { input: classes.textFieldLabel },
-                  }}
-                  placeholder="Take a note..."
-                  inputRef={textFieldEl}
-                  style={!isFocused ? { marginLeft: '20px' } : null}
-                  multiline
-                  fullWidth
-                />
-              </Grid>
-            )}
-            {!isFocused ? (
-              <Grid item>
-                <Tooltip title="New list" aria-label="New list" placement="bottom">
-                  <IconButton
-                    onClick={() => setIsListMode(!isListMode)}
-                    style={!isFocused ? { marginRight: '20px' } : null}
-                  >
-                    <CheckBoxOutlinedIcon />
-                  </IconButton>
-                </Tooltip>
-              </Grid>
-            ) : null}
-          </Grid>
-          {/* <Grid item>
-
-          </Grid> */}
-          {isFocused ? (
-            <Grid
-              container
-              justify="space-between"
-              alignItems="center"
-              style={{ padding: '10px 10px 0 10px' }}
-            >
-              <Grid item>
-                <span>test</span>
-              </Grid>
-              <Grid item>
-                <Button onClick={() => handleMode()} color="inherit">Close</Button>
-              </Grid>
-            </Grid>
-          ) : null}
-        </Grid>
+        {isFocused ? (
+          <NoteForm
+            formData={formData}
+            handleChange={handleChange}
+            handleClose={handleClose}
+            isRemovable={false}
+          />
+        ) : (
+          <div className={classes.content}>
+            <Typography className={classes.title}>Take a note...</Typography>
+            <Tooltip title="New list" aria-label="New list">
+              <IconButton onClick={handleList}>
+                <CheckBoxOutlinedIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
+        )}
       </Paper>
     </ClickAwayListener>
   );

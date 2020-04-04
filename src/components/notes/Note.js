@@ -4,6 +4,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import DialogWindow from '../DialogWindow';
 import ModalNote from './ModalNote';
 import NoteSettings from './NoteSettings';
+import { useLocation } from 'react-router-dom';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -23,9 +24,9 @@ const useStyles = makeStyles((theme) => ({
     },
     // transition: 'opacity .3s ease',
   },
-  // title: {
-  //   minHeight: '32px',
-  // },
+  title: {
+    overflowWrap: 'anywhere',
+  },
   btn: {
     position: 'absolute',
     top: '0',
@@ -38,12 +39,14 @@ const useStyles = makeStyles((theme) => ({
   content: {
     margin: '5px 0 5px 0',
     minHeight: '20px',
+    overflowWrap: 'anywhere',
   },
 }));
 
 const Note = (props) => {
   const classes = useStyles();
   const { index, note: { id, title, content } } = props;
+  const { pathname } = useLocation();
 
   const [open, setOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -62,28 +65,16 @@ const Note = (props) => {
     setIsHovered(!isHovered);
   };
 
-  // const handleHoverOpen = (event) => {
-  //   event.stopPropagation();
-  //   setIsHovered(true);
-  // };
-  // const handleHoverClose = (event) => {
-  //   event.stopPropagation();
-  //   setIsHovered(false);
-  // };
-
-  // console.log(title.length <= 0 ? { content } : { title });
-
   return (
     <Draggable
       draggableId={id}
       index={index}
+      isDragDisabled={pathname !== '/'}
     >
       {(provided, snapshot) => (
         <Paper
           onMouseOver={handleHover}
           onMouseOut={handleHover}
-          // onMouseEnter={handleHover}
-          // onMouseLeave={handleHover}
           onFocus={() => null}
           onBlur={() => null}
           className={classes.container}
@@ -97,9 +88,16 @@ const Note = (props) => {
             onClick={handleClickOpen}
           />
           {open ? (
-            <DialogWindow handleClose={handleClose} open={open}>
-              <ModalNote noteId={id} title={title} content={content} />
-            </DialogWindow>
+          // <DialogWindow handleClose={handleClose} open={open}>
+            <ModalNote
+              handleClose={handleClose}
+              open={open}
+              noteId={id}
+              title={title}
+              content={content}
+              handleHoverClose={handleHover}
+            />
+          // </DialogWindow>
           ) : null}
           {/* {title} */}
           {title.length <= 0 ? (
@@ -107,14 +105,19 @@ const Note = (props) => {
               {content}
             </div>
           ) : (
-            <Typography variant="h6">
+            <Typography className={classes.title} variant="h6">
               {title}
             </Typography>
           )}
           <div className={classes.content}>
             {title.length <= 0 ? null : content}
           </div>
-          <NoteSettings noteId={id} isHovered={isHovered} handleHoverClose={handleHover} />
+          <NoteSettings
+            noteId={id}
+            isHovered={isHovered}
+            handleHoverClose={handleHover}
+            isRemovable
+          />
         </Paper>
       )}
     </Draggable>

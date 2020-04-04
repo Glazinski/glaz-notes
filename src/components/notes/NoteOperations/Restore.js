@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { restore } from '../../../store/actions/notesActions';
+import { restoreNote } from '../../../store/actions/notesActions';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -15,10 +16,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DeleteForever = ({ noteId, restore }) => {
+const DeleteForever = (props) => {
   const classes = useStyles();
+  const { noteId, restoreNote } = props;
   const onRestore = () => {
-    restore(noteId);
+    restoreNote(noteId);
   };
 
   return (
@@ -30,4 +32,9 @@ const DeleteForever = ({ noteId, restore }) => {
   );
 };
 
-export default connect(null, { restore })(DeleteForever);
+DeleteForever.propTypes = {
+  noteId: PropTypes.string.isRequired,
+  restoreNote: PropTypes.func.isRequired,
+};
+
+export default connect(null, { restoreNote })(DeleteForever);

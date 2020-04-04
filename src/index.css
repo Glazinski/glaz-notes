@@ -16,12 +16,13 @@ code {
   font-size: 15px;
 }
 
-.my-masonry-grid {
+/* .my-masonry-grid {
   display: flex;
-  margin-left: -20px; /* gutter size offset */
+  margin-left: -20px;
   width: 100%;
 }
+
 .my-masonry-grid_column {
-  padding-left: 20px; /* gutter size */
+  padding-left: 20px;
   background-clip: padding-box;
-}
+} */

@@ -19,7 +19,6 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import MuiLink from '@material-ui/core/Link';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import FormControl from '@material-ui/core/FormControl';
 
 // MUI Icons
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';

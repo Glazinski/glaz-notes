@@ -25,6 +25,18 @@
     ],
     "import/order": "off",
     "react/jsx-props-no-spreading": "off",
-    "react-hooks/exhaustive-deps": "off"
+    "react-hooks/exhaustive-deps": "off",
+    "no-shadow": [
+      "error",
+      {
+        "allow": [
+          "createNote",
+          "moveNoteToBin",
+          "deleteNoteForever",
+          "restoreNote",
+          "updateNote"
+        ]
+      }
+    ]
   }
 }

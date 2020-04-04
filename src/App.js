@@ -18,7 +18,6 @@ import history from './utils/history';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
 import Home from './components/Home';
-import Dashboard from './components/notes/Dashboard';
 
 const App = (props) => {
   const { theme, fetchTheme, auth: { uid } } = props;
@@ -28,9 +27,6 @@ const App = (props) => {
     () => myTheme(prefersDarkMode),
     [prefersDarkMode],
   );
-
-  // TODO: Temporary solution
-  useEffect(() => history.push('/'), []);
 
   useEffect(() => {
     if (uid) {

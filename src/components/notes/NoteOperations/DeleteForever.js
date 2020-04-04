@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { deleteForever } from '../../../store/actions/notesActions';
+import { deleteNoteForever } from '../../../store/actions/notesActions';
 import Confirm from '../../Confirm';
 
 // MUI
@@ -20,8 +20,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DeleteForever = ({ noteId, deleteForever, handleHoverClose }) => {
+const DeleteForever = (props) => {
   const classes = useStyles();
+  const { noteId, deleteNoteForever, handleHoverClose } = props;
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = (event) => {
@@ -35,7 +36,7 @@ const DeleteForever = ({ noteId, deleteForever, handleHoverClose }) => {
 
   const handleDelete = () => {
     handleClose();
-    deleteForever(noteId);
+    deleteNoteForever(noteId);
   };
 
   return (
@@ -52,7 +53,8 @@ const DeleteForever = ({ noteId, deleteForever, handleHoverClose }) => {
 
 DeleteForever.propTypes = {
   noteId: PropTypes.string.isRequired,
-  deleteForever: PropTypes.func.isRequired,
+  deleteNoteForever: PropTypes.func.isRequired,
+  handleHoverClose: PropTypes.func.isRequired,
 };
 
-export default connect(null, { deleteForever })(DeleteForever);
+export default connect(null, { deleteNoteForever })(DeleteForever);

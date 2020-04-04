@@ -41,7 +41,7 @@ const NoteList = (props) => {
   }, []);
 
   useEffect(() => {
-    // console.log(props);
+    // console.log(props.notes);
     if (notes && colNum) {
       const lay = calculateLayout(notes, colNum);
 
@@ -61,6 +61,7 @@ const NoteList = (props) => {
 
 const mapStateToProps = (state) => {
   const { userNotes } = state.firestore.data;
+  // console.log(userNotes);
   let data = {};
   _.forIn(userNotes, (value, key) => {
     if (value !== null) {
@@ -71,6 +72,7 @@ const mapStateToProps = (state) => {
   return ({
     auth: state.firebase.auth,
     notes: data,
+    // notes: userNotes,
   });
 };
 
