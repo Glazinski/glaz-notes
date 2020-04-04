@@ -33,7 +33,7 @@ const App = (props) => {
       fetchTheme();
     }
     setPrefersDarkMode(theme);
-  }, [props]);
+  }, [theme]);
 
   return (
     <Router history={history}>
@@ -44,17 +44,17 @@ const App = (props) => {
           <Route
             path="/"
             exact
-            render={(props) => (
-              <Home {...props}>
-                <Notes {...props} />
+            render={(routerProps) => (
+              <Home {...routerProps}>
+                <Notes {...routerProps} />
               </Home>
             )}
           />
           <Route
             path="/bin"
-            render={(props) => (
-              <Home {...props}>
-                <Bin {...props} />
+            render={(routerProps) => (
+              <Home {...routerProps}>
+                <Bin {...routerProps} />
               </Home>
             )}
           />
@@ -73,13 +73,13 @@ const mapStateToProps = (state) => ({
 });
 
 App.defaultProps = {
-  uid: null,
+  auth: null,
 };
 
 App.propTypes = {
   theme: PropTypes.string.isRequired,
   fetchTheme: PropTypes.func.isRequired,
-  uid: PropTypes.string,
+  auth: PropTypes.oneOfType([PropTypes.object]),
 };
 
 export default connect(mapStateToProps, { fetchTheme })(App);

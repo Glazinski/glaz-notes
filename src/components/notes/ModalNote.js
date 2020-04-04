@@ -61,6 +61,10 @@ const DialogNote = (props) => {
   );
 };
 
+DialogNote.defaultProps = {
+  handleHoverClose: null,
+};
+
 DialogNote.propTypes = {
   noteId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
@@ -68,6 +72,7 @@ DialogNote.propTypes = {
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   updateNote: PropTypes.func.isRequired,
+  handleHoverClose: PropTypes.func,
 };
 
 export default connect(null, { updateNote })(DialogNote);

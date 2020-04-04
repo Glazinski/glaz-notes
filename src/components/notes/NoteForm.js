@@ -111,6 +111,7 @@ const NoteForm = (props) => {
 
 NoteForm.defaultProps = {
   noteId: null,
+  handleHoverClose: null,
 };
 
 NoteForm.propTypes = {
@@ -118,6 +119,8 @@ NoteForm.propTypes = {
   handleChange: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   noteId: PropTypes.string,
+  isRemovable: PropTypes.bool.isRequired,
+  handleHoverClose: PropTypes.func,
 };
 
 export default NoteForm;

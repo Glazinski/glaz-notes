@@ -89,8 +89,11 @@ const CreateNote = (props) => {
   useEffect(() => {
     const { title, content } = formData;
 
-    // eslint-disable-next-line no-mixed-operators
-    if (!isFocused && (title.length > 0 || content.length > 0) && !!title.trim().length || !!content.trim().length) {
+    if (
+      !isFocused && (title.length > 0 || content.length > 0)
+      // eslint-disable-next-line no-mixed-operators
+      && !!title.trim().length || !!content.trim().length
+    ) {
       props.createNote(uniqid(), formData);
       setFormData({ title: '', content: '' });
     } else {

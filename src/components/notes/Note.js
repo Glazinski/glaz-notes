@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Draggable } from 'react-beautiful-dnd';
-import DialogWindow from '../DialogWindow';
 import ModalNote from './ModalNote';
 import NoteSettings from './NoteSettings';
 import { useLocation } from 'react-router-dom';
@@ -71,7 +70,7 @@ const Note = (props) => {
       index={index}
       isDragDisabled={pathname !== '/'}
     >
-      {(provided, snapshot) => (
+      {(provided) => (
         <Paper
           onMouseOver={handleHover}
           onMouseOut={handleHover}
@@ -84,6 +83,7 @@ const Note = (props) => {
           variant="outlined"
         >
           <div
+            aria-hidden="true"
             className={classes.btn}
             onClick={handleClickOpen}
           />

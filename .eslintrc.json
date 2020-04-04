@@ -34,7 +34,8 @@
           "moveNoteToBin",
           "deleteNoteForever",
           "restoreNote",
-          "updateNote"
+          "updateNote",
+          "fetchTheme"
         ]
       }
     ]
