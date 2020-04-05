@@ -1,6 +1,8 @@
 import {
   SET_NOTE,
   SET_NOTE_ERRORS,
+  NOTE_MOVED,
+  NOTE_MOVED_CLEAR,
 } from '../types';
 
 export const createNote = (noteId, note) => (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -13,7 +15,9 @@ export const createNote = (noteId, note) => (dispatch, getState, { getFirebase, 
     .collection('userNotes')
     .doc(noteId)
     .set({
-      ...note,
+      // ...note,
+      title: note.title,
+      content: note.content,
       id: noteId,
       createdAt: new Date(),
     })
@@ -21,15 +25,37 @@ export const createNote = (noteId, note) => (dispatch, getState, { getFirebase, 
     .catch((err) => dispatch({ type: SET_NOTE_ERRORS, payload: err }));
 };
 
-export const moveNoteToBin = (noteId) => (dispatch, getState, { getFirebase, getFirestore }) => {
+export const noteMovedClear = () => ({
+  type: NOTE_MOVED_CLEAR,
+});
+
+export const moveNoteFromTo = (noteId, src, destination, msg = null, newFormData = null) => (
+  dispatch, getState, { getFirebase, getFirestore },
+) => {
   const firebase = getFirebase();
   const firestore = getFirestore();
   const userId = firebase.auth().currentUser.uid;
 
   let note = {};
 
+  if (newFormData) {
+    dispatch(createNote(noteId, newFormData));
+  }
+
+  dispatch(noteMovedClear);
+
+  dispatch({
+    type: NOTE_MOVED,
+    payload: {
+      from: src,
+      to: destination,
+      msg,
+      noteId,
+    },
+  });
+
   firestore
-    .collection('notes')
+    .collection(src)
     .doc(userId)
     .collection('userNotes')
     .doc(noteId)
@@ -38,7 +64,7 @@ export const moveNoteToBin = (noteId) => (dispatch, getState, { getFirebase, get
       if (doc.exists) {
         note = { ...doc.data() };
         return firestore
-          .collection('bin').doc(userId)
+          .collection(destination).doc(userId)
           .collection('userNotes').doc(noteId)
           .set({
             ...note,
@@ -48,7 +74,7 @@ export const moveNoteToBin = (noteId) => (dispatch, getState, { getFirebase, get
     })
     .then(() => {
       firestore
-        .collection('notes')
+        .collection(src)
         .doc(userId)
         .collection('userNotes')
         .doc(noteId)
@@ -73,45 +99,6 @@ export const deleteNoteForever = (noteId) => (
     .collection('userNotes')
     .doc(noteId)
     .delete();
-};
-
-export const restoreNote = (noteId) => (dispatch, getState, { getFirebase, getFirestore }) => {
-  const firebase = getFirebase();
-  const firestore = getFirestore();
-  const userId = firebase.auth().currentUser.uid;
-
-  let note = {};
-
-  firestore
-    .collection('bin')
-    .doc(userId)
-    .collection('userNotes')
-    .doc(noteId)
-    .get()
-    .then((doc) => {
-      if (doc.exists) {
-        note = { ...doc.data() };
-        return firestore
-          .collection('notes').doc(userId)
-          .collection('userNotes').doc(noteId)
-          .set({
-            ...note,
-          });
-      }
-      return console.log('No such document');
-    })
-    .then(() => {
-      firestore
-        .collection('bin')
-        .doc(userId)
-        .collection('userNotes')
-        .doc(noteId)
-        .delete();
-    })
-    .catch((err) => {
-      console.error(err);
-      dispatch({ type: SET_NOTE_ERRORS, payload: err });
-    });
 };
 
 export const updateNote = (noteId, newFormData) => (

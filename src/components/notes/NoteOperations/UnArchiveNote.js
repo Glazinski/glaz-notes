@@ -3,45 +3,41 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { moveNoteFromTo } from '../../../store/actions/notesActions';
 
-// MUI
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
-
-// MUI icons
-import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
+import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined';
 
 const useStyles = makeStyles((theme) => ({
   iconBtn: {
     padding: '7px',
+    marginRight: '5px',
     color: theme.palette.text.primary,
   },
 }));
 
-const DeleteNote = (props) => {
+const UnArchiveNote = (props) => {
   const classes = useStyles();
   const { noteId, moveNoteFromTo, coll } = props;
-  const msg = 'Note binned';
+  const msg = 'Note unarchived';
 
-  const onDeleteClick = () => {
-    moveNoteFromTo(noteId, coll, 'bin', msg);
+  const onRestore = () => {
+    moveNoteFromTo(noteId, coll, 'notes', msg);
   };
 
   return (
-    <>
-      <Tooltip title="Delete" aria-label="Delete">
-        <IconButton onClick={onDeleteClick} className={classes.iconBtn}>
-          <DeleteOutlineOutlinedIcon fontSize="small" />
-        </IconButton>
-      </Tooltip>
-    </>
+    <Tooltip title="Unarchive" aria-label="Unarchive">
+      <IconButton onClick={onRestore} className={classes.iconBtn}>
+        <UnarchiveOutlinedIcon fontSize="small" color="inherit" />
+      </IconButton>
+    </Tooltip>
   );
 };
 
-DeleteNote.propTypes = {
+UnArchiveNote.propTypes = {
   noteId: PropTypes.string.isRequired,
   moveNoteFromTo: PropTypes.func.isRequired,
   coll: PropTypes.string.isRequired,
 };
 
-export default connect(null, { moveNoteFromTo })(DeleteNote);
+export default connect(null, { moveNoteFromTo })(UnArchiveNote);

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import DrawerList from '../Layout/DrawerList';
 import Settings from './settings/Menu';
+import UndoNoteOperation from './notes/UndoNoteOperation';
 
 // Redux
 import { connect } from 'react-redux';
@@ -173,11 +174,7 @@ const Home = ({ auth: { uid }, children }) => {
         >
           <div className={classes.drawerHeader} />
           {children}
-          {/* <Switch>
-            <Route exact path="/" component={Notes} />
-            <Route path="/bin" component={Bin} />
-
-          </Switch> */}
+          <UndoNoteOperation />
         </main>
       </div>
     </div>

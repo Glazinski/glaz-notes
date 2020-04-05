@@ -22,12 +22,11 @@ const useStyles = makeStyles((theme) => ({
 
 const DeleteForever = (props) => {
   const classes = useStyles();
-  const { noteId, deleteNoteForever, handleHoverClose } = props;
+  const { noteId, deleteNoteForever } = props;
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = (event) => {
     setOpen(true);
-    handleHoverClose(event);
   };
 
   const handleClose = () => {
@@ -54,7 +53,6 @@ const DeleteForever = (props) => {
 DeleteForever.propTypes = {
   noteId: PropTypes.string.isRequired,
   deleteNoteForever: PropTypes.func.isRequired,
-  handleHoverClose: PropTypes.func.isRequired,
 };
 
 export default connect(null, { deleteNoteForever })(DeleteForever);

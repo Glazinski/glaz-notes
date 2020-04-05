@@ -7,6 +7,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import myTheme from './utils/theme';
 import Notes from './pages/Notes';
 import Bin from './pages/Bin';
+import Archive from './pages/Archive';
 
 // React router
 import {
@@ -55,6 +56,14 @@ const App = (props) => {
             render={(routerProps) => (
               <Home {...routerProps}>
                 <Bin {...routerProps} />
+              </Home>
+            )}
+          />
+          <Route
+            path="/archive"
+            render={(routerProps) => (
+              <Home {...routerProps}>
+                <Archive {...routerProps} />
               </Home>
             )}
           />

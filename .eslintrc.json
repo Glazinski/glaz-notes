@@ -31,11 +31,11 @@
       {
         "allow": [
           "createNote",
-          "moveNoteToBin",
+          "moveNoteFromTo",
           "deleteNoteForever",
-          "restoreNote",
           "updateNote",
-          "fetchTheme"
+          "fetchTheme",
+          "noteMovedClear"
         ]
       }
     ]

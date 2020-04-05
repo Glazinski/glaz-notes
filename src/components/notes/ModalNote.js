@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 const DialogNote = (props) => {
   const {
-    noteId, content, title, handleClose, open, updateNote, handleHoverClose,
+    noteId, content, title, handleClose, open, updateNote,
   } = props;
   const classes = useStyles();
   const [formData, setFormData] = useState({
@@ -53,16 +53,11 @@ const DialogNote = (props) => {
           formData={formData}
           handleChange={handleChange}
           handleClose={handleModalClose}
-          handleHoverClose={handleHoverClose}
           isRemovable
         />
       </Paper>
     </DialogWindow>
   );
-};
-
-DialogNote.defaultProps = {
-  handleHoverClose: null,
 };
 
 DialogNote.propTypes = {
@@ -72,7 +67,6 @@ DialogNote.propTypes = {
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   updateNote: PropTypes.func.isRequired,
-  handleHoverClose: PropTypes.func,
 };
 
 export default connect(null, { updateNote })(DialogNote);

@@ -9,6 +9,7 @@ import { useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -44,7 +45,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Note = (props) => {
   const classes = useStyles();
-  const { index, note: { id, title, content } } = props;
+  const {
+    index, note: { id, title, content },
+  } = props;
   const { pathname } = useLocation();
 
   const [open, setOpen] = useState(false);
@@ -52,16 +55,18 @@ const Note = (props) => {
 
   const handleClickOpen = () => {
     setOpen(true);
-    setIsHovered(false);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleHover = (event) => {
-    event.stopPropagation();
-    setIsHovered(!isHovered);
+  const handleHoverOn = () => {
+    setIsHovered(true);
+  };
+
+  const handleHoverOff = () => {
+    setIsHovered(false);
   };
 
   return (
@@ -71,54 +76,54 @@ const Note = (props) => {
       isDragDisabled={pathname !== '/'}
     >
       {(provided) => (
-        <Paper
-          onMouseOver={handleHover}
-          onMouseOut={handleHover}
-          onFocus={() => null}
-          onBlur={() => null}
-          className={classes.container}
-          {...provided.dragHandleProps}
-          {...provided.draggableProps}
-          ref={provided.innerRef}
-          variant="outlined"
-        >
-          <div
-            aria-hidden="true"
-            className={classes.btn}
-            onClick={handleClickOpen}
-          />
-          {open ? (
-          // <DialogWindow handleClose={handleClose} open={open}>
-            <ModalNote
-              handleClose={handleClose}
-              open={open}
-              noteId={id}
-              title={title}
-              content={content}
-              handleHoverClose={handleHover}
+        <ClickAwayListener onClickAway={handleHoverOff}>
+          <Paper
+            onMouseEnter={handleHoverOn}
+            onMouseLeave={handleHoverOff}
+            className={classes.container}
+            {...provided.dragHandleProps}
+            {...provided.draggableProps}
+            ref={provided.innerRef}
+            variant="outlined"
+            // style={open ? {transform: translate}}
+          >
+            <div
+              aria-hidden="true"
+              className={classes.btn}
+              onClick={handleClickOpen}
             />
-          // </DialogWindow>
-          ) : null}
-          {/* {title} */}
-          {title.length <= 0 ? (
+            {open ? (
+            // <DialogWindow handleClose={handleClose} open={open}>
+              <ModalNote
+                handleClose={handleClose}
+                open={open}
+                noteId={id}
+                title={title}
+                content={content}
+                handleHoverClose={handleHoverOff}
+              />
+            // </DialogWindow>
+            ) : null}
+            {/* {title} */}
+            {title.length <= 0 ? (
+              <div className={classes.content}>
+                {content}
+              </div>
+            ) : (
+              <Typography className={classes.title} variant="h6">
+                {title}
+              </Typography>
+            )}
             <div className={classes.content}>
-              {content}
+              {title.length <= 0 ? null : content}
             </div>
-          ) : (
-            <Typography className={classes.title} variant="h6">
-              {title}
-            </Typography>
-          )}
-          <div className={classes.content}>
-            {title.length <= 0 ? null : content}
-          </div>
-          <NoteSettings
-            noteId={id}
-            isHovered={isHovered}
-            handleHoverClose={handleHover}
-            isRemovable
-          />
-        </Paper>
+            <NoteSettings
+              noteId={id}
+              isHovered={isHovered}
+              isRemovable
+            />
+          </Paper>
+        </ClickAwayListener>
       )}
     </Draggable>
   );

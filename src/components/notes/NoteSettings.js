@@ -4,6 +4,8 @@ import ChangeColor from './NoteOperations/ChangeColor';
 import DeleteNote from './NoteOperations/Delete';
 import DeleteForever from './NoteOperations/DeleteForever';
 import Restore from './NoteOperations/Restore';
+import ArchiveNote from './NoteOperations/ArchiveNote';
+import UnArchiveNote from './NoteOperations/UnArchiveNote';
 import { useLocation } from 'react-router-dom';
 
 // MUI
@@ -23,13 +25,13 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     justifyContent: 'space-between',
     marginTop: '5px',
-    // transition: 'opacity .3s ease',
+    transition: 'opacity .3s ease',
   },
   binContainer: {
     display: 'flex',
     marginTop: '5px',
     marginLeft: '-6px',
-    // transition: 'opacity .2s ease',
+    transition: 'opacity .3s ease',
   },
   iconBtn: {
     padding: '7px',
@@ -39,11 +41,12 @@ const useStyles = makeStyles((theme) => ({
 
 const NoteSettings = (props) => {
   const {
-    isHovered, noteId, handleHoverClose, isRemovable,
+    isHovered, noteId, isRemovable, formData,
   } = props;
   const classes = useStyles();
-  const location = useLocation();
+  const { pathname } = useLocation();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const coll = pathname === '/' ? 'notes' : pathname.substr(1);
 
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -56,13 +59,13 @@ const NoteSettings = (props) => {
   const open = Boolean(anchorEl);
 
   const renderItems = () => {
-    if (location.pathname === '/bin') {
+    if (pathname === '/bin') {
       return (
         <div
           className={classes.binContainer}
           style={isHovered ? { opacity: '1', pointerEvents: 'auto' } : { opacity: '0', pointerEvents: 'none' }}
         >
-          <DeleteForever noteId={noteId} handleHoverClose={handleHoverClose} />
+          <DeleteForever noteId={noteId} />
           <Restore noteId={noteId} />
         </div>
       );
@@ -92,19 +95,14 @@ const NoteSettings = (props) => {
             <ImageOutlinedIcon fontSize="small" />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Archive" aria-label="Archive">
-          <IconButton className={classes.iconBtn}>
-            <ArchiveOutlinedIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
+        {pathname === '/archive' ? (
+          <UnArchiveNote coll={coll} noteId={noteId} />
+        ) : (
+          <ArchiveNote formData={formData} coll={coll} noteId={noteId} />
+        )}
         {isRemovable ? (
-          <DeleteNote noteId={noteId} />
+          <DeleteNote coll={coll} noteId={noteId} />
         ) : null}
-        {/* <Tooltip title="Delete" aria-label="Delete">
-        <IconButton className={classes.iconBtn}>
-          <DeleteOutlineOutlinedIcon fontSize="small" />
-        </IconButton>
-      </Tooltip> */}
         <Tooltip title="Add Label" aria-label="Add Label">
           <IconButton className={classes.iconBtn}>
             <LabelOutlinedIcon fontSize="small" />
@@ -123,13 +121,11 @@ const NoteSettings = (props) => {
 
 NoteSettings.defaultProps = {
   noteId: null,
-  handleHoverClose: null,
 };
 
 NoteSettings.propTypes = {
   isHovered: PropTypes.bool.isRequired,
   noteId: PropTypes.string,
-  handleHoverClose: PropTypes.func,
   isRemovable: PropTypes.bool.isRequired,
 };
 

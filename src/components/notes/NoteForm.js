@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import NoteSettings from './NoteSettings';
-
+import { useLocation } from 'react-router-dom';
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -38,14 +38,30 @@ const useStyles = makeStyles((theme) => ({
 
 const NoteForm = (props) => {
   const {
-    formData: { title, content }, handleChange, handleClose, noteId, isRemovable, handleHoverClose,
+    formData: { title, content },
+    handleChange,
+    handleClose,
+    noteId,
+    isRemovable,
+    handleHoverClose,
   } = props;
   const classes = useStyles();
   const textFieldEl = useRef(null);
+  const { pathname } = useLocation();
+  const isBin = pathname === '/bin';
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     textFieldEl.current.focus();
   }, []);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleSnackClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Grid
@@ -56,6 +72,7 @@ const NoteForm = (props) => {
     >
       <Grid item>
         <TextField
+          onClick={isBin ? handleClick : null}
           onChange={handleChange}
           name="title"
           value={title}
@@ -65,11 +82,13 @@ const NoteForm = (props) => {
           style={{ marginBottom: '20px' }}
           fullWidth
           multiline
+          disabled={isBin}
         />
       </Grid>
 
       <Grid item>
         <TextField
+          onClick={isBin ? handleClick : null}
           onChange={handleChange}
           name="content"
           value={content}
@@ -83,8 +102,8 @@ const NoteForm = (props) => {
           inputRef={textFieldEl}
           multiline
           fullWidth
+          disabled={isBin}
         />
-
       </Grid>
 
       <Grid
@@ -93,8 +112,9 @@ const NoteForm = (props) => {
         alignItems="center"
         style={{ padding: '10px 10px 0 10px' }}
       >
-        <Grid item>
+        <Grid item xs={6}>
           <NoteSettings
+            formData={props.formData}
             noteId={noteId}
             isHovered
             isRemovable={isRemovable}

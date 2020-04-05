@@ -61,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
 
 const CreateNote = (props) => {
   const [formData, setFormData] = useState({
+    noteId: uniqid(),
     title: '',
     content: '',
   });
@@ -95,9 +96,9 @@ const CreateNote = (props) => {
       && !!title.trim().length || !!content.trim().length
     ) {
       props.createNote(uniqid(), formData);
-      setFormData({ title: '', content: '' });
+      setFormData({ noteId: uniqid(), title: '', content: '' });
     } else {
-      setFormData({ title: '', content: '' });
+      setFormData({ noteId: uniqid(), title: '', content: '' });
     }
   }, [isFocused]);
 
@@ -111,6 +112,7 @@ const CreateNote = (props) => {
       >
         {isFocused ? (
           <NoteForm
+            noteId={formData.noteId}
             formData={formData}
             handleChange={handleChange}
             handleClose={handleClose}

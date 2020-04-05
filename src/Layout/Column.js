@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Droppable } from 'react-beautiful-dnd';
 import Note from '../components/notes/Note';
@@ -34,10 +34,11 @@ const Column = (props) => {
             className={classes.list}
             ref={provided.innerRef}
             {...provided.droppableProps}
-            // isDraggingOver={snapshot.isDraggingOver}
           >
             {/* // TODO: Maybe I can put snackbar here */}
-            {!notes.includes(null) ? notes.map((note, index) => <Note key={note.id} note={note} index={index} />) : null}
+            {!notes.includes(null) ? notes.map((note, index) => (
+              <Note key={note.id} note={note} index={index} />
+            )) : null}
             {provided.placeholder}
           </div>
         )}

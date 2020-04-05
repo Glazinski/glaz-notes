@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { restoreNote } from '../../../store/actions/notesActions';
+import { moveNoteFromTo } from '../../../store/actions/notesActions';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -16,11 +16,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DeleteForever = (props) => {
+const RestoreNote = (props) => {
   const classes = useStyles();
-  const { noteId, restoreNote } = props;
+  const { noteId, moveNoteFromTo } = props;
+  const msg = 'Note restored';
+
   const onRestore = () => {
-    restoreNote(noteId);
+    moveNoteFromTo(noteId, 'bin', 'notes', msg);
   };
 
   return (
@@ -32,9 +34,9 @@ const DeleteForever = (props) => {
   );
 };
 
-DeleteForever.propTypes = {
+RestoreNote.propTypes = {
   noteId: PropTypes.string.isRequired,
-  restoreNote: PropTypes.func.isRequired,
+  moveNoteFromTo: PropTypes.func.isRequired,
 };
 
-export default connect(null, { restoreNote })(DeleteForever);
+export default connect(null, { moveNoteFromTo })(RestoreNote);

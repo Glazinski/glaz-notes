@@ -85,15 +85,15 @@ NoteList.propTypes = {
 };
 
 export default compose(
-  connect(mapStateToProps),
   firestoreConnect((props) => {
+    const { uid } = props.firebase.auth().currentUser;
     const { pathname } = props.location;
-    const coll = pathname === '/bin' ? 'bin' : 'notes';
+    const coll = pathname === '/' ? 'notes' : pathname.substr(1);
 
     return [
       {
         collection: `${coll}`,
-        doc: `${props.auth.uid}`,
+        doc: `${uid}`,
         subcollections: [
           { collection: 'userNotes' },
         ],
@@ -103,4 +103,5 @@ export default compose(
       },
     ];
   }),
+  connect(mapStateToProps),
 )(NoteList);

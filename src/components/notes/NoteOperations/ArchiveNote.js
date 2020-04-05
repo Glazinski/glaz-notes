@@ -9,7 +9,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 
 // MUI icons
-import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
+import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined';
 
 const useStyles = makeStyles((theme) => ({
   iconBtn: {
@@ -18,30 +18,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DeleteNote = (props) => {
+const ArchiveNote = (props) => {
   const classes = useStyles();
-  const { noteId, moveNoteFromTo, coll } = props;
-  const msg = 'Note binned';
+  const {
+    noteId, moveNoteFromTo, coll, formData,
+  } = props;
+  const msg = 'Note archived';
 
-  const onDeleteClick = () => {
-    moveNoteFromTo(noteId, coll, 'bin', msg);
+  const onArchiveClick = () => {
+    moveNoteFromTo(noteId, coll, 'archive', msg, formData);
   };
 
   return (
     <>
-      <Tooltip title="Delete" aria-label="Delete">
-        <IconButton onClick={onDeleteClick} className={classes.iconBtn}>
-          <DeleteOutlineOutlinedIcon fontSize="small" />
+      <Tooltip title="Archive" aria-label="Archive">
+        <IconButton onClick={onArchiveClick} className={classes.iconBtn}>
+          <ArchiveOutlinedIcon fontSize="small" />
         </IconButton>
       </Tooltip>
     </>
   );
 };
 
-DeleteNote.propTypes = {
+
+ArchiveNote.defaultProps = {
+  formData: null,
+};
+
+ArchiveNote.propTypes = {
   noteId: PropTypes.string.isRequired,
   moveNoteFromTo: PropTypes.func.isRequired,
   coll: PropTypes.string.isRequired,
+  formData: PropTypes.oneOfType([PropTypes.object]),
 };
 
-export default connect(null, { moveNoteFromTo })(DeleteNote);
+export default connect(null, { moveNoteFromTo })(ArchiveNote);

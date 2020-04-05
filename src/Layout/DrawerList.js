@@ -20,13 +20,12 @@ import Typography from '@material-ui/core/Typography';
 import EmojiObjectsOutlinedIcon from '@material-ui/icons/EmojiObjectsOutlined';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined';
 
 const useStyles = makeStyles((theme) => ({
   item: {
-    borderRadius: '0 50px 50px 0',
-  },
-  divider: {
     margin: '10px 0',
+    borderRadius: '0 50px 50px 0',
   },
   subtitle: {
     margin: '15px 0 15px 15px',
@@ -52,6 +51,8 @@ const DrawerList = (props) => {
       handleListItemClick(0);
     } else if (pathname === '/bin') {
       handleListItemClick(2);
+    } else if (pathname === '/archive') {
+      handleListItemClick(3);
     }
   }, []);
 
@@ -81,7 +82,7 @@ const DrawerList = (props) => {
         <ListItemText primary="Notes" />
       </ListItem>
 
-      <Divider className={classes.divider} />
+      <Divider />
 
       <Typography className={classes.subtitle} variant="overline">LABELS</Typography>
       <ListItem
@@ -94,7 +95,19 @@ const DrawerList = (props) => {
       </ListItem>
       <EditLabels open={open} handleClose={handleClose} />
 
-      <Divider className={classes.divider} />
+      <Divider />
+      <ListItem
+        className={classes.item}
+        button
+        component={Link}
+        to="/archive"
+        selected={selectedIndex === 3}
+        onClick={() => handleItemClick(3)}
+      >
+        <ListItemIcon><ArchiveOutlinedIcon /></ListItemIcon>
+        <ListItemText primary="Archive" />
+      </ListItem>
+
       <ListItem
         className={classes.item}
         button
