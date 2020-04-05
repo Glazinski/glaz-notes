@@ -77,7 +77,7 @@ const NoteSettings = (props) => {
         style={isHovered ? { opacity: '1', pointerEvents: 'auto' } : { opacity: '0', pointerEvents: 'none' }}
         // style={isHovered ? { display: 'block' } : { display: 'none' }}
       >
-        <Tooltip title="Change color" aria-label="Change color">
+        {/* <Tooltip title="Change color" aria-label="Change color">
           <IconButton
             aria-owns={open ? 'mouse-over-popover' : undefined}
             aria-haspopup="true"
@@ -87,7 +87,7 @@ const NoteSettings = (props) => {
           >
             <PaletteOutlinedIcon fontSize="small" />
           </IconButton>
-        </Tooltip>
+        </Tooltip> */}
         <ChangeColor open={open} anchorEl={anchorEl} onClose={handlePopoverClose} />
 
         <Tooltip title="Add image" aria-label="Add image">

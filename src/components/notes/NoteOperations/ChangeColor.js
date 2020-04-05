@@ -1,39 +1,58 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ColorList from './ColorList';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
-import Popover from '@material-ui/core/Popover';
-import Paper from '@material-ui/core/Paper';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+
+// MUI icons
+import PaletteOutlinedIcon from '@material-ui/icons/PaletteOutlined';
 
 const useStyles = makeStyles((theme) => ({
-  popover: {
-    pointerEvents: 'none',
+  root: {
+    position: 'relative',
+  },
+  iconBtn: {
+    padding: '7px',
+    color: theme.palette.text.primary,
+  },
+  test: {
+    position: 'absolute',
+    top: '-15px',
+    left: 0,
   },
 }));
 
 const ChangeColor = (props) => {
   const classes = useStyles();
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleHoverOn = () => {
+    setIsHovered(true);
+  };
+
+  const handleHoverOut = () => {
+    setIsHovered(false);
+  };
 
   return (
-    <Popover
-      className={classes.popover}
-      id="mouse-over-popover"
-      open={props.open}
-      anchorEl={props.anchorEl}
-      onClose={props.onClose}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'left',
-      }}
-      transformOrigin={{
-        vertical: 'bottom',
-        horizontal: 'left',
-      }}
+    <div
+      className={classes.root}
+      onMouseEnter={handleHoverOn}
+      onMouseLeave={handleHoverOut}
     >
-      <Paper style={{ width: '100px', height: '50px' }}>
-        <h4>elo</h4>
-      </Paper>
-    </Popover>
+      <Tooltip title="Change color" aria-label="Change color">
+        <IconButton
+          className={classes.iconBtn}
+          aria-haspopup="true"
+
+        >
+          <PaletteOutlinedIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
+      {isHovered ? <ColorList /> : null}
+    </div>
   );
 };
 
