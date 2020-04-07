@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import DialogWindow from '../DialogWindow';
 import NoteForm from './NoteForm';
+import { useLocation } from 'react-router-dom';
 
 // Redux
 import { connect } from 'react-redux';
@@ -32,6 +33,8 @@ const DialogNote = (props) => {
     title,
     content,
   });
+  const { pathname } = useLocation();
+  const coll = pathname === '/' ? 'notes' : pathname.substr(1);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -41,7 +44,7 @@ const DialogNote = (props) => {
   const handleModalClose = () => {
     handleClose();
     if (formData.title !== title || formData.content !== content) {
-      updateNote(noteId, formData);
+      updateNote(noteId, formData, coll);
     }
   };
 

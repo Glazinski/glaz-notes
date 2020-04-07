@@ -34,7 +34,7 @@ const App = (props) => {
       fetchTheme();
     }
     setPrefersDarkMode(theme);
-  }, [theme]);
+  }, [uid, theme]);
 
   return (
     <Router history={history}>

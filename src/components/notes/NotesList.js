@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+import { useLocation } from 'react-router-dom';
 import DragContainer from '../../Layout/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import calculateLayout from '../../utils/calculateLayout';
 
 // Redux
-import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firestoreConnect } from 'react-redux-firebase';
+import { fetchNotes } from '../../store/actions/notesActions';
+
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -22,7 +22,9 @@ const NoteList = (props) => {
   const [colNum, setColNum] = useState(2);
   const [layout, setLayout] = useState(null);
   const classes = useStyles();
-  const { notes } = props;
+  const { notes, loading, fetchNotes } = props;
+  const { pathname } = useLocation();
+  const coll = pathname === '/' ? 'notes' : pathname.substr(1);
 
   const specifyColNum = () => {
     const { clientWidth } = document.body;
@@ -37,11 +39,11 @@ const NoteList = (props) => {
   });
 
   useEffect(() => {
+    fetchNotes(coll);
     specifyColNum();
   }, []);
 
   useEffect(() => {
-    // console.log(props.notes);
     if (notes && colNum) {
       const lay = calculateLayout(notes, colNum);
 
@@ -51,29 +53,11 @@ const NoteList = (props) => {
 
   return (
     <div className={classes.container}>
-      {/* <h1>NOTYY</h1> */}
-      {layout ? (
+      {layout && !loading ? (
         <DragContainer layout={layout} />
       ) : null}
     </div>
   );
-};
-
-const mapStateToProps = (state) => {
-  const { userNotes } = state.firestore.data;
-  // console.log(userNotes);
-  let data = {};
-  _.forIn(userNotes, (value, key) => {
-    if (value !== null) {
-      data = { ...data, [key]: value };
-    }
-  });
-
-  return ({
-    auth: state.firebase.auth,
-    notes: data,
-    // notes: userNotes,
-  });
 };
 
 NoteList.defaultProps = {
@@ -82,26 +66,13 @@ NoteList.defaultProps = {
 
 NoteList.propTypes = {
   notes: PropTypes.oneOfType([PropTypes.object]),
+  loading: PropTypes.bool.isRequired,
+  fetchNotes: PropTypes.func.isRequired,
 };
 
-export default compose(
-  firestoreConnect((props) => {
-    const { uid } = props.firebase.auth().currentUser;
-    const { pathname } = props.location;
-    const coll = pathname === '/' ? 'notes' : pathname.substr(1);
+const mapStateToProps = (state) => ({
+  notes: state.notes.notes,
+  loading: state.notes.loading,
+});
 
-    return [
-      {
-        collection: `${coll}`,
-        doc: `${uid}`,
-        subcollections: [
-          { collection: 'userNotes' },
-        ],
-        storeAs: 'userNotes',
-        // where: [['userId', '==', props.auth.uid]],
-      // orderBy: ['position', 'asc'],
-      },
-    ];
-  }),
-  connect(mapStateToProps),
-)(NoteList);
+export default connect(mapStateToProps, { fetchNotes })(NoteList);

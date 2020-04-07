@@ -6,8 +6,14 @@ export const LOADING_UI = 'LOADING_UI';
 // Notes types
 export const SET_NOTE = 'SET_NOTE';
 export const SET_NOTE_ERRORS = 'SET_NOTE_ERRORS';
-export const NOTE_MOVED = 'NOTE_MOVED';
-export const NOTE_MOVED_CLEAR = 'NOTE_MOVED_CLEAR';
+export const MOVE_NOTE = 'MOVE_NOTE';
+export const MOVE_NOTE_BACK = 'MOVE_NOTE_BACK';
+export const MOVE_NOTE_CLEAR = 'MOVE_NOTE_CLEAR';
+export const NOTES_LOADING = 'NOTES_LOADING';
+export const NOTES_FETCHED = 'NOTES_FETCHED';
+export const UPDATE_NOTE = 'UPDATE_NOTE';
+export const CREATE_NOTE = 'CREATE_NOTE';
+export const DELETE_NOTE_FOREVER = 'DELETE_NOTE_FOREVER';
 
 // UI types
 export const LOADING_SUCCESS = 'LOADING_SUCCESS';

@@ -46,7 +46,6 @@ const ChangeColor = (props) => {
         <IconButton
           className={classes.iconBtn}
           aria-haspopup="true"
-
         >
           <PaletteOutlinedIcon fontSize="small" />
         </IconButton>

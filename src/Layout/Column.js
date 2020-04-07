@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Droppable } from 'react-beautiful-dnd';
 import Note from '../components/notes/Note';
@@ -52,7 +52,7 @@ Column.defaultProps = {
 };
 
 Column.propTypes = {
-  notes: PropTypes.array,
+  notes: PropTypes.arrayOf(PropTypes.object),
   column: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 

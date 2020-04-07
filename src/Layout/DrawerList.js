@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import EditLabels from '../components/notes/labels/EditLabels';
 
+// REDUX
+import { connect } from 'react-redux';
+import { moveNoteClear } from '../store/actions/notesActions';
+
 // React router
 import {
   Link, useLocation,
@@ -37,11 +41,14 @@ const useStyles = makeStyles((theme) => ({
 
 const DrawerList = (props) => {
   const classes = useStyles();
-  const { selectedIndex, handleListItemClick, handleMobileDrawerToggle } = props;
+  const {
+    selectedIndex, handleListItemClick, handleMobileDrawerToggle, moveNoteClear,
+  } = props;
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
 
   const handleItemClick = (index) => {
+    moveNoteClear();
     if (handleMobileDrawerToggle) handleMobileDrawerToggle();
     handleListItemClick(index);
   };
@@ -131,6 +138,7 @@ DrawerList.propTypes = {
   selectedIndex: PropTypes.number.isRequired,
   handleListItemClick: PropTypes.func.isRequired,
   handleMobileDrawerToggle: PropTypes.func,
+  moveNoteClear: PropTypes.func.isRequired,
 };
 
-export default DrawerList;
+export default connect(null, { moveNoteClear })(DrawerList);

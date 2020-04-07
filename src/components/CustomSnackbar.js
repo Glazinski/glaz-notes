@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { noteMovedClear, moveNoteFromTo } from '../store/actions/notesActions';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -24,11 +22,8 @@ const CustomSnackbar = (props) => {
   const {
     open,
     msg,
-    noteMovedClear,
-    moveNoteFromTo,
-    from,
-    to,
-    noteId,
+    handleClose,
+    handleClick,
   } = props;
 
   const handleSnackClose = (event, reason) => {
@@ -36,11 +31,11 @@ const CustomSnackbar = (props) => {
       return;
     }
 
-    noteMovedClear();
+    handleClose();
   };
 
   const handleUndoClick = () => {
-    moveNoteFromTo(noteId, to, from);
+    handleClick();
     handleSnackClose();
   };
 
@@ -84,19 +79,13 @@ const CustomSnackbar = (props) => {
 
 CustomSnackbar.defaultProps = {
   msg: null,
-  from: null,
-  to: null,
-  noteId: null,
 };
 
 CustomSnackbar.propTypes = {
   open: PropTypes.bool.isRequired,
-  noteMovedClear: PropTypes.func.isRequired,
-  moveNoteFromTo: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  handleClick: PropTypes.func.isRequired,
   msg: PropTypes.string,
-  from: PropTypes.string,
-  to: PropTypes.string,
-  noteId: PropTypes.string,
 };
 
-export default connect(null, { noteMovedClear, moveNoteFromTo })(CustomSnackbar);
+export default CustomSnackbar;

@@ -23,6 +23,7 @@
         "extensions": [".js", ".jsx"]
       }
     ],
+    // "linebreak-style": ["error", "windows"],
     "import/order": "off",
     "react/jsx-props-no-spreading": "off",
     "react-hooks/exhaustive-deps": "off",
@@ -35,7 +36,10 @@
           "deleteNoteForever",
           "updateNote",
           "fetchTheme",
-          "noteMovedClear"
+          "noteMovedClear",
+          "moveNoteClear",
+          "moveNoteBack",
+          "fetchNotes"
         ]
       }
     ]
