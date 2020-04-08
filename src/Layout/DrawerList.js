@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import EditLabels from '../components/notes/labels/EditLabels';
+import LabelList from '../components/notes/labels/LabelList';
 
 // REDUX
 import { connect } from 'react-redux';
@@ -54,13 +55,7 @@ const DrawerList = (props) => {
   };
 
   useEffect(() => {
-    if (pathname === '/') {
-      handleListItemClick(0);
-    } else if (pathname === '/bin') {
-      handleListItemClick(2);
-    } else if (pathname === '/archive') {
-      handleListItemClick(3);
-    }
+    handleItemClick(pathname);
   }, []);
 
   const handleOpenClick = () => setOpen(true);
@@ -81,9 +76,9 @@ const DrawerList = (props) => {
         component={Link}
         to="/"
         button
-        selected={selectedIndex === 0}
+        selected={selectedIndex === '/'}
         // onClick={() => handleListItemClick(0)}
-        onClick={() => handleItemClick(0)}
+        onClick={() => handleItemClick('/')}
       >
         <ListItemIcon><EmojiObjectsOutlinedIcon /></ListItemIcon>
         <ListItemText primary="Notes" />
@@ -92,6 +87,11 @@ const DrawerList = (props) => {
       <Divider />
 
       <Typography className={classes.subtitle} variant="overline">LABELS</Typography>
+      <LabelList
+        itemClassName={classes.item}
+        handleItemClick={handleItemClick}
+        selectedIndex={selectedIndex}
+      />
       <ListItem
         className={classes.item}
         button
@@ -108,8 +108,8 @@ const DrawerList = (props) => {
         button
         component={Link}
         to="/archive"
-        selected={selectedIndex === 3}
-        onClick={() => handleItemClick(3)}
+        selected={selectedIndex === '/archive'}
+        onClick={() => handleItemClick('/archive')}
       >
         <ListItemIcon><ArchiveOutlinedIcon /></ListItemIcon>
         <ListItemText primary="Archive" />
@@ -120,8 +120,8 @@ const DrawerList = (props) => {
         button
         component={Link}
         to="/bin"
-        selected={selectedIndex === 2}
-        onClick={() => handleItemClick(2)}
+        selected={selectedIndex === '/bin'}
+        onClick={() => handleItemClick('/bin')}
       >
         <ListItemIcon><DeleteOutlinedIcon /></ListItemIcon>
         <ListItemText primary="Bin" />
@@ -135,7 +135,7 @@ DrawerList.defaultProps = {
 };
 
 DrawerList.propTypes = {
-  selectedIndex: PropTypes.number.isRequired,
+  selectedIndex: PropTypes.string.isRequired,
   handleListItemClick: PropTypes.func.isRequired,
   handleMobileDrawerToggle: PropTypes.func,
   moveNoteClear: PropTypes.func.isRequired,

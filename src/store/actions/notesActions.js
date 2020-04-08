@@ -204,3 +204,24 @@ export const updateNote = (noteId, newFormData, coll) => (
     dispatch({ type: SET_NOTE_ERRORS, payload: err });
   });
 };
+
+export const createLabel = (labelName) => (dispatch, getState, { getFirebase, getFirestore }) => {
+  const firebase = getFirebase();
+  const firestore = getFirestore();
+  const userId = firebase.auth().currentUser.uid;
+
+  firestore.collection('labels')
+    .doc(userId)
+    .collection('userLabels')
+    .doc(labelName)
+    .set({
+      labelName,
+      noteIds: [],
+    })
+    .then(() => {
+      console.log('Document successfully written!');
+    })
+    .catch((error) => {
+      console.error('Error writing document: ', error);
+    });
+};

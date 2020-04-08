@@ -87,7 +87,7 @@ const Home = ({ auth: { uid }, children }) => {
   const handleDrawerToggle = () => setOpen(!open);
   const handleMobileDrawerToggle = () => setMobileOpen(!mobileOpen);
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState('/');
 
   const handleListItemClick = (index) => {
     setSelectedIndex(index);

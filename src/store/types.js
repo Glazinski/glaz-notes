@@ -15,6 +15,10 @@ export const UPDATE_NOTE = 'UPDATE_NOTE';
 export const CREATE_NOTE = 'CREATE_NOTE';
 export const DELETE_NOTE_FOREVER = 'DELETE_NOTE_FOREVER';
 
+// Labels types
+export const FETCH_LABELS = 'FETCH_LABELS';
+export const CREATE_LABEL = 'CREATE_LABEL';
+
 // UI types
 export const LOADING_SUCCESS = 'LOADING_SUCCESS';
 export const LOADING_FAILURE = 'LOADING_FAILURE';

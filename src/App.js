@@ -8,6 +8,7 @@ import myTheme from './utils/theme';
 import Notes from './pages/Notes';
 import Bin from './pages/Bin';
 import Archive from './pages/Archive';
+import LabelsRoutes from './utils/LabelsRoutes';
 
 // React router
 import {
@@ -67,6 +68,9 @@ const App = (props) => {
               </Home>
             )}
           />
+
+          <LabelsRoutes />
+
           <PrivateRoute path="/login" component={SignIn} />
           <PrivateRoute path="/signup" component={SignUp} />
           <Redirect to="/" />

@@ -1,6 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import DialogWindow from '../../DialogWindow';
+
+// Redux
+import { connect } from 'react-redux';
+import { fetchLabels, createLabel } from '../../../store/actions/labelsActions';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -39,7 +44,9 @@ const useStyles = makeStyles((theme) => ({
 
 const EditLabels = (props) => {
   const classes = useStyles();
-  const { open, handleClose } = props;
+  const {
+    open, handleClose, createLabel, fetchLabels, labels,
+  } = props;
   const [isFocused, setIsFocused] = useState(false);
   const [newLabel, setNewLabel] = useState('');
   const textFieldEl = useRef(null);
@@ -58,6 +65,14 @@ const EditLabels = (props) => {
     const { value } = event.target;
     setNewLabel(value);
   };
+
+  const handleSubmit = () => {
+    createLabel(newLabel);
+  };
+
+  useEffect(() => {
+    fetchLabels();
+  }, []);
 
   // TODO:
   return (
@@ -96,7 +111,7 @@ const EditLabels = (props) => {
             title="Create label"
             aria-label="Create label"
           >
-            <IconButton className={classes.iconBtn}>
+            <IconButton onClick={handleSubmit} className={classes.iconBtn}>
               <CheckIcon fontSize="small" />
             </IconButton>
           </Tooltip>
@@ -115,4 +130,8 @@ EditLabels.propTypes = {
   handleClose: PropTypes.func.isRequired,
 };
 
-export default EditLabels;
+const mapStateToProps = (state) => ({
+  labels: state.labels.labels,
+});
+
+export default connect(mapStateToProps, { createLabel, fetchLabels })(EditLabels);
