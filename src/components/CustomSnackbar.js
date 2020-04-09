@@ -24,6 +24,7 @@ const CustomSnackbar = (props) => {
     msg,
     handleClose,
     handleClick,
+    info,
   } = props;
 
   const handleSnackClose = (event, reason) => {
@@ -54,14 +55,16 @@ const CustomSnackbar = (props) => {
         message={msg}
         action={(
           <>
-            <Button
-              style={{ margin: '0 10px 0 40px' }}
-              color="secondary"
-              size="small"
-              onClick={handleUndoClick}
-            >
-              UNDO
-            </Button>
+            {!info ? (
+              <Button
+                style={{ margin: '0 10px 0 40px' }}
+                color="secondary"
+                size="small"
+                onClick={handleUndoClick}
+              >
+                UNDO
+              </Button>
+            ) : null}
             <IconButton
               size="small"
               aria-label="close"
@@ -79,6 +82,7 @@ const CustomSnackbar = (props) => {
 
 CustomSnackbar.defaultProps = {
   msg: null,
+  info: null,
 };
 
 CustomSnackbar.propTypes = {
@@ -86,6 +90,7 @@ CustomSnackbar.propTypes = {
   handleClose: PropTypes.func.isRequired,
   handleClick: PropTypes.func.isRequired,
   msg: PropTypes.string,
+  info: PropTypes.bool,
 };
 
 export default CustomSnackbar;

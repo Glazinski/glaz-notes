@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import NoteSettings from './NoteSettings';
+import CustomSnackbar from '../CustomSnackbar';
 import { useLocation } from 'react-router-dom';
+
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -125,6 +127,13 @@ const NoteForm = (props) => {
           <Button onClick={() => handleClose()} color="inherit">Close</Button>
         </Grid>
       </Grid>
+      <CustomSnackbar
+        info
+        msg="Can't edit in Recycle Bin"
+        open={open}
+        handleClick={handleClick}
+        handleClose={handleSnackClose}
+      />
     </Grid>
   );
 };

@@ -18,6 +18,7 @@ export const DELETE_NOTE_FOREVER = 'DELETE_NOTE_FOREVER';
 // Labels types
 export const FETCH_LABELS = 'FETCH_LABELS';
 export const CREATE_LABEL = 'CREATE_LABEL';
+export const EDIT_LABEL_NAME = 'EDIT_LABEL_NAME';
 
 // UI types
 export const LOADING_SUCCESS = 'LOADING_SUCCESS';

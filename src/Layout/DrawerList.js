@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import EditLabels from '../components/notes/labels/EditLabels';
-import LabelList from '../components/notes/labels/LabelList';
+import DrawerLabelList from '../components/notes/labels/DrawerLabelList';
 
 // REDUX
 import { connect } from 'react-redux';
@@ -43,14 +43,15 @@ const useStyles = makeStyles((theme) => ({
 const DrawerList = (props) => {
   const classes = useStyles();
   const {
-    selectedIndex, handleListItemClick, handleMobileDrawerToggle, moveNoteClear,
+    selectedIndex, handleListItemClick, moveNoteClear,
   } = props;
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
 
   const handleItemClick = (index) => {
     moveNoteClear();
-    if (handleMobileDrawerToggle) handleMobileDrawerToggle();
+    // if (handleMobileDrawerToggle) handleMobileDrawerToggle();
+    // handleMobileDrawerToggle();
     handleListItemClick(index);
   };
 
@@ -87,7 +88,7 @@ const DrawerList = (props) => {
       <Divider />
 
       <Typography className={classes.subtitle} variant="overline">LABELS</Typography>
-      <LabelList
+      <DrawerLabelList
         itemClassName={classes.item}
         handleItemClick={handleItemClick}
         selectedIndex={selectedIndex}
@@ -130,14 +131,9 @@ const DrawerList = (props) => {
   );
 };
 
-DrawerList.defaultProps = {
-  handleMobileDrawerToggle: null,
-};
-
 DrawerList.propTypes = {
   selectedIndex: PropTypes.string.isRequired,
   handleListItemClick: PropTypes.func.isRequired,
-  handleMobileDrawerToggle: PropTypes.func,
   moveNoteClear: PropTypes.func.isRequired,
 };
 

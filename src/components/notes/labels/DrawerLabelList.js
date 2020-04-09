@@ -24,7 +24,7 @@ const LabelList = (props) => {
 
   const items = _.values(labels).map((item) => (
     <ListItem
-      key={item.labelName}
+      key={item.labelId + 1}
       className={itemClassName}
       button
       component={Link}
@@ -45,7 +45,7 @@ const LabelList = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  labels: state.labels.labels,
+  labels: state.labels,
 });
 
 LabelList.propTypes = {

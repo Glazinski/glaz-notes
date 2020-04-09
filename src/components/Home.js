@@ -160,7 +160,6 @@ const Home = ({ auth: { uid }, children }) => {
         >
           <div className={classes.toolbar} />
           <DrawerList
-            handleMobileDrawerToggle={handleMobileDrawerToggle}
             selectedIndex={selectedIndex}
             handleListItemClick={handleListItemClick}
           />
@@ -181,12 +180,12 @@ const Home = ({ auth: { uid }, children }) => {
   );
 };
 
-Home.propTypes = {
-  auth: PropTypes.oneOfType([PropTypes.object]).isRequired,
-};
-
 const mapStateToProps = (state) => ({
   auth: state.firebase.auth,
 });
+
+Home.propTypes = {
+  auth: PropTypes.oneOfType([PropTypes.object]).isRequired,
+};
 
 export default connect(mapStateToProps)(Home);

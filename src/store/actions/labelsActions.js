@@ -1,6 +1,8 @@
+import uniqid from 'uniqid';
 import {
   FETCH_LABELS,
   CREATE_LABEL,
+  EDIT_LABEL_NAME,
 } from '../types';
 
 export const fetchLabels = () => (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -11,13 +13,13 @@ export const fetchLabels = () => (dispatch, getState, { getFirebase, getFirestor
   firestore.collection('labels')
     .doc(userId)
     .collection('userLabels')
+    .orderBy('createdAt', 'desc')
     .get()
     .then((querySnapshot) => {
       let labels = {};
 
       querySnapshot.forEach((doc) => {
-        // console.log(doc.data());
-        labels = { [doc.data().labelName]: { ...doc.data() }, ...labels };
+        labels = { [doc.data().labelId]: { ...doc.data() }, ...labels };
       });
 
       // console.log(labels);
@@ -31,21 +33,56 @@ export const createLabel = (labelName) => (dispatch, getState, { getFirebase, ge
   const firestore = getFirestore();
   const userId = firebase.auth().currentUser.uid;
 
-  dispatch({ type: CREATE_LABEL, payload: labelName });
+  const newLabel = {
+    labelId: uniqid(),
+    labelName,
+    noteIds: [],
+    createdAt: new Date(),
+  };
+
+  dispatch({ type: CREATE_LABEL, payload: newLabel });
 
   firestore.collection('labels')
     .doc(userId)
     .collection('userLabels')
-    .doc(labelName)
+    .doc(newLabel.labelId)
     .set({
-      labelName,
-      noteIds: [],
+      ...newLabel,
     })
     .then(() => {
       console.log('Document successfully written!');
     })
     .catch((error) => {
       console.error('Error writing document: ', error);
+    });
+};
+
+export const editLabelName = (labelId, newLabelName) => (
+  dispatch, getState, { getFirebase, getFirestore },
+) => {
+  const firebase = getFirebase();
+  const firestore = getFirestore();
+  const userId = firebase.auth().currentUser.uid;
+
+  dispatch({
+    type: EDIT_LABEL_NAME,
+    payload: {
+      labelId,
+      newLabelName,
+    },
+  });
+
+  const labelRef = firestore.collection('labels').doc(userId).collection('userLabels').doc(labelId);
+
+  return labelRef.update({
+    labelName: newLabelName,
+  })
+    .then(() => {
+      console.log('Document successfully updated!');
+    })
+    .catch((error) => {
+    // The document probably doesn't exist.
+      console.error('Error updating document: ', error);
     });
 };
 

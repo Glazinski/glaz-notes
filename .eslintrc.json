@@ -39,7 +39,9 @@
           "noteMovedClear",
           "moveNoteClear",
           "moveNoteBack",
-          "fetchNotes"
+          "fetchNotes",
+          "editLabelName",
+          "createLabel"
         ]
       }
     ]

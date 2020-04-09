@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import Home from '../components/Home';
-import NotesList from '../components/notes/NotesList';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { fetchLabels } from '../store/actions/labelsActions';
@@ -15,7 +14,7 @@ const LabelsRoutes = (props) => {
 
   const routes = _.values(labels).map((item) => (
     <Route
-      key={item.labelName}
+      key={item.labelId}
       path={`/${item.labelName}`}
       render={(routerProps) => (
         <Home {...routerProps}>
@@ -29,7 +28,7 @@ const LabelsRoutes = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  labels: state.labels.labels,
+  labels: state.labels,
 });
 
 export default connect(mapStateToProps, { fetchLabels })(LabelsRoutes);
