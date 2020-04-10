@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import DialogWindow from '../DialogWindow';
 import NoteForm from './NoteForm';
+import moment from 'moment';
 import { useLocation } from 'react-router-dom';
 
 // Redux
@@ -18,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
     heihgt: 200,
     padding: '10px',
     overflowWrap: 'anywhere',
+    transition: 'background-color .3s ease',
   },
   dialog: {
     marginBottom: '200px',
@@ -26,7 +28,10 @@ const useStyles = makeStyles((theme) => ({
 
 const DialogNote = (props) => {
   const {
-    noteId, content, title, handleClose, open, updateNote,
+    handleClose, open, updateNote, color,
+    note: {
+      id, content, title, createdAt, colorName,
+    },
   } = props;
   const classes = useStyles();
   const [formData, setFormData] = useState({
@@ -44,18 +49,25 @@ const DialogNote = (props) => {
   const handleModalClose = () => {
     handleClose();
     if (formData.title !== title || formData.content !== content) {
-      updateNote(noteId, formData, coll);
+      updateNote(id, formData, coll);
     }
   };
 
+  const date = moment(createdAt.toDate()).format('MMM Do YY');
+
   return (
     <DialogWindow handleClose={handleModalClose} open={open}>
-      <Paper className={classes.container}>
+      <Paper
+        className={classes.container}
+        style={color ? { backgroundColor: color } : null}
+      >
         <NoteForm
-          noteId={noteId}
+          noteId={id}
+          colorId={colorName}
           formData={formData}
           handleChange={handleChange}
           handleClose={handleModalClose}
+          date={date}
           isRemovable
         />
       </Paper>
@@ -64,12 +76,11 @@ const DialogNote = (props) => {
 };
 
 DialogNote.propTypes = {
-  noteId: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
+  note: PropTypes.oneOfType([PropTypes.object]).isRequired,
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   updateNote: PropTypes.func.isRequired,
+  color: PropTypes.string.isRequired,
 };
 
 export default connect(null, { updateNote })(DialogNote);

@@ -41,7 +41,8 @@
           "moveNoteBack",
           "fetchNotes",
           "editLabelName",
-          "createLabel"
+          "createLabel",
+          "changeNoteColor"
         ]
       }
     ]

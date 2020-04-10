@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchTheme } from './store/actions/uiActions';
+import { fetchTheme, setColors } from './store/actions/uiActions';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import myTheme from './utils/theme';
@@ -9,6 +9,8 @@ import Notes from './pages/Notes';
 import Bin from './pages/Bin';
 import Archive from './pages/Archive';
 import LabelsRoutes from './utils/LabelsRoutes';
+import darkColors from './utils/darkColors';
+import lightColors from './utils/lightColors';
 
 // React router
 import {
@@ -22,7 +24,9 @@ import SignUp from './components/auth/SignUp';
 import Home from './components/Home';
 
 const App = (props) => {
-  const { theme, fetchTheme, auth: { uid } } = props;
+  const {
+    theme, fetchTheme, setColors, auth: { uid },
+  } = props;
   const [prefersDarkMode, setPrefersDarkMode] = useState(theme);
 
   const MuiTheme = React.useMemo(
@@ -34,6 +38,13 @@ const App = (props) => {
     if (uid) {
       fetchTheme();
     }
+
+    if (theme === 'dark') {
+      setColors(darkColors);
+    } else {
+      setColors(lightColors);
+    }
+
     setPrefersDarkMode(theme);
   }, [uid, theme]);
 
@@ -95,4 +106,4 @@ App.propTypes = {
   auth: PropTypes.oneOfType([PropTypes.object]),
 };
 
-export default connect(mapStateToProps, { fetchTheme })(App);
+export default connect(mapStateToProps, { fetchTheme, setColors })(App);

@@ -10,6 +10,7 @@ import {
   CREATE_NOTE,
   DELETE_NOTE_FOREVER,
   UPDATE_NOTE,
+  CHANGE_NOTE_COLOR,
 } from '../types';
 
 const initState = {
@@ -68,6 +69,18 @@ export default (state = initState, action) => {
 
     case MOVE_NOTE_CLEAR:
       return { ...state, noteMoved: { open: false } };
+
+    case CHANGE_NOTE_COLOR:
+      return {
+        ...state,
+        notes: {
+          ...state.notes,
+          [action.payload.noteId]: {
+            ...state.notes[action.payload.noteId],
+            colorName: action.payload.color,
+          },
+        },
+      };
 
     case SET_NOTE:
       return { ...state, errors: null };

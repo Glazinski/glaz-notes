@@ -9,6 +9,7 @@ import {
   CREATE_NOTE,
   DELETE_NOTE_FOREVER,
   UPDATE_NOTE,
+  CHANGE_NOTE_COLOR,
 } from '../types';
 
 export const fetchNotes = (coll) => (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -205,23 +206,31 @@ export const updateNote = (noteId, newFormData, coll) => (
   });
 };
 
-export const createLabel = (labelName) => (dispatch, getState, { getFirebase, getFirestore }) => {
+export const changeNoteColor = (noteId, newColor) => (
+  dispatch, getState, { getFirebase, getFirestore },
+) => {
   const firebase = getFirebase();
   const firestore = getFirestore();
   const userId = firebase.auth().currentUser.uid;
 
-  firestore.collection('labels')
-    .doc(userId)
-    .collection('userLabels')
-    .doc(labelName)
-    .set({
-      labelName,
-      noteIds: [],
-    })
-    .then(() => {
-      console.log('Document successfully written!');
-    })
-    .catch((error) => {
-      console.error('Error writing document: ', error);
-    });
+  const note = firestore.collection('notes').doc(userId).collection('userNotes').doc(noteId);
+
+  dispatch({
+    type: CHANGE_NOTE_COLOR,
+    payload: {
+      noteId,
+      color: newColor,
+    },
+  });
+
+  return note.update({
+    colorName: newColor,
+  }).then(() => {
+    dispatch({ type: SET_NOTE });
+  }).catch((err) => {
+    console.error(err);
+    dispatch({ type: SET_NOTE_ERRORS, payload: err });
+  });
+
+  // CHANGE_NOTE_COLOR
 };

@@ -9,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
       fontSize: 5,
     },
   },
+  date: {
+    color: theme.palette.text.disabled,
+  },
 }));
 
 const NoteForm = (props) => {
@@ -46,6 +50,8 @@ const NoteForm = (props) => {
     noteId,
     isRemovable,
     handleHoverClose,
+    colorId,
+    date,
   } = props;
   const classes = useStyles();
   const textFieldEl = useRef(null);
@@ -108,6 +114,24 @@ const NoteForm = (props) => {
         />
       </Grid>
 
+      {date ? (
+        <Grid
+          container
+          justify="flex-end"
+          alignItems="center"
+        >
+          <Typography
+            style={{ marginTop: '10px' }}
+            className={classes.date}
+            variant="caption"
+          >
+            Created
+            {' '}
+            {date}
+          </Typography>
+        </Grid>
+      ) : null}
+
       <Grid
         container
         justify="space-between"
@@ -116,6 +140,7 @@ const NoteForm = (props) => {
       >
         <Grid item xs={6}>
           <NoteSettings
+            colorId={colorId}
             formData={props.formData}
             noteId={noteId}
             isHovered
@@ -141,6 +166,7 @@ const NoteForm = (props) => {
 NoteForm.defaultProps = {
   noteId: null,
   handleHoverClose: null,
+  date: null,
 };
 
 NoteForm.propTypes = {
@@ -150,6 +176,8 @@ NoteForm.propTypes = {
   noteId: PropTypes.string,
   isRemovable: PropTypes.bool.isRequired,
   handleHoverClose: PropTypes.func,
+  colorId: PropTypes.string.isRequired,
+  date: PropTypes.string,
 };
 
 export default NoteForm;

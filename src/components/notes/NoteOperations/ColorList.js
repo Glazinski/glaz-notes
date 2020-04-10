@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
+import _ from 'lodash';
+
+// Redux
+import { connect } from 'react-redux';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -9,7 +13,7 @@ import Button from '@material-ui/core/Button';
 // MUI icons
 import CheckIcon from '@material-ui/icons/Check';
 
-const listWidth = 80;
+const listWidth = 100;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     zIndex: 1400,
     padding: '5px',
+    backgroundColor: theme.palette.background.default,
   },
   content: {
     display: 'grid',
@@ -27,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
     gridRowGap: '5px',
   },
   item: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     width: '25px',
     height: '25px',
     borderRadius: '100px',
@@ -37,48 +45,37 @@ const useStyles = makeStyles((theme) => ({
       cursor: 'pointer',
     },
     outline: 'none',
-    // backgroundColor: theme.palette.background.default,
-    // padding: 3,
-    // margin: 1,
-    // borderRadius: 100,
+    '&:first-child': {
+      border: `1px solid ${theme.palette.text.primary}`,
+    },
+  },
+  icon: {
+    color: theme.palette.text.primary,
   },
 }));
 
-const ColorList = () => {
+const ColorList = (props) => {
   const classes = useStyles();
+  const { colorId, colors, handleColorChange } = props;
+  const [checkedIndex, setCheckedIndex] = useState(colorId);
 
-  const colors = [
-    {
-      name: 'default',
-      color: '#303030',
-      // color: 'inherit',
-    },
-    {
-      name: 'red',
-      color: '#f28b82',
-    },
-    {
-      name: 'orange',
-      color: '#fbbc04',
-    },
-    {
-      name: 'yellow',
-      color: '#fff475',
-    },
-    {
-      name: 'green',
-      color: '#345920',
-    },
-    {
-      name: 'teal',
-      color: '#16504b',
-    },
-  ];
 
-  const items = colors.map((item, index) => (
+  const handleChecked = (colorName) => {
+    handleColorChange(colorName);
+    setCheckedIndex(colorName);
+  };
+
+  const items = _.values(colors).map((item) => (
     <Tooltip key={item.color} title={item.name}>
-      <button type="button" className={classes.item} style={{ backgroundColor: item.color }}>
-        {/* <CheckIcon fontSize="small" /> */}
+      <button
+        onClick={() => handleChecked(item.name)}
+        type="button"
+        className={classes.item}
+        style={{ backgroundColor: item.color }}
+      >
+        {checkedIndex === item.name ? (
+          <CheckIcon className={classes.icon} fontSize="small" />
+        ) : false}
       </button>
     </Tooltip>
   ));
@@ -92,4 +89,8 @@ const ColorList = () => {
   );
 };
 
-export default ColorList;
+const mapStateToProps = (state) => ({
+  colors: _.mapKeys(state.ui.colors, 'name'),
+});
+
+export default connect(mapStateToProps)(ColorList);

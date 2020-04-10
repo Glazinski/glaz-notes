@@ -14,9 +14,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 
 // MUI icons
-import PaletteOutlinedIcon from '@material-ui/icons/PaletteOutlined';
 import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
-import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined';
 import LabelOutlinedIcon from '@material-ui/icons/LabelOutlined';
 
 const useStyles = makeStyles((theme) => ({
@@ -41,22 +39,11 @@ const useStyles = makeStyles((theme) => ({
 
 const NoteSettings = (props) => {
   const {
-    isHovered, noteId, isRemovable, formData,
+    isHovered, noteId, isRemovable, formData, colorId,
   } = props;
   const classes = useStyles();
   const { pathname } = useLocation();
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const coll = pathname === '/' ? 'notes' : pathname.substr(1);
-
-  const handlePopoverOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
 
   const renderItems = () => {
     if (pathname === '/bin') {
@@ -77,18 +64,10 @@ const NoteSettings = (props) => {
         style={isHovered ? { opacity: '1', pointerEvents: 'auto' } : { opacity: '0', pointerEvents: 'none' }}
         // style={isHovered ? { display: 'block' } : { display: 'none' }}
       >
-        {/* <Tooltip title="Change color" aria-label="Change color">
-          <IconButton
-            aria-owns={open ? 'mouse-over-popover' : undefined}
-            aria-haspopup="true"
-            onMouseEnter={handlePopoverOpen}
-            onMouseLeave={handlePopoverClose}
-            className={classes.iconBtn}
-          >
-            <PaletteOutlinedIcon fontSize="small" />
-          </IconButton>
-        </Tooltip> */}
-        <ChangeColor open={open} anchorEl={anchorEl} onClose={handlePopoverClose} />
+        <ChangeColor
+          colorId={colorId}
+          noteId={noteId}
+        />
 
         <Tooltip title="Add image" aria-label="Add image">
           <IconButton className={classes.iconBtn}>
@@ -121,12 +100,15 @@ const NoteSettings = (props) => {
 
 NoteSettings.defaultProps = {
   noteId: null,
+  formData: null,
 };
 
 NoteSettings.propTypes = {
+  formData: PropTypes.oneOfType([PropTypes.object]),
   isHovered: PropTypes.bool.isRequired,
   noteId: PropTypes.string,
   isRemovable: PropTypes.bool.isRequired,
+  colorId: PropTypes.string.isRequired,
 };
 
 export default NoteSettings;

@@ -1,5 +1,6 @@
 import {
   FETCH_THEME,
+  SET_COLORS,
 } from '../types';
 
 export const fetchTheme = () => (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -36,3 +37,10 @@ export const changeTheme = (newTheme) => (dispatch, getState, { getFirebase, get
   })
     .catch((err) => console.error('Error updating document: ', err));
 };
+
+export const setColors = (colors) => ({
+  type: SET_COLORS,
+  payload: {
+    colors,
+  },
+});

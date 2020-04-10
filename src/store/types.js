@@ -14,6 +14,7 @@ export const NOTES_FETCHED = 'NOTES_FETCHED';
 export const UPDATE_NOTE = 'UPDATE_NOTE';
 export const CREATE_NOTE = 'CREATE_NOTE';
 export const DELETE_NOTE_FOREVER = 'DELETE_NOTE_FOREVER';
+export const CHANGE_NOTE_COLOR = 'CHANGE_NOTE_COLOR';
 
 // Labels types
 export const FETCH_LABELS = 'FETCH_LABELS';
@@ -24,3 +25,4 @@ export const EDIT_LABEL_NAME = 'EDIT_LABEL_NAME';
 export const LOADING_SUCCESS = 'LOADING_SUCCESS';
 export const LOADING_FAILURE = 'LOADING_FAILURE';
 export const FETCH_THEME = 'FETCH_THEME';
+export const SET_COLORS = 'SET_COLORS';

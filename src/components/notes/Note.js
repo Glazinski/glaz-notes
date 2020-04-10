@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { Draggable } from 'react-beautiful-dnd';
 import ModalNote from './ModalNote';
 import NoteSettings from './NoteSettings';
 import { useLocation } from 'react-router-dom';
+
+// Redux
+import { connect } from 'react-redux';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.default,
     padding: '10px',
     margin: '10px 0',
+    transition: 'background-color .3s ease',
     '&:hover': {
       boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
       cursor: 'default',
@@ -46,7 +51,9 @@ const useStyles = makeStyles((theme) => ({
 const Note = (props) => {
   const classes = useStyles();
   const {
-    index, note: { id, title, content },
+    colors, index, note: {
+      id, title, content, colorName,
+    },
   } = props;
   const { pathname } = useLocation();
 
@@ -69,6 +76,8 @@ const Note = (props) => {
     setIsHovered(false);
   };
 
+  const color = colorName ? colors[colorName].color : colors.Default;
+
   return (
     <Draggable
       draggableId={id}
@@ -77,52 +86,54 @@ const Note = (props) => {
     >
       {(provided) => (
         <ClickAwayListener onClickAway={handleHoverOff}>
-          <Paper
+          <div
             onMouseEnter={handleHoverOn}
             onMouseLeave={handleHoverOff}
-            className={classes.container}
             {...provided.dragHandleProps}
             {...provided.draggableProps}
             ref={provided.innerRef}
-            variant="outlined"
-            // style={open ? {transform: translate}}
           >
-            <div
-              aria-hidden="true"
-              className={classes.btn}
-              onClick={handleClickOpen}
-            />
-            {open ? (
-            // <DialogWindow handleClose={handleClose} open={open}>
-              <ModalNote
-                handleClose={handleClose}
-                open={open}
-                noteId={id}
-                title={title}
-                content={content}
-                handleHoverClose={handleHoverOff}
+            <Paper
+              className={classes.container}
+              variant="outlined"
+              style={{
+                backgroundColor: color,
+              }}
+            >
+              <div
+                aria-hidden="true"
+                className={classes.btn}
+                onClick={handleClickOpen}
               />
-            // </DialogWindow>
-            ) : null}
-            {/* {title} */}
-            {title.length <= 0 ? (
+              {open ? (
+                <ModalNote
+                  handleClose={handleClose}
+                  open={open}
+                  color={color}
+                  note={props.note}
+                  handleHoverClose={handleHoverOff}
+                />
+              ) : null}
+              {title.length <= 0 ? (
+                <div className={classes.content}>
+                  {content}
+                </div>
+              ) : (
+                <Typography className={classes.title} variant="h6">
+                  {title}
+                </Typography>
+              )}
               <div className={classes.content}>
-                {content}
+                {title.length <= 0 ? null : content}
               </div>
-            ) : (
-              <Typography className={classes.title} variant="h6">
-                {title}
-              </Typography>
-            )}
-            <div className={classes.content}>
-              {title.length <= 0 ? null : content}
-            </div>
-            <NoteSettings
-              noteId={id}
-              isHovered={isHovered}
-              isRemovable
-            />
-          </Paper>
+              <NoteSettings
+                noteId={id}
+                isHovered={isHovered}
+                isRemovable
+                colorId={colorName || 'Default'}
+              />
+            </Paper>
+          </div>
         </ClickAwayListener>
       )}
     </Draggable>
@@ -132,6 +143,11 @@ const Note = (props) => {
 Note.propTypes = {
   index: PropTypes.number.isRequired,
   note: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  colors: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
-export default Note;
+const mapStateToProps = (state) => ({
+  colors: _.mapKeys(state.ui.colors, 'name'),
+});
+
+export default connect(mapStateToProps)(Note);
