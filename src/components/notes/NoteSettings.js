@@ -67,6 +67,7 @@ const NoteSettings = (props) => {
         <ChangeColor
           colorId={colorId}
           noteId={noteId}
+          coll={coll}
         />
 
         <Tooltip title="Add image" aria-label="Add image">
@@ -101,6 +102,7 @@ const NoteSettings = (props) => {
 NoteSettings.defaultProps = {
   noteId: null,
   formData: null,
+  colorId: null,
 };
 
 NoteSettings.propTypes = {
@@ -108,7 +110,7 @@ NoteSettings.propTypes = {
   isHovered: PropTypes.bool.isRequired,
   noteId: PropTypes.string,
   isRemovable: PropTypes.bool.isRequired,
-  colorId: PropTypes.string.isRequired,
+  colorId: PropTypes.string,
 };
 
 export default NoteSettings;

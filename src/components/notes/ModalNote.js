@@ -53,7 +53,7 @@ const DialogNote = (props) => {
     }
   };
 
-  const date = moment(createdAt.toDate()).format('MMM Do YY');
+  const date = createdAt ? moment(createdAt).format('MMM Do YY') : null;
 
   return (
     <DialogWindow handleClose={handleModalClose} open={open}>
@@ -75,12 +75,16 @@ const DialogNote = (props) => {
   );
 };
 
+DialogNote.defaultProps = {
+  color: null,
+};
+
 DialogNote.propTypes = {
   note: PropTypes.oneOfType([PropTypes.object]).isRequired,
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   updateNote: PropTypes.func.isRequired,
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
 };
 
 export default connect(null, { updateNote })(DialogNote);

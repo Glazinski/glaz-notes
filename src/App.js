@@ -8,7 +8,6 @@ import myTheme from './utils/theme';
 import Notes from './pages/Notes';
 import Bin from './pages/Bin';
 import Archive from './pages/Archive';
-import LabelsRoutes from './utils/LabelsRoutes';
 import darkColors from './utils/darkColors';
 import lightColors from './utils/lightColors';
 
@@ -80,7 +79,14 @@ const App = (props) => {
             )}
           />
 
-          <LabelsRoutes />
+          <Route
+            path="/label/:id"
+            render={(routerProps) => (
+              <Home {...routerProps}>
+                <span>elo</span>
+              </Home>
+            )}
+          />
 
           <PrivateRoute path="/login" component={SignIn} />
           <PrivateRoute path="/signup" component={SignUp} />

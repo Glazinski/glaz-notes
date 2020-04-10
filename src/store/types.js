@@ -15,6 +15,7 @@ export const UPDATE_NOTE = 'UPDATE_NOTE';
 export const CREATE_NOTE = 'CREATE_NOTE';
 export const DELETE_NOTE_FOREVER = 'DELETE_NOTE_FOREVER';
 export const CHANGE_NOTE_COLOR = 'CHANGE_NOTE_COLOR';
+export const DELETE_NOTES_FOREVER = 'DELETE_NOTES_FOREVER';
 
 // Labels types
 export const FETCH_LABELS = 'FETCH_LABELS';

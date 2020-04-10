@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 // Redux
@@ -8,7 +9,6 @@ import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tooltip from '@material-ui/core/Tooltip';
-import Button from '@material-ui/core/Button';
 
 // MUI icons
 import CheckIcon from '@material-ui/icons/Check';
@@ -92,5 +92,15 @@ const ColorList = (props) => {
 const mapStateToProps = (state) => ({
   colors: _.mapKeys(state.ui.colors, 'name'),
 });
+
+ColorList.defaultProps = {
+  colorId: null,
+};
+
+ColorList.propTypes = {
+  colorId: PropTypes.string,
+  colors: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  handleColorChange: PropTypes.func.isRequired,
+};
 
 export default connect(mapStateToProps)(ColorList);

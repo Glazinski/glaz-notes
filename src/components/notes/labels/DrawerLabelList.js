@@ -28,7 +28,7 @@ const LabelList = (props) => {
       className={itemClassName}
       button
       component={Link}
-      to={`/${item.labelName}`}
+      to={`/label/${item.labelName}`}
       selected={selectedIndex === `/${item.labelName}`}
       onClick={() => handleItemClick(`/${item.labelName}`)}
     >

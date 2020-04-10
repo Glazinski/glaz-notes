@@ -42,7 +42,8 @@
           "fetchNotes",
           "editLabelName",
           "createLabel",
-          "changeNoteColor"
+          "changeNoteColor",
+          "fetchLabels"
         ]
       }
     ]

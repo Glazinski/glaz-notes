@@ -10,6 +10,7 @@ import {
   DELETE_NOTE_FOREVER,
   UPDATE_NOTE,
   CHANGE_NOTE_COLOR,
+  DELETE_NOTES_FOREVER,
 } from '../types';
 
 export const fetchNotes = (coll) => (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -44,7 +45,7 @@ export const createNote = (noteId, note) => (dispatch, getState, { getFirebase, 
     title: note.title,
     content: note.content,
     id: noteId,
-    createdAt: new Date(),
+    createdAt: new Date().toISOString(),
   };
 
   dispatch({ type: CREATE_NOTE, payload: newNote });
@@ -179,6 +180,20 @@ export const deleteNoteForever = (noteId) => (
     .delete();
 };
 
+export const deleteNotesForever = () => (dispatch, getState, { getFirebase, getFirestore }) => {
+  const firebase = getFirebase();
+  const firestore = getFirestore();
+  const userId = firebase.auth().currentUser.uid;
+  const noteIds = Object.getOwnPropertyNames(getState().notes.notes);
+
+  dispatch({ type: DELETE_NOTES_FOREVER });
+
+  noteIds.forEach((id) => {
+    firestore.collection('bin').doc(userId).collection('userNotes').doc(id)
+      .delete();
+  });
+};
+
 export const updateNote = (noteId, newFormData, coll) => (
   dispatch, getState, { getFirebase, getFirestore },
 ) => {
@@ -206,14 +221,14 @@ export const updateNote = (noteId, newFormData, coll) => (
   });
 };
 
-export const changeNoteColor = (noteId, newColor) => (
+export const changeNoteColor = (noteId, newColor, coll) => (
   dispatch, getState, { getFirebase, getFirestore },
 ) => {
   const firebase = getFirebase();
   const firestore = getFirestore();
   const userId = firebase.auth().currentUser.uid;
 
-  const note = firestore.collection('notes').doc(userId).collection('userNotes').doc(noteId);
+  const note = firestore.collection(coll).doc(userId).collection('userNotes').doc(noteId);
 
   dispatch({
     type: CHANGE_NOTE_COLOR,

@@ -71,7 +71,6 @@ const SignIn = (props) => {
   useEffect(() => () => props.clearForm(), []);
 
   useEffect(() => {
-    console.log(authErrors);
     const err = validate(authErrors);
     setErrors({ ...err });
 

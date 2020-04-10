@@ -167,6 +167,7 @@ NoteForm.defaultProps = {
   noteId: null,
   handleHoverClose: null,
   date: null,
+  colorId: null,
 };
 
 NoteForm.propTypes = {
@@ -176,7 +177,7 @@ NoteForm.propTypes = {
   noteId: PropTypes.string,
   isRemovable: PropTypes.bool.isRequired,
   handleHoverClose: PropTypes.func,
-  colorId: PropTypes.string.isRequired,
+  colorId: PropTypes.string,
   date: PropTypes.string,
 };
 

@@ -64,6 +64,7 @@ const CreateNote = (props) => {
     noteId: uniqid(),
     title: '',
     content: '',
+    createdAt: null,
   });
   const classes = useStyles();
   const [isFocused, setIsFocused] = useState(false);
@@ -95,6 +96,7 @@ const CreateNote = (props) => {
       // eslint-disable-next-line no-mixed-operators
       && !!title.trim().length || !!content.trim().length
     ) {
+      setFormData({ ...formData, createdAt: new Date().toISOString() });
       props.createNote(uniqid(), formData);
       setFormData({ noteId: uniqid(), title: '', content: '' });
     } else {

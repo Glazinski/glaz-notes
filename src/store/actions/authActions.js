@@ -14,6 +14,7 @@ export const signIn = (credentials) => (dispatch, getState, { getFirebase }) => 
     credentials.password,
   ).then(() => {
     dispatch({ type: CLEAR_ERRORS });
+    history.push('/');
   }).catch((err) => dispatch({ type: SET_ERRORS, err }));
 };
 
@@ -40,7 +41,10 @@ export const signUp = (newUser) => (dispatch, getState, { getFirebase, getFirest
       firstName: newUser.firstName,
       lastName: newUser.lastName,
     }))
-    .then(() => dispatch({ type: CLEAR_ERRORS }))
+    .then(() => {
+      history.push('/');
+      dispatch({ type: CLEAR_ERRORS });
+    })
     .catch((err) => dispatch({ type: SET_ERRORS, err }));
 };
 

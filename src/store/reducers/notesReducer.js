@@ -11,6 +11,7 @@ import {
   DELETE_NOTE_FOREVER,
   UPDATE_NOTE,
   CHANGE_NOTE_COLOR,
+  DELETE_NOTES_FOREVER,
 } from '../types';
 
 const initState = {
@@ -80,6 +81,12 @@ export default (state = initState, action) => {
             colorName: action.payload.color,
           },
         },
+      };
+
+    case DELETE_NOTES_FOREVER:
+      return {
+        ...state,
+        notes: {},
       };
 
     case SET_NOTE:

@@ -97,7 +97,7 @@ const DragContainer = (props) => {
       },
     };
 
-    // console.log('new col', newState);
+    console.log('new col', newState);
     setInitData(newState);
   };
 

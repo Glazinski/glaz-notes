@@ -31,7 +31,9 @@ const useStyles = makeStyles((theme) => ({
 
 const ChangeColor = (props) => {
   const classes = useStyles();
-  const { colorId, changeNoteColor, noteId } = props;
+  const {
+    colorId, changeNoteColor, noteId, coll,
+  } = props;
   const [isHovered, setIsHovered] = useState(false);
 
   const handleHoverOn = () => {
@@ -43,7 +45,7 @@ const ChangeColor = (props) => {
   };
 
   const handleColorChange = (colorName) => {
-    changeNoteColor(noteId, colorName);
+    changeNoteColor(noteId, colorName, coll);
   };
 
   return (
