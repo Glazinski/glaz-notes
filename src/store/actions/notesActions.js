@@ -42,8 +42,9 @@ export const createNote = (noteId, note) => (dispatch, getState, { getFirebase, 
   const userId = firebase.auth().currentUser.uid;
 
   const newNote = {
-    title: note.title,
-    content: note.content,
+    // title: note.title,
+    // content: note.content,
+    ...note,
     id: noteId,
     createdAt: new Date().toISOString(),
   };

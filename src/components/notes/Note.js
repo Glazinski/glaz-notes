@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { Draggable } from 'react-beautiful-dnd';
-import ModalNote from './ModalNote';
+import DialogNote from './DialogNote';
 import NoteSettings from './NoteSettings';
 import { useLocation } from 'react-router-dom';
 
 // Redux
 import { connect } from 'react-redux';
+import { moveNoteFromTo, changeNoteColor } from '../../store/actions/notesActions';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.default,
     padding: '10px',
     margin: '10px 0',
-    transition: 'background-color .3s ease',
+    transition: 'background-color .3s ease, opacity .3s ease',
     '&:hover': {
       boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
       cursor: 'default',
@@ -51,11 +52,16 @@ const useStyles = makeStyles((theme) => ({
 const Note = (props) => {
   const classes = useStyles();
   const {
-    colors, index, note: {
+    colors,
+    index,
+    moveNoteFromTo,
+    changeNoteColor,
+    note: {
       id, title, content, colorName,
     },
   } = props;
   const { pathname } = useLocation();
+  const coll = pathname === '/' ? 'notes' : pathname.substr(1);
 
   const [open, setOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -74,6 +80,14 @@ const Note = (props) => {
 
   const handleHoverOff = () => {
     setIsHovered(false);
+  };
+
+  const handleNoteMove = (to, msg) => {
+    moveNoteFromTo(id, coll, to, msg);
+  };
+
+  const handleColor = (newColorName) => {
+    changeNoteColor(id, newColorName, coll);
   };
 
   const color = colorName ? colors[colorName].color : colors.Default;
@@ -96,8 +110,12 @@ const Note = (props) => {
             <Paper
               className={classes.container}
               variant="outlined"
-              style={{
+              style={open ? {
                 backgroundColor: color,
+                opacity: '0',
+              } : {
+                backgroundColor: color,
+                opacity: '1',
               }}
             >
               <div
@@ -106,12 +124,14 @@ const Note = (props) => {
                 onClick={handleClickOpen}
               />
               {open ? (
-                <ModalNote
+                <DialogNote
                   handleClose={handleClose}
                   open={open}
                   color={color}
                   note={props.note}
                   handleHoverClose={handleHoverOff}
+                  handleNoteMove={handleNoteMove}
+                  handleColor={handleColor}
                 />
               ) : null}
               {title.length <= 0 ? (
@@ -129,8 +149,10 @@ const Note = (props) => {
               <NoteSettings
                 noteId={id}
                 isHovered={isHovered}
-                isRemovable
+                isMovable
                 colorId={colorName || 'Default'}
+                handleNoteMove={handleNoteMove}
+                handleColor={handleColor}
               />
             </Paper>
           </div>
@@ -144,10 +166,12 @@ Note.propTypes = {
   index: PropTypes.number.isRequired,
   note: PropTypes.oneOfType([PropTypes.object]).isRequired,
   colors: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  moveNoteFromTo: PropTypes.func.isRequired,
+  changeNoteColor: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   colors: _.mapKeys(state.ui.colors, 'name'),
 });
 
-export default connect(mapStateToProps)(Note);
+export default connect(mapStateToProps, { moveNoteFromTo, changeNoteColor })(Note);

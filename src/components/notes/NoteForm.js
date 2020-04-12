@@ -45,13 +45,16 @@ const useStyles = makeStyles((theme) => ({
 const NoteForm = (props) => {
   const {
     formData: { title, content },
+    formData,
     handleChange,
     handleClose,
     noteId,
-    isRemovable,
+    isMovable,
     handleHoverClose,
     colorId,
     date,
+    handleNoteMove,
+    handleColor,
   } = props;
   const classes = useStyles();
   const textFieldEl = useRef(null);
@@ -125,7 +128,7 @@ const NoteForm = (props) => {
             className={classes.date}
             variant="caption"
           >
-            Created
+            Created at
             {' '}
             {date}
           </Typography>
@@ -141,11 +144,13 @@ const NoteForm = (props) => {
         <Grid item xs={6}>
           <NoteSettings
             colorId={colorId}
-            formData={props.formData}
+            formData={formData}
             noteId={noteId}
             isHovered
-            isRemovable={isRemovable}
+            isMovable={isMovable}
             handleHoverClose={handleHoverClose}
+            handleNoteMove={handleNoteMove}
+            handleColor={handleColor}
           />
         </Grid>
         <Grid item>
@@ -168,6 +173,7 @@ NoteForm.defaultProps = {
   handleHoverClose: null,
   date: null,
   colorId: null,
+  handleNoteMove: null,
 };
 
 NoteForm.propTypes = {
@@ -175,10 +181,12 @@ NoteForm.propTypes = {
   handleChange: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   noteId: PropTypes.string,
-  isRemovable: PropTypes.bool.isRequired,
+  isMovable: PropTypes.bool.isRequired,
   handleHoverClose: PropTypes.func,
   colorId: PropTypes.string,
   date: PropTypes.string,
+  handleNoteMove: PropTypes.func,
+  handleColor: PropTypes.func.isRequired,
 };
 
 export default NoteForm;

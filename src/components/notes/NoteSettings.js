@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import PropTypes from 'prop-types';
 import ChangeColor from './NoteOperations/ChangeColor';
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 const NoteSettings = (props) => {
   const {
-    isHovered, noteId, isRemovable, formData, colorId,
+    isHovered, noteId, isMovable, colorId, handleNoteMove, handleColor,
   } = props;
   const classes = useStyles();
   const { pathname } = useLocation();
@@ -53,7 +54,7 @@ const NoteSettings = (props) => {
           style={isHovered ? { opacity: '1', pointerEvents: 'auto' } : { opacity: '0', pointerEvents: 'none' }}
         >
           <DeleteForever noteId={noteId} />
-          <Restore noteId={noteId} />
+          <Restore handleNoteMove={handleNoteMove} />
         </div>
       );
     }
@@ -62,12 +63,12 @@ const NoteSettings = (props) => {
       <div
         className={classes.container}
         style={isHovered ? { opacity: '1', pointerEvents: 'auto' } : { opacity: '0', pointerEvents: 'none' }}
-        // style={isHovered ? { display: 'block' } : { display: 'none' }}
       >
         <ChangeColor
           colorId={colorId}
           noteId={noteId}
           coll={coll}
+          handleColor={handleColor}
         />
 
         <Tooltip title="Add image" aria-label="Add image">
@@ -76,13 +77,14 @@ const NoteSettings = (props) => {
           </IconButton>
         </Tooltip>
         {pathname === '/archive' ? (
-          <UnArchiveNote coll={coll} noteId={noteId} />
-        ) : (
-          <ArchiveNote formData={formData} coll={coll} noteId={noteId} />
-        )}
-        {isRemovable ? (
-          <DeleteNote coll={coll} noteId={noteId} />
+          <UnArchiveNote handleNoteMove={handleNoteMove} />
+        ) : isMovable ? (
+          <ArchiveNote handleNoteMove={handleNoteMove} />
         ) : null}
+        {isMovable ? (
+          <DeleteNote handleNoteMove={handleNoteMove} />
+        ) : null}
+
         <Tooltip title="Add Label" aria-label="Add Label">
           <IconButton className={classes.iconBtn}>
             <LabelOutlinedIcon fontSize="small" />
@@ -101,16 +103,18 @@ const NoteSettings = (props) => {
 
 NoteSettings.defaultProps = {
   noteId: null,
-  formData: null,
   colorId: null,
+  handleNoteMove: null,
+  handleColor: null,
 };
 
 NoteSettings.propTypes = {
-  formData: PropTypes.oneOfType([PropTypes.object]),
   isHovered: PropTypes.bool.isRequired,
   noteId: PropTypes.string,
-  isRemovable: PropTypes.bool.isRequired,
+  isMovable: PropTypes.bool.isRequired,
   colorId: PropTypes.string,
+  handleNoteMove: PropTypes.func,
+  handleColor: PropTypes.func,
 };
 
 export default NoteSettings;

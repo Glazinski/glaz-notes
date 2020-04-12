@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ColorList from './ColorList';
 
-// Redux
-import { connect } from 'react-redux';
-import { changeNoteColor } from '../../../store/actions/notesActions';
-
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -32,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 const ChangeColor = (props) => {
   const classes = useStyles();
   const {
-    colorId, changeNoteColor, noteId, coll,
+    colorId, handleColor,
   } = props;
   const [isHovered, setIsHovered] = useState(false);
 
@@ -45,7 +41,7 @@ const ChangeColor = (props) => {
   };
 
   const handleColorChange = (colorName) => {
-    changeNoteColor(noteId, colorName, coll);
+    handleColor(colorName);
   };
 
   return (
@@ -73,8 +69,7 @@ ChangeColor.defaultProps = {
 
 ChangeColor.propTypes = {
   colorId: PropTypes.string,
-  changeNoteColor: PropTypes.func.isRequired,
-  noteId: PropTypes.string.isRequired,
+  handleColor: PropTypes.func.isRequired,
 };
 
-export default connect(null, { changeNoteColor })(ChangeColor);
+export default ChangeColor;

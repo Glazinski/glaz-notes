@@ -1,8 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { moveNoteFromTo } from '../../../store/actions/notesActions';
-
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -20,11 +17,13 @@ const useStyles = makeStyles((theme) => ({
 
 const DeleteNote = (props) => {
   const classes = useStyles();
-  const { noteId, moveNoteFromTo, coll } = props;
+  const {
+    handleNoteMove,
+  } = props;
   const msg = 'Note binned';
 
   const onDeleteClick = () => {
-    moveNoteFromTo(noteId, coll, 'bin', msg);
+    handleNoteMove('bin', msg);
   };
 
   return (
@@ -38,10 +37,12 @@ const DeleteNote = (props) => {
   );
 };
 
-DeleteNote.propTypes = {
-  noteId: PropTypes.string.isRequired,
-  moveNoteFromTo: PropTypes.func.isRequired,
-  coll: PropTypes.string.isRequired,
+DeleteNote.defaultProps = {
+  handleNoteMove: null,
 };
 
-export default connect(null, { moveNoteFromTo })(DeleteNote);
+DeleteNote.propTypes = {
+  handleNoteMove: PropTypes.func,
+};
+
+export default DeleteNote;

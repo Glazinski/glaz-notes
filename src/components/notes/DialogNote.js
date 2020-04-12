@@ -28,7 +28,12 @@ const useStyles = makeStyles((theme) => ({
 
 const DialogNote = (props) => {
   const {
-    handleClose, open, updateNote, color,
+    handleClose,
+    open,
+    updateNote,
+    color,
+    handleNoteMove,
+    handleColor,
     note: {
       id, content, title, createdAt, colorName,
     },
@@ -67,8 +72,10 @@ const DialogNote = (props) => {
           formData={formData}
           handleChange={handleChange}
           handleClose={handleModalClose}
+          handleNoteMove={handleNoteMove}
+          handleColor={handleColor}
           date={date}
-          isRemovable
+          isMovable
         />
       </Paper>
     </DialogWindow>
@@ -77,6 +84,8 @@ const DialogNote = (props) => {
 
 DialogNote.defaultProps = {
   color: null,
+  handleNoteMove: null,
+  handleColor: null,
 };
 
 DialogNote.propTypes = {
@@ -85,6 +94,8 @@ DialogNote.propTypes = {
   open: PropTypes.bool.isRequired,
   updateNote: PropTypes.func.isRequired,
   color: PropTypes.string,
+  handleNoteMove: PropTypes.func,
+  handleColor: PropTypes.func,
 };
 
 export default connect(null, { updateNote })(DialogNote);

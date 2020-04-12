@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import CreateList from './CreateList';
 import uniqid from 'uniqid';
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.default,
     boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
     margin: '0 auto 80px auto',
+    transition: 'background-color .3s ease',
   },
   content: {
     display: 'flex',
@@ -60,13 +62,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CreateNote = (props) => {
+  const { colors } = props;
+  const classes = useStyles();
   const [formData, setFormData] = useState({
     noteId: uniqid(),
     title: '',
     content: '',
     createdAt: null,
+    colorName: 'Default',
   });
-  const classes = useStyles();
   const [isFocused, setIsFocused] = useState(false);
   const [isListMode, setIsListMode] = useState(false);
 
@@ -88,6 +92,10 @@ const CreateNote = (props) => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleColor = (colorName) => {
+    setFormData({ ...formData, colorName });
+  };
+
   useEffect(() => {
     const { title, content } = formData;
 
@@ -98,11 +106,18 @@ const CreateNote = (props) => {
     ) {
       setFormData({ ...formData, createdAt: new Date().toISOString() });
       props.createNote(uniqid(), formData);
-      setFormData({ noteId: uniqid(), title: '', content: '' });
+      setFormData({
+        ...formData, noteId: uniqid(), title: '', content: '', colorName: 'Default',
+      });
     } else {
-      setFormData({ noteId: uniqid(), title: '', content: '' });
+      setFormData({
+        ...formData, noteId: uniqid(), title: '', content: '', colorName: 'Default',
+      });
     }
   }, [isFocused]);
+
+  const color = _.some(colors) ? colors[formData.colorName].color : null;
+  // console.log(_.some(colors));
 
   return (
     <ClickAwayListener onClickAway={() => handleClose()}>
@@ -111,6 +126,7 @@ const CreateNote = (props) => {
         className={classes.paper}
         elevation={5}
         variant="outlined"
+        style={{ backgroundColor: color }}
       >
         {isFocused ? (
           <NoteForm
@@ -118,7 +134,8 @@ const CreateNote = (props) => {
             formData={formData}
             handleChange={handleChange}
             handleClose={handleClose}
-            isRemovable={false}
+            handleColor={handleColor}
+            isMovable={false}
           />
         ) : (
           <div className={classes.content}>
@@ -137,6 +154,11 @@ const CreateNote = (props) => {
 
 CreateNote.propTypes = {
   createNote: PropTypes.func.isRequired,
+  colors: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
-export default connect(null, { createNote })(CreateNote);
+const mapStateToProps = (state) => ({
+  colors: _.mapKeys(state.ui.colors, 'name'),
+});
+
+export default connect(mapStateToProps, { createNote })(CreateNote);

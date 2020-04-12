@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { moveNoteFromTo } from '../../../store/actions/notesActions';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -18,16 +16,18 @@ const useStyles = makeStyles((theme) => ({
 
 const UnArchiveNote = (props) => {
   const classes = useStyles();
-  const { noteId, moveNoteFromTo, coll } = props;
+  const {
+    handleNoteMove,
+  } = props;
   const msg = 'Note unarchived';
 
-  const onRestore = () => {
-    moveNoteFromTo(noteId, coll, 'notes', msg);
+  const onUnArchiveClick = () => {
+    handleNoteMove('notes', msg);
   };
 
   return (
     <Tooltip title="Unarchive" aria-label="Unarchive">
-      <IconButton onClick={onRestore} className={classes.iconBtn}>
+      <IconButton onClick={onUnArchiveClick} className={classes.iconBtn}>
         <UnarchiveOutlinedIcon fontSize="small" color="inherit" />
       </IconButton>
     </Tooltip>
@@ -35,9 +35,7 @@ const UnArchiveNote = (props) => {
 };
 
 UnArchiveNote.propTypes = {
-  noteId: PropTypes.string.isRequired,
-  moveNoteFromTo: PropTypes.func.isRequired,
-  coll: PropTypes.string.isRequired,
+  handleNoteMove: PropTypes.func.isRequired,
 };
 
-export default connect(null, { moveNoteFromTo })(UnArchiveNote);
+export default UnArchiveNote;

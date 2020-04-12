@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { moveNoteFromTo } from '../../../store/actions/notesActions';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -21,12 +19,12 @@ const useStyles = makeStyles((theme) => ({
 const ArchiveNote = (props) => {
   const classes = useStyles();
   const {
-    noteId, moveNoteFromTo, coll, formData,
+    handleNoteMove,
   } = props;
   const msg = 'Note archived';
 
   const onArchiveClick = () => {
-    moveNoteFromTo(noteId, coll, 'archive', msg, formData);
+    handleNoteMove('archive', msg);
   };
 
   return (
@@ -40,16 +38,12 @@ const ArchiveNote = (props) => {
   );
 };
 
-
 ArchiveNote.defaultProps = {
-  formData: null,
+  handleNoteMove: null,
 };
 
 ArchiveNote.propTypes = {
-  noteId: PropTypes.string.isRequired,
-  moveNoteFromTo: PropTypes.func.isRequired,
-  coll: PropTypes.string.isRequired,
-  formData: PropTypes.oneOfType([PropTypes.object]),
+  handleNoteMove: PropTypes.func,
 };
 
-export default connect(null, { moveNoteFromTo })(ArchiveNote);
+export default ArchiveNote;
