@@ -7,6 +7,7 @@ import DeleteForever from './NoteOperations/DeleteForever';
 import Restore from './NoteOperations/Restore';
 import ArchiveNote from './NoteOperations/ArchiveNote';
 import UnArchiveNote from './NoteOperations/UnArchiveNote';
+import StarNote from './NoteOperations/StarNote';
 import { useLocation } from 'react-router-dom';
 
 // MUI
@@ -40,7 +41,14 @@ const useStyles = makeStyles((theme) => ({
 
 const NoteSettings = (props) => {
   const {
-    isHovered, noteId, isMovable, colorId, handleNoteMove, handleColor,
+    isHovered,
+    noteId,
+    isMovable,
+    colorId,
+    handleNoteMove,
+    handleColor,
+    handleStar,
+    isStarred,
   } = props;
   const classes = useStyles();
   const { pathname } = useLocation();
@@ -60,37 +68,45 @@ const NoteSettings = (props) => {
     }
 
     return (
-      <div
-        className={classes.container}
-        style={isHovered ? { opacity: '1', pointerEvents: 'auto' } : { opacity: '0', pointerEvents: 'none' }}
-      >
-        <ChangeColor
-          colorId={colorId}
-          noteId={noteId}
-          coll={coll}
-          handleColor={handleColor}
+      <>
+        <StarNote
+          isHovered={isHovered}
+          handleStar={handleStar}
+          isStarred={isStarred}
         />
+        <div
+          className={classes.container}
+          style={isHovered ? { opacity: '1', pointerEvents: 'auto' } : { opacity: '0', pointerEvents: 'none' }}
+        >
+          {/* <StarNote isHovered={isHovered} /> */}
+          <ChangeColor
+            colorId={colorId}
+            noteId={noteId}
+            coll={coll}
+            handleColor={handleColor}
+          />
 
-        <Tooltip title="Add image" aria-label="Add image">
-          <IconButton className={classes.iconBtn}>
-            <ImageOutlinedIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
-        {pathname === '/archive' ? (
-          <UnArchiveNote handleNoteMove={handleNoteMove} />
-        ) : isMovable ? (
-          <ArchiveNote handleNoteMove={handleNoteMove} />
-        ) : null}
-        {isMovable ? (
-          <DeleteNote handleNoteMove={handleNoteMove} />
-        ) : null}
+          <Tooltip title="Add image" aria-label="Add image">
+            <IconButton className={classes.iconBtn}>
+              <ImageOutlinedIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+          {pathname === '/archive' ? (
+            <UnArchiveNote handleNoteMove={handleNoteMove} />
+          ) : isMovable ? (
+            <ArchiveNote handleNoteMove={handleNoteMove} />
+          ) : null}
+          {isMovable ? (
+            <DeleteNote handleNoteMove={handleNoteMove} />
+          ) : null}
 
-        <Tooltip title="Add Label" aria-label="Add Label">
-          <IconButton className={classes.iconBtn}>
-            <LabelOutlinedIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
-      </div>
+          <Tooltip title="Add Label" aria-label="Add Label">
+            <IconButton className={classes.iconBtn}>
+              <LabelOutlinedIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        </div>
+      </>
     );
   };
 
@@ -106,6 +122,8 @@ NoteSettings.defaultProps = {
   colorId: null,
   handleNoteMove: null,
   handleColor: null,
+  handleStar: null,
+  isStarred: null,
 };
 
 NoteSettings.propTypes = {
@@ -115,6 +133,8 @@ NoteSettings.propTypes = {
   colorId: PropTypes.string,
   handleNoteMove: PropTypes.func,
   handleColor: PropTypes.func,
+  handleStar: PropTypes.func,
+  isStarred: PropTypes.bool,
 };
 
 export default NoteSettings;

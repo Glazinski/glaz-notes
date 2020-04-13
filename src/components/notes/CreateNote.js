@@ -25,7 +25,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   paper: {
-    maxWidth: 520,
+    position: 'relative',
+    // maxWidth: 520,
+    width: 520,
     backgroundColor: theme.palette.background.default,
     boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
     margin: '0 auto 80px auto',
@@ -41,10 +43,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '10px',
   },
   textField: {
-    // width: 400,
     borderBottom: 'none',
-    // marginLeft: 10,
-    // marginRight: 10,
     padding: '0 10px 0 10px',
   },
   button: {
@@ -65,11 +64,11 @@ const CreateNote = (props) => {
   const { colors } = props;
   const classes = useStyles();
   const [formData, setFormData] = useState({
-    noteId: uniqid(),
     title: '',
     content: '',
     createdAt: null,
     colorName: 'Default',
+    isStarred: false,
   });
   const [isFocused, setIsFocused] = useState(false);
   const [isListMode, setIsListMode] = useState(false);
@@ -96,6 +95,10 @@ const CreateNote = (props) => {
     setFormData({ ...formData, colorName });
   };
 
+  const handleStar = (newIsStarred) => {
+    setFormData({ ...formData, isStarred: newIsStarred });
+  };
+
   useEffect(() => {
     const { title, content } = formData;
 
@@ -104,20 +107,19 @@ const CreateNote = (props) => {
       // eslint-disable-next-line no-mixed-operators
       && !!title.trim().length || !!content.trim().length
     ) {
-      setFormData({ ...formData, createdAt: new Date().toISOString() });
+      setFormData({ ...formData });
       props.createNote(uniqid(), formData);
       setFormData({
-        ...formData, noteId: uniqid(), title: '', content: '', colorName: 'Default',
+        ...formData, title: '', content: '', colorName: 'Default', isStarred: false,
       });
     } else {
       setFormData({
-        ...formData, noteId: uniqid(), title: '', content: '', colorName: 'Default',
+        ...formData, title: '', content: '', colorName: 'Default', isStarred: false,
       });
     }
   }, [isFocused]);
 
   const color = _.some(colors) ? colors[formData.colorName].color : null;
-  // console.log(_.some(colors));
 
   return (
     <ClickAwayListener onClickAway={() => handleClose()}>
@@ -135,6 +137,7 @@ const CreateNote = (props) => {
             handleChange={handleChange}
             handleClose={handleClose}
             handleColor={handleColor}
+            handleStar={handleStar}
             isMovable={false}
           />
         ) : (

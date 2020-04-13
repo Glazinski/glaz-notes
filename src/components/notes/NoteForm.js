@@ -14,7 +14,7 @@ import { Typography } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: '5px',
+    padding: '10px',
   },
   paper: {
     maxWidth: 520,
@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     borderBottom: 'none',
     padding: '0 10px 0 10px',
+    // whiteSpace: 'pre-wrap',
   },
   button: {
     color: theme.palette.text.primary,
@@ -55,6 +56,8 @@ const NoteForm = (props) => {
     date,
     handleNoteMove,
     handleColor,
+    handleStar,
+    isStarred,
   } = props;
   const classes = useStyles();
   const textFieldEl = useRef(null);
@@ -88,10 +91,16 @@ const NoteForm = (props) => {
           name="title"
           value={title}
           className={classes.textField}
-          InputProps={{ disableUnderline: true, classes: { input: classes.textFieldLabel } }}
+          InputProps={{
+            disableUnderline: true,
+            classes: { input: classes.textFieldLabel },
+          }}
           placeholder="Title"
-          style={{ marginBottom: '20px' }}
-          fullWidth
+          style={{
+            marginBottom: '20px',
+            width: '96%',
+          }}
+          // fullWidth
           multiline
           disabled={isBin}
         />
@@ -151,6 +160,8 @@ const NoteForm = (props) => {
             handleHoverClose={handleHoverClose}
             handleNoteMove={handleNoteMove}
             handleColor={handleColor}
+            handleStar={handleStar}
+            isStarred={isStarred}
           />
         </Grid>
         <Grid item>
@@ -174,6 +185,8 @@ NoteForm.defaultProps = {
   date: null,
   colorId: null,
   handleNoteMove: null,
+  handleStar: null,
+  isStarred: null,
 };
 
 NoteForm.propTypes = {
@@ -187,6 +200,8 @@ NoteForm.propTypes = {
   date: PropTypes.string,
   handleNoteMove: PropTypes.func,
   handleColor: PropTypes.func.isRequired,
+  handleStar: PropTypes.func,
+  isStarred: PropTypes.bool,
 };
 
 export default NoteForm;

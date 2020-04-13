@@ -3,11 +3,15 @@ import PropTypes from 'prop-types';
 import { DragDropContext } from 'react-beautiful-dnd';
 import Column from './Column';
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     justifyContent: 'center',
+  },
+  title: {
+    marginLeft: 70,
   },
 }));
 
@@ -100,20 +104,55 @@ const DragContainer = (props) => {
     console.log('new col', newState);
     setInitData(newState);
   };
-
   return (
-    <DragDropContext
-      onDragEnd={onDragEnd}
-    >
-      <div className={classes.container}>
-        {initData.columnOrder.map((columnId) => {
-          const column = initData.columns[columnId];
-          const notes = column.noteIds.map((noteId) => initData.notes[noteId]);
+    <>
+      {initData.starredColumns['starred-column-1'].noteIds.length > 0 ? (
+        <>
+          <Typography className={classes.title} variant="overline">STARRED</Typography>
+          <DragDropContext
+            onDragEnd={onDragEnd}
+          >
+            <div
+              className={classes.container}
+              style={{
+                marginBottom: '50px',
+              }}
+            >
+              {initData.starredColumnOrder.map((columnId) => {
+                const column = initData.starredColumns[columnId];
+                const notes = column.noteIds.map((noteId) => initData.notes[noteId]);
 
-          return <Column key={column.id} column={column} notes={notes} />;
-        })}
-      </div>
-    </DragDropContext>
+                return <Column key={column.id} column={column} notes={notes} />;
+              })}
+            </div>
+          </DragDropContext>
+        </>
+      ) : null}
+
+
+      {initData.columns['column-1'].noteIds.length > 0 ? (
+        <>
+          <Typography
+            className={classes.title}
+            variant="overline"
+          >
+            OTHERS
+          </Typography>
+          <DragDropContext
+            onDragEnd={onDragEnd}
+          >
+            <div className={classes.container}>
+              {initData.columnOrder.map((columnId) => {
+                const column = initData.columns[columnId];
+                const notes = column.noteIds.map((noteId) => initData.notes[noteId]);
+
+                return <Column key={column.id} column={column} notes={notes} />;
+              })}
+            </div>
+          </DragDropContext>
+        </>
+      ) : null}
+    </>
   );
 };
 

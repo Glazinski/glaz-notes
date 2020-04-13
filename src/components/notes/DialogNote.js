@@ -34,8 +34,9 @@ const DialogNote = (props) => {
     color,
     handleNoteMove,
     handleColor,
+    handleStar,
     note: {
-      id, content, title, createdAt, colorName,
+      id, content, title, createdAt, colorName, isStarred,
     },
   } = props;
   const classes = useStyles();
@@ -67,14 +68,16 @@ const DialogNote = (props) => {
         style={color ? { backgroundColor: color } : null}
       >
         <NoteForm
+          handleChange={handleChange}
+          handleClose={handleModalClose}
+          date={date}
           noteId={id}
           colorId={colorName}
           formData={formData}
-          handleChange={handleChange}
-          handleClose={handleModalClose}
           handleNoteMove={handleNoteMove}
           handleColor={handleColor}
-          date={date}
+          handleStar={handleStar}
+          isStarred={isStarred}
           isMovable
         />
       </Paper>
@@ -86,6 +89,8 @@ DialogNote.defaultProps = {
   color: null,
   handleNoteMove: null,
   handleColor: null,
+  handleStar: null,
+  isStarred: null,
 };
 
 DialogNote.propTypes = {
@@ -96,6 +101,8 @@ DialogNote.propTypes = {
   color: PropTypes.string,
   handleNoteMove: PropTypes.func,
   handleColor: PropTypes.func,
+  handleStar: PropTypes.func,
+  isStarred: PropTypes.bool,
 };
 
 export default connect(null, { updateNote })(DialogNote);

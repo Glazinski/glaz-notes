@@ -8,7 +8,7 @@ import { useLocation } from 'react-router-dom';
 
 // Redux
 import { connect } from 'react-redux';
-import { moveNoteFromTo, changeNoteColor } from '../../store/actions/notesActions';
+import { moveNoteFromTo, changeNoteColor, starNote } from '../../store/actions/notesActions';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -28,10 +28,13 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
       cursor: 'default',
     },
-    // transition: 'opacity .3s ease',
   },
   title: {
-    overflowWrap: 'anywhere',
+    // overflowWrap: 'anywhere',
+    wordBreak: 'break-word',
+    direction: 'rtl',
+    textAlign: 'left',
+    textIndent: '12%',
   },
   btn: {
     position: 'absolute',
@@ -40,7 +43,6 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '100%',
     opacity: '0',
-    // backgroundColor: 'red',
   },
   content: {
     margin: '5px 0 5px 0',
@@ -56,8 +58,9 @@ const Note = (props) => {
     index,
     moveNoteFromTo,
     changeNoteColor,
+    starNote,
     note: {
-      id, title, content, colorName,
+      id, title, content, colorName, isStarred,
     },
   } = props;
   const { pathname } = useLocation();
@@ -88,6 +91,10 @@ const Note = (props) => {
 
   const handleColor = (newColorName) => {
     changeNoteColor(id, newColorName, coll);
+  };
+
+  const handleStar = (newIsStarred) => {
+    starNote(id, newIsStarred);
   };
 
   const color = colorName ? colors[colorName].color : colors.Default;
@@ -132,6 +139,7 @@ const Note = (props) => {
                   handleHoverClose={handleHoverOff}
                   handleNoteMove={handleNoteMove}
                   handleColor={handleColor}
+                  handleStar={handleStar}
                 />
               ) : null}
               {title.length <= 0 ? (
@@ -153,6 +161,8 @@ const Note = (props) => {
                 colorId={colorName || 'Default'}
                 handleNoteMove={handleNoteMove}
                 handleColor={handleColor}
+                handleStar={handleStar}
+                isStarred={isStarred}
               />
             </Paper>
           </div>
@@ -174,4 +184,4 @@ const mapStateToProps = (state) => ({
   colors: _.mapKeys(state.ui.colors, 'name'),
 });
 
-export default connect(mapStateToProps, { moveNoteFromTo, changeNoteColor })(Note);
+export default connect(mapStateToProps, { moveNoteFromTo, changeNoteColor, starNote })(Note);
