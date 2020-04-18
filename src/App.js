@@ -8,6 +8,7 @@ import myTheme from './utils/theme';
 import Notes from './pages/Notes';
 import Bin from './pages/Bin';
 import Archive from './pages/Archive';
+import AnyLabel from './pages/AnyLabel';
 import darkColors from './utils/darkColors';
 import lightColors from './utils/lightColors';
 
@@ -80,10 +81,10 @@ const App = (props) => {
           />
 
           <Route
-            path="/label/:id"
+            path="/label/:labelName"
             render={(routerProps) => (
               <Home {...routerProps}>
-                <span>elo</span>
+                <AnyLabel {...routerProps} />
               </Home>
             )}
           />

@@ -16,6 +16,10 @@ import {
   changeNoteLabels,
 } from '../../store/actions/notesActions';
 
+import {
+  changeLabelNoteIds,
+} from '../../store/actions/labelsActions';
+
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -65,13 +69,15 @@ const Note = (props) => {
     moveNoteFromTo,
     changeNoteColor,
     changeNoteLabels,
+    changeLabelNoteIds,
     starNote,
+    labelsList,
     note: {
       id, title, content, colorName, labels,
     },
   } = props;
   const { pathname } = useLocation();
-  const coll = pathname === '/' ? 'notes' : pathname.substr(1);
+  const coll = pathname === '/' || pathname.includes('label') ? 'notes' : pathname.substr(1);
 
   const [open, setOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -104,9 +110,23 @@ const Note = (props) => {
     starNote(id, newIsStarred, coll);
   };
 
-  const handleLabels = (labelsArr) => {
-    changeNoteLabels(id, labelsArr, coll);
+  const handleLabels = (labelsArr, labelId, type) => {
+    // const shouldBeMoved = !!(pathname.includes(labelName) && type === 'del');
+    // console.log(shouldBeMoved);
+    console.log(labelsList);
+    console.log(labelsArr, labelId, type);
+
+    if (labelId && type) {
+      const newNoteIds = type === 'del'
+        ? labelsList[labelId].noteIds.filter((item) => item !== id)
+        : [id, ...labelsList[labelId].noteIds];
+
+      changeLabelNoteIds(labelId, newNoteIds);
+      changeNoteLabels(id, labelsArr);
+    }
   };
+
+  // console.log(labels);
 
   const color = colorName ? colors[colorName].color : colors.Default;
 
@@ -193,6 +213,7 @@ Note.propTypes = {
   index: PropTypes.number.isRequired,
   note: PropTypes.oneOfType([PropTypes.object]).isRequired,
   colors: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  labelsList: PropTypes.oneOfType([PropTypes.object]).isRequired,
   moveNoteFromTo: PropTypes.func.isRequired,
   changeNoteColor: PropTypes.func.isRequired,
   changeNoteLabels: PropTypes.func.isRequired,
@@ -201,6 +222,8 @@ Note.propTypes = {
 
 const mapStateToProps = (state) => ({
   colors: _.mapKeys(state.ui.colors, 'name'),
+  // labelsList: _.mapKeys(state.labels, 'labelName'),
+  labelsList: state.labels,
 });
 
 export default connect(
@@ -210,5 +233,6 @@ export default connect(
     changeNoteColor,
     starNote,
     changeNoteLabels,
+    changeLabelNoteIds,
   },
 )(Note);

@@ -100,6 +100,7 @@ const CreateNote = (props) => {
     setFormData({ ...formData, isStarred: newIsStarred });
   };
 
+  // TODO: Set noteIds in labels
   const handleLabels = (labelsArr) => {
     setFormData({ ...formData, labels: [...labelsArr] });
   };

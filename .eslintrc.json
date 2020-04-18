@@ -45,7 +45,8 @@
           "changeNoteColor",
           "fetchLabels",
           "starNote",
-          "changeNoteLabels"
+          "changeNoteLabels",
+          "changeLabelNoteIds"
         ]
       }
     ]

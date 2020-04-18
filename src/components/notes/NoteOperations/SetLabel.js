@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import SetLabelList from '../labels/SetLabelList';
 
 // Redux
@@ -87,7 +86,7 @@ const SetLabel = (props) => {
           <SetLabelList
             labels={labels}
             handleLabels={handleLabels}
-            labelsList={_.values(_.mapValues(labelsList, 'labelName'))}
+            labelsList={labelsList}
           />
           {/* <SetLabelList handleLabels={handleLabels} labelsList={_.values(labelsList)} /> */}
         </Popover>

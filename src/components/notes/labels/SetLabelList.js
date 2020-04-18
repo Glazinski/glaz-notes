@@ -1,28 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import _ from 'lodash';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
-import TextField from '@material-ui/core/TextField';
 
 const listHeight = 50;
 
 const useStyles = makeStyles((theme) => ({
   list: {
-    // position: 'absolute',
-    // bottom: '100%',
-    // top: '100%',
-    // right: 0,
     width: 225,
     minHeight: listHeight,
-    // zIndex: 99999,
-    // padding: theme.spacing(1),
   },
   item: {
     height: 25,
@@ -39,10 +33,17 @@ const SetLabelList = (props) => {
   const { labels, labelsList, handleLabels } = props;
 
   const [checked, setChecked] = useState(labels);
+  const [curValue, setCurValue] = useState(null);
+  const [type, setType] = useState(null);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
+    const newType = currentIndex !== -1 ? 'del' : 'add';
+
+    // console.log(_.mapKeys(labelsList, 'labelName')[value].labelId);
+    setType(newType);
+    setCurValue(value);
 
     if (currentIndex === -1) {
       newChecked.push(value);
@@ -50,30 +51,33 @@ const SetLabelList = (props) => {
       newChecked.splice(currentIndex, 1);
     }
 
+    console.log(newChecked, newType, value);
     setChecked(newChecked);
   };
 
   useEffect(() => {
-    handleLabels(checked);
+    // console.log(curValue, type);
+    handleLabels(checked, curValue, type);
   }, [checked]);
 
   // console.log(checked);
-  // console.log(labelsList);
+  // console.log(labels);
+  // console.log(_.values(_.mapValues(labelsList, 'labelId')));
 
   return (
     <Paper className={classes.list}>
       <List
         subheader={<ListSubheader>Label note</ListSubheader>}
       >
-        {labelsList.map((labelName) => {
+        {_.values(_.mapValues(labelsList, 'labelId')).map((labelId) => {
           // const { labelName, labelId } = label;
-          const id = `checkbox-list-label-${labelName}`;
+          const id = `checkbox-list-label-${labelId}`;
 
           return (
             <ListItem
-              onClick={handleToggle(labelName)}
+              onClick={handleToggle(labelId)}
               className={classes.item}
-              key={labelName}
+              key={labelId}
               role={undefined}
               button
             >
@@ -81,14 +85,14 @@ const SetLabelList = (props) => {
                 color="default"
                 size="small"
                 edge="start"
-                checked={checked.indexOf(labelName) !== -1}
+                checked={checked.indexOf(labelId) !== -1}
                 tabIndex={-1}
                 disableRipple
                 inputProps={{ 'aria-labelledby': id }}
               />
               <ListItemText
                 id={id}
-                primary={labelName}
+                primary={labelsList[labelId].labelName}
               />
             </ListItem>
           );
@@ -96,11 +100,12 @@ const SetLabelList = (props) => {
       </List>
     </Paper>
   );
-  // return (
-  //   <Paper className={classes.list}>
-  //     <Typography variant="body2">Label note</Typography>
-  //   </Paper>
-  // );
+};
+
+SetLabelList.propTypes = {
+  labels: PropTypes.arrayOf(PropTypes.string).isRequired,
+  labelsList: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  handleLabels: PropTypes.func.isRequired,
 };
 
 export default SetLabelList;

@@ -3,6 +3,7 @@ import {
   FETCH_LABELS,
   CREATE_LABEL,
   EDIT_LABEL_NAME,
+  ADD_NOTE_TO_LABEL,
 } from '../types';
 
 export const fetchLabels = () => (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -45,7 +46,7 @@ export const createLabel = (labelName) => (dispatch, getState, { getFirebase, ge
   firestore.collection('labels')
     .doc(userId)
     .collection('userLabels')
-    .doc(labelName)
+    .doc(newLabel.labelId)
     .set({
       ...newLabel,
     })
@@ -90,4 +91,33 @@ export const removeLabel = (labelName) => (dispatch, getState, { getFirebase, ge
   const firebase = getFirebase();
   const firestore = getFirestore();
   const userId = firebase.auth().currentUser.uid;
+};
+
+export const changeLabelNoteIds = (labelId, newNoteIds) => (
+  dispatch, getState, { getFirebase, getFirestore },
+) => {
+  const firebase = getFirebase();
+  const firestore = getFirestore();
+  const userId = firebase.auth().currentUser.uid;
+
+  console.log(labelId, newNoteIds);
+
+  dispatch({
+    type: ADD_NOTE_TO_LABEL,
+    payload: {
+      labelId,
+      newNoteIds,
+    },
+  });
+
+  const label = firestore.collection('labels').doc(userId).collection('userLabels').doc(labelId);
+  return label.update({
+    noteIds: newNoteIds,
+  }).then(() => {
+    console.log('Document successfully updated!');
+  })
+    .catch((error) => {
+    // The document probably doesn't exist.
+      console.error('Error updating document: ', error);
+    });
 };

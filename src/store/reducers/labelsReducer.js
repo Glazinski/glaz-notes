@@ -2,6 +2,7 @@ import {
   FETCH_LABELS,
   CREATE_LABEL,
   EDIT_LABEL_NAME,
+  ADD_NOTE_TO_LABEL,
 } from '../types';
 
 const initState = {};
@@ -20,8 +21,6 @@ export default (state = initState, action) => {
       };
 
     case EDIT_LABEL_NAME:
-      console.log(state);
-      console.log(action);
       return {
         ...state,
         [action.payload.labelId]: {
@@ -29,6 +28,18 @@ export default (state = initState, action) => {
           labelName: action.payload.newLabelName,
         },
       };
+
+    case ADD_NOTE_TO_LABEL: {
+      const { labelId, newNoteIds } = action.payload;
+      return {
+        ...state,
+        [labelId]: {
+          ...state[labelId],
+          noteIds: newNoteIds,
+        },
+      };
+    }
+
 
     default:
       return { ...state };

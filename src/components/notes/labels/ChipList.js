@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
+
+// Redux
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -15,23 +19,26 @@ const useStyles = makeStyles(() => ({
 
 const ChipList = (props) => {
   const classes = useStyles();
-  const { labels, handleLabels } = props;
+  const { labels, labelsList, handleLabels } = props;
   const [chipData, setChipData] = useState(labels);
 
   const handleDelete = (chipToDelete) => () => {
+    console.log(chipToDelete);
     const chipArr = chipData.filter((chip) => chip !== chipToDelete);
     setChipData(chipArr);
-    handleLabels(chipArr);
+    handleLabels(chipArr, chipToDelete, 'del');
   };
 
   useEffect(() => setChipData(labels), [labels]);
 
-  const chips = chipData.length > 0 ? chipData.map((item) => (
+  console.log(labelsList);
+
+  const chips = _.values(labelsList).length > 0 ? chipData.map((item) => (
     <Chip
       key={item}
       className={classes.chip}
       variant="outlined"
-      label={item}
+      label={labelsList[item].labelName}
       onDelete={handleDelete(item)}
       size="small"
     />
@@ -52,4 +59,17 @@ ChipList.propTypes = {
   handleLabels: PropTypes.func.isRequired,
 };
 
-export default ChipList;
+const mapStateToProps = (state) => ({
+  labelsList: state.labels,
+});
+
+ChipList.defaultProps = {
+  labels: [],
+};
+
+ChipList.propTypes = {
+  labelsList: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  labels: PropTypes.arrayOf(PropTypes.string),
+};
+
+export default connect(mapStateToProps)(ChipList);

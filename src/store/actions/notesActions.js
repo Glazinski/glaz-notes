@@ -15,27 +15,66 @@ import {
   CHANGE_NOTE_LABELS,
 } from '../types';
 
-export const fetchNotes = (coll) => (dispatch, getState, { getFirebase, getFirestore }) => {
+export const fetchNotes = (coll, labelName) => (
+  dispatch, getState, { getFirebase, getFirestore },
+) => {
   const firebase = getFirebase();
   const firestore = getFirestore();
   const userId = firebase.auth().currentUser.uid;
   dispatch({ type: NOTES_LOADING });
 
-  firestore.collection(coll)
-    .doc(userId)
-    .collection('userNotes')
-    .orderBy('createdAt', 'desc')
-    .get()
-    .then((querySnapshot) => {
-      let notes = {};
+  if (labelName) {
+    const labelRef = firestore.collection('labels').doc(userId).collection('userLabels');
+    let arrOfNoteIds = [];
+    labelRef
+      .where('labelName', '==', labelName)
+      .get()
+      .then((doc) => {
+        doc.forEach((item) => {
+          arrOfNoteIds = item.data().noteIds;
+        });
+        console.log(arrOfNoteIds);
 
-      querySnapshot.forEach((doc) => {
-        notes = { ...notes, [doc.id]: doc.data() };
+        if (arrOfNoteIds.length > 0) {
+          return firestore.collection('notes')
+            .doc(userId)
+            .collection('userNotes')
+            .where('id', 'in', arrOfNoteIds)
+            .orderBy('createdAt', 'desc')
+            .get();
+        }
+        dispatch({ type: NOTES_FETCHED, payload: {} });
+        return null;
+      })
+      .then((querySnapshot) => {
+        let notes = {};
+
+        querySnapshot.forEach((doc) => {
+          notes = { ...notes, [doc.id]: doc.data() };
+        });
+
+        dispatch({ type: NOTES_FETCHED, payload: notes });
+      })
+      .catch((error) => {
+        console.log('Error getting document:', error);
       });
+  } else {
+    firestore.collection(coll)
+      .doc(userId)
+      .collection('userNotes')
+      .orderBy('createdAt', 'desc')
+      .get()
+      .then((querySnapshot) => {
+        let notes = {};
 
-      dispatch({ type: NOTES_FETCHED, payload: notes });
-    })
-    .catch((err) => console.log(err));
+        querySnapshot.forEach((doc) => {
+          notes = { ...notes, [doc.id]: doc.data() };
+        });
+
+        return dispatch({ type: NOTES_FETCHED, payload: notes });
+      })
+      .catch((err) => console.log(err));
+  }
 };
 
 export const createNote = (noteId, note) => (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -283,7 +322,7 @@ export const starNote = (noteId, newIsStarred, coll) => (
   });
 };
 
-export const changeNoteLabels = (noteId, newLabels, coll) => (
+export const changeNoteLabels = (noteId, newLabels) => (
   dispatch, getState, { getFirebase, getFirestore },
 ) => {
   const firebase = getFirebase();
@@ -298,7 +337,7 @@ export const changeNoteLabels = (noteId, newLabels, coll) => (
     },
   });
 
-  const note = firestore.collection(coll).doc(userId).collection('userNotes').doc(noteId);
+  const note = firestore.collection('notes').doc(userId).collection('userNotes').doc(noteId);
 
   return note.update({
     labels: newLabels,

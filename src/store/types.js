@@ -23,6 +23,7 @@ export const CHANGE_NOTE_LABELS = 'CHANGE_NOTE_LABELS';
 export const FETCH_LABELS = 'FETCH_LABELS';
 export const CREATE_LABEL = 'CREATE_LABEL';
 export const EDIT_LABEL_NAME = 'EDIT_LABEL_NAME';
+export const ADD_NOTE_TO_LABEL = 'ADD_NOTE_TO_LABEL';
 
 // UI types
 export const LOADING_SUCCESS = 'LOADING_SUCCESS';
