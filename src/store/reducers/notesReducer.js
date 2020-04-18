@@ -13,6 +13,7 @@ import {
   CHANGE_NOTE_COLOR,
   DELETE_NOTES_FOREVER,
   STAR_NOTE,
+  CHANGE_NOTE_LABELS,
 } from '../types';
 
 const initState = {
@@ -98,6 +99,18 @@ export default (state = initState, action) => {
           [action.payload.noteId]: {
             ...state.notes[action.payload.noteId],
             isStarred: action.payload.newIsStarred,
+          },
+        },
+      };
+
+    case CHANGE_NOTE_LABELS:
+      return {
+        ...state,
+        notes: {
+          ...state.notes,
+          [action.payload.noteId]: {
+            ...state.notes[action.payload.noteId],
+            labels: [...action.payload.newLabels],
           },
         },
       };

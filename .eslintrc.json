@@ -43,7 +43,9 @@
           "editLabelName",
           "createLabel",
           "changeNoteColor",
-          "fetchLabels"
+          "fetchLabels",
+          "starNote",
+          "changeNoteLabels"
         ]
       }
     ]

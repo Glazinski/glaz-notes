@@ -45,7 +45,7 @@ export const createLabel = (labelName) => (dispatch, getState, { getFirebase, ge
   firestore.collection('labels')
     .doc(userId)
     .collection('userLabels')
-    .doc(newLabel.labelId)
+    .doc(labelName)
     .set({
       ...newLabel,
     })

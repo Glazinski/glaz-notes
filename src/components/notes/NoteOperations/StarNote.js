@@ -56,10 +56,14 @@ const StarNote = (props) => {
   );
 };
 
+StarNote.defaultProps = {
+  isStarred: false,
+};
+
 StarNote.propTypes = {
   isHovered: PropTypes.bool.isRequired,
   handleStar: PropTypes.func.isRequired,
-  isStarred: PropTypes.bool.isRequired,
+  isStarred: PropTypes.bool,
 };
 
 export default StarNote;

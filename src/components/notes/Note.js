@@ -4,11 +4,17 @@ import PropTypes from 'prop-types';
 import { Draggable } from 'react-beautiful-dnd';
 import DialogNote from './DialogNote';
 import NoteSettings from './NoteSettings';
+import ChipList from './labels/ChipList';
 import { useLocation } from 'react-router-dom';
 
 // Redux
 import { connect } from 'react-redux';
-import { moveNoteFromTo, changeNoteColor, starNote } from '../../store/actions/notesActions';
+import {
+  moveNoteFromTo,
+  changeNoteColor,
+  starNote,
+  changeNoteLabels,
+} from '../../store/actions/notesActions';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -58,9 +64,10 @@ const Note = (props) => {
     index,
     moveNoteFromTo,
     changeNoteColor,
+    changeNoteLabels,
     starNote,
     note: {
-      id, title, content, colorName, isStarred,
+      id, title, content, colorName, labels,
     },
   } = props;
   const { pathname } = useLocation();
@@ -94,7 +101,11 @@ const Note = (props) => {
   };
 
   const handleStar = (newIsStarred) => {
-    starNote(id, newIsStarred);
+    starNote(id, newIsStarred, coll);
+  };
+
+  const handleLabels = (labelsArr) => {
+    changeNoteLabels(id, labelsArr, coll);
   };
 
   const color = colorName ? colors[colorName].color : colors.Default;
@@ -140,6 +151,8 @@ const Note = (props) => {
                   handleNoteMove={handleNoteMove}
                   handleColor={handleColor}
                   handleStar={handleStar}
+                  handleLabels={handleLabels}
+                  coll={coll}
                 />
               ) : null}
               {title.length <= 0 ? (
@@ -154,15 +167,19 @@ const Note = (props) => {
               <div className={classes.content}>
                 {title.length <= 0 ? null : content}
               </div>
+              <ChipList
+                labels={labels}
+                handleLabels={handleLabels}
+              />
               <NoteSettings
-                noteId={id}
                 isHovered={isHovered}
                 isMovable
-                colorId={colorName || 'Default'}
                 handleNoteMove={handleNoteMove}
                 handleColor={handleColor}
                 handleStar={handleStar}
-                isStarred={isStarred}
+                handleLabels={handleLabels}
+                coll={coll}
+                note={props.note}
               />
             </Paper>
           </div>
@@ -178,10 +195,20 @@ Note.propTypes = {
   colors: PropTypes.oneOfType([PropTypes.object]).isRequired,
   moveNoteFromTo: PropTypes.func.isRequired,
   changeNoteColor: PropTypes.func.isRequired,
+  changeNoteLabels: PropTypes.func.isRequired,
+  starNote: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   colors: _.mapKeys(state.ui.colors, 'name'),
 });
 
-export default connect(mapStateToProps, { moveNoteFromTo, changeNoteColor, starNote })(Note);
+export default connect(
+  mapStateToProps,
+  {
+    moveNoteFromTo,
+    changeNoteColor,
+    starNote,
+    changeNoteLabels,
+  },
+)(Note);

@@ -13,14 +13,14 @@ import Tooltip from '@material-ui/core/Tooltip';
 // MUI icons
 import CheckIcon from '@material-ui/icons/Check';
 
-const listWidth = 100;
+const listHeight = 100;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: 150,
-    height: listWidth,
+    height: listHeight,
     position: 'absolute',
-    top: -listWidth,
+    top: -listHeight,
     left: 0,
     zIndex: 1400,
     padding: '5px',

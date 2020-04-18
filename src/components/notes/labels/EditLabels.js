@@ -53,6 +53,7 @@ const EditLabels = (props) => {
   const textFieldEl = useRef(null);
 
   const handleFocusOn = () => {
+    setIsFocused(false);
     setIsFocused(true);
     textFieldEl.current.focus();
   };

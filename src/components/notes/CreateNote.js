@@ -69,6 +69,7 @@ const CreateNote = (props) => {
     createdAt: null,
     colorName: 'Default',
     isStarred: false,
+    labels: [],
   });
   const [isFocused, setIsFocused] = useState(false);
   const [isListMode, setIsListMode] = useState(false);
@@ -99,6 +100,10 @@ const CreateNote = (props) => {
     setFormData({ ...formData, isStarred: newIsStarred });
   };
 
+  const handleLabels = (labelsArr) => {
+    setFormData({ ...formData, labels: [...labelsArr] });
+  };
+
   useEffect(() => {
     const { title, content } = formData;
 
@@ -110,11 +115,11 @@ const CreateNote = (props) => {
       setFormData({ ...formData });
       props.createNote(uniqid(), formData);
       setFormData({
-        ...formData, title: '', content: '', colorName: 'Default', isStarred: false,
+        ...formData, title: '', content: '', colorName: 'Default', isStarred: false, labels: [],
       });
     } else {
       setFormData({
-        ...formData, title: '', content: '', colorName: 'Default', isStarred: false,
+        ...formData, title: '', content: '', colorName: 'Default', isStarred: false, labels: [],
       });
     }
   }, [isFocused]);
@@ -122,36 +127,36 @@ const CreateNote = (props) => {
   const color = _.some(colors) ? colors[formData.colorName].color : null;
 
   return (
-    <ClickAwayListener onClickAway={() => handleClose()}>
-      <Paper
-        onClick={!isFocused ? handleFocus : null}
-        className={classes.paper}
-        elevation={5}
-        variant="outlined"
-        style={{ backgroundColor: color }}
-      >
-        {isFocused ? (
-          <NoteForm
-            noteId={formData.noteId}
-            formData={formData}
-            handleChange={handleChange}
-            handleClose={handleClose}
-            handleColor={handleColor}
-            handleStar={handleStar}
-            isMovable={false}
-          />
-        ) : (
-          <div className={classes.content}>
-            <Typography className={classes.title}>Take a note...</Typography>
-            <Tooltip title="New list" aria-label="New list">
-              <IconButton onClick={handleList}>
-                <CheckBoxOutlinedIcon />
-              </IconButton>
-            </Tooltip>
-          </div>
-        )}
-      </Paper>
-    </ClickAwayListener>
+  // <ClickAwayListener onClickAway={handleClose}>
+    <Paper
+      onClick={!isFocused ? handleFocus : null}
+      className={classes.paper}
+      elevation={5}
+      variant="outlined"
+      style={{ backgroundColor: color }}
+    >
+      {isFocused ? (
+        <NoteForm
+          note={formData}
+          handleChange={handleChange}
+          handleClose={handleClose}
+          handleColor={handleColor}
+          handleStar={handleStar}
+          handleLabels={handleLabels}
+          isMovable={false}
+        />
+      ) : (
+        <div className={classes.content}>
+          <Typography className={classes.title}>Take a note...</Typography>
+          <Tooltip title="New list" aria-label="New list">
+            <IconButton onClick={handleList}>
+              <CheckBoxOutlinedIcon />
+            </IconButton>
+          </Tooltip>
+        </div>
+      )}
+    </Paper>
+  // </ClickAwayListener>
   );
 };
 

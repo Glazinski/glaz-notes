@@ -12,6 +12,7 @@ import {
   CHANGE_NOTE_COLOR,
   DELETE_NOTES_FOREVER,
   STAR_NOTE,
+  CHANGE_NOTE_LABELS,
 } from '../types';
 
 export const fetchNotes = (coll) => (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -141,7 +142,10 @@ export const moveNoteFromTo = (noteId, src, destination, msg = null, newFormData
     .get()
     .then((doc) => {
       if (doc.exists) {
-        note = { ...doc.data() };
+        note = {
+          ...doc.data(),
+          // isStarred: destination === 'bin' ? false : doc.data().isStarred,
+        };
         return firestore
           .collection(destination).doc(userId)
           .collection('userNotes').doc(noteId)
@@ -252,7 +256,7 @@ export const changeNoteColor = (noteId, newColor, coll) => (
   // CHANGE_NOTE_COLOR
 };
 
-export const starNote = (noteId, newIsStarred) => (
+export const starNote = (noteId, newIsStarred, coll) => (
   dispatch, getState, { getFirebase, getFirestore },
 ) => {
   const firebase = getFirebase();
@@ -267,10 +271,37 @@ export const starNote = (noteId, newIsStarred) => (
     },
   });
 
-  const note = firestore.collection('notes').doc(userId).collection('userNotes').doc(noteId);
+  const note = firestore.collection(coll).doc(userId).collection('userNotes').doc(noteId);
 
   return note.update({
     isStarred: newIsStarred,
+  }).then(() => {
+    dispatch({ type: SET_NOTE });
+  }).catch((err) => {
+    console.error(err);
+    dispatch({ type: SET_NOTE_ERRORS, payload: err });
+  });
+};
+
+export const changeNoteLabels = (noteId, newLabels, coll) => (
+  dispatch, getState, { getFirebase, getFirestore },
+) => {
+  const firebase = getFirebase();
+  const firestore = getFirestore();
+  const userId = firebase.auth().currentUser.uid;
+
+  dispatch({
+    type: CHANGE_NOTE_LABELS,
+    payload: {
+      noteId,
+      newLabels,
+    },
+  });
+
+  const note = firestore.collection(coll).doc(userId).collection('userNotes').doc(noteId);
+
+  return note.update({
+    labels: newLabels,
   }).then(() => {
     dispatch({ type: SET_NOTE });
   }).catch((err) => {

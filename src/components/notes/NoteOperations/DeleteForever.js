@@ -25,7 +25,7 @@ const DeleteForever = (props) => {
   const { noteId, deleteNoteForever } = props;
   const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = (event) => {
+  const handleClickOpen = () => {
     setOpen(true);
   };
 

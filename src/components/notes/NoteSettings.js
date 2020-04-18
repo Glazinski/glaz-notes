@@ -8,6 +8,7 @@ import Restore from './NoteOperations/Restore';
 import ArchiveNote from './NoteOperations/ArchiveNote';
 import UnArchiveNote from './NoteOperations/UnArchiveNote';
 import StarNote from './NoteOperations/StarNote';
+import SetLabel from './NoteOperations/SetLabel';
 import { useLocation } from 'react-router-dom';
 
 // MUI
@@ -17,7 +18,6 @@ import IconButton from '@material-ui/core/IconButton';
 
 // MUI icons
 import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
-import LabelOutlinedIcon from '@material-ui/icons/LabelOutlined';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -37,18 +37,22 @@ const useStyles = makeStyles((theme) => ({
     padding: '7px',
     color: theme.palette.text.primary,
   },
+  date: {
+    color: theme.palette.text.disabled,
+  },
 }));
 
 const NoteSettings = (props) => {
   const {
     isHovered,
-    noteId,
     isMovable,
-    colorId,
     handleNoteMove,
     handleColor,
     handleStar,
-    isStarred,
+    handleLabels,
+    note: {
+      id: noteId, colorName: colorId, isStarred, labels,
+    },
   } = props;
   const classes = useStyles();
   const { pathname } = useLocation();
@@ -78,7 +82,6 @@ const NoteSettings = (props) => {
           className={classes.container}
           style={isHovered ? { opacity: '1', pointerEvents: 'auto' } : { opacity: '0', pointerEvents: 'none' }}
         >
-          {/* <StarNote isHovered={isHovered} /> */}
           <ChangeColor
             colorId={colorId}
             noteId={noteId}
@@ -100,11 +103,10 @@ const NoteSettings = (props) => {
             <DeleteNote handleNoteMove={handleNoteMove} />
           ) : null}
 
-          <Tooltip title="Add Label" aria-label="Add Label">
-            <IconButton className={classes.iconBtn}>
-              <LabelOutlinedIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
+          <SetLabel
+            labels={labels}
+            handleLabels={handleLabels}
+          />
         </div>
       </>
     );
@@ -118,23 +120,26 @@ const NoteSettings = (props) => {
 };
 
 NoteSettings.defaultProps = {
-  noteId: null,
-  colorId: null,
+  id: null,
+  colorName: null,
   handleNoteMove: null,
   handleColor: null,
   handleStar: null,
+  handleLabels: null,
   isStarred: null,
 };
 
 NoteSettings.propTypes = {
   isHovered: PropTypes.bool.isRequired,
-  noteId: PropTypes.string,
+  id: PropTypes.string,
   isMovable: PropTypes.bool.isRequired,
-  colorId: PropTypes.string,
+  colorName: PropTypes.string,
   handleNoteMove: PropTypes.func,
   handleColor: PropTypes.func,
   handleStar: PropTypes.func,
+  handleLabels: PropTypes.func,
   isStarred: PropTypes.bool,
+  note: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default NoteSettings;

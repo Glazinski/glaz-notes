@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import NoteSettings from './NoteSettings';
 import CustomSnackbar from '../CustomSnackbar';
+import ChipList from './labels/ChipList';
 import { useLocation } from 'react-router-dom';
 
 // MUI
@@ -25,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     borderBottom: 'none',
     padding: '0 10px 0 10px',
-    // whiteSpace: 'pre-wrap',
   },
   button: {
     color: theme.palette.text.primary,
@@ -45,19 +45,11 @@ const useStyles = makeStyles((theme) => ({
 
 const NoteForm = (props) => {
   const {
-    formData: { title, content },
-    formData,
+    note: { title, content, labels },
     handleChange,
     handleClose,
-    noteId,
-    isMovable,
-    handleHoverClose,
-    colorId,
+    handleLabels,
     date,
-    handleNoteMove,
-    handleColor,
-    handleStar,
-    isStarred,
   } = props;
   const classes = useStyles();
   const textFieldEl = useRef(null);
@@ -126,12 +118,19 @@ const NoteForm = (props) => {
         />
       </Grid>
 
-      {date ? (
-        <Grid
-          container
-          justify="flex-end"
-          alignItems="center"
-        >
+      <Grid
+        container
+        // justify="flex-end"
+        justify="space-between"
+        alignItems="center"
+      >
+        <Grid item>
+          <ChipList
+            handleLabels={handleLabels}
+            labels={labels}
+          />
+        </Grid>
+        {date ? (
           <Typography
             style={{ marginTop: '10px' }}
             className={classes.date}
@@ -141,8 +140,9 @@ const NoteForm = (props) => {
             {' '}
             {date}
           </Typography>
-        </Grid>
-      ) : null}
+        ) : null}
+      </Grid>
+
 
       <Grid
         container
@@ -152,20 +152,12 @@ const NoteForm = (props) => {
       >
         <Grid item xs={6}>
           <NoteSettings
-            colorId={colorId}
-            formData={formData}
-            noteId={noteId}
+            {...props}
             isHovered
-            isMovable={isMovable}
-            handleHoverClose={handleHoverClose}
-            handleNoteMove={handleNoteMove}
-            handleColor={handleColor}
-            handleStar={handleStar}
-            isStarred={isStarred}
           />
         </Grid>
         <Grid item>
-          <Button onClick={() => handleClose()} color="inherit">Close</Button>
+          <Button onClick={handleClose} color="inherit">Close</Button>
         </Grid>
       </Grid>
       <CustomSnackbar
@@ -180,28 +172,20 @@ const NoteForm = (props) => {
 };
 
 NoteForm.defaultProps = {
-  noteId: null,
-  handleHoverClose: null,
   date: null,
-  colorId: null,
-  handleNoteMove: null,
-  handleStar: null,
-  isStarred: null,
+  title: null,
+  content: null,
 };
 
 NoteForm.propTypes = {
-  formData: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  note: PropTypes.oneOfType([PropTypes.object]).isRequired,
   handleChange: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
-  noteId: PropTypes.string,
-  isMovable: PropTypes.bool.isRequired,
-  handleHoverClose: PropTypes.func,
-  colorId: PropTypes.string,
+  handleLabels: PropTypes.func.isRequired,
+  title: PropTypes.string,
+  content: PropTypes.string,
   date: PropTypes.string,
-  handleNoteMove: PropTypes.func,
-  handleColor: PropTypes.func.isRequired,
-  handleStar: PropTypes.func,
-  isStarred: PropTypes.bool,
+
 };
 
 export default NoteForm;

@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import DialogWindow from '../DialogWindow';
 import NoteForm from './NoteForm';
 import moment from 'moment';
-import { useLocation } from 'react-router-dom';
 
 // Redux
 import { connect } from 'react-redux';
@@ -13,7 +12,7 @@ import { updateNote } from '../../store/actions/notesActions';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   container: {
     width: 500,
     heihgt: 200,
@@ -32,20 +31,18 @@ const DialogNote = (props) => {
     open,
     updateNote,
     color,
-    handleNoteMove,
-    handleColor,
-    handleStar,
+    coll,
+    note,
     note: {
-      id, content, title, createdAt, colorName, isStarred,
+      id, content, title, createdAt,
     },
   } = props;
   const classes = useStyles();
   const [formData, setFormData] = useState({
     title,
     content,
+    ...note,
   });
-  const { pathname } = useLocation();
-  const coll = pathname === '/' ? 'notes' : pathname.substr(1);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -59,6 +56,8 @@ const DialogNote = (props) => {
     }
   };
 
+  useEffect(() => setFormData({ ...note }), [note]);
+
   const date = createdAt ? moment(createdAt).format('MMM Do YY') : null;
 
   return (
@@ -68,16 +67,11 @@ const DialogNote = (props) => {
         style={color ? { backgroundColor: color } : null}
       >
         <NoteForm
+          {...props}
           handleChange={handleChange}
           handleClose={handleModalClose}
           date={date}
-          noteId={id}
-          colorId={colorName}
-          formData={formData}
-          handleNoteMove={handleNoteMove}
-          handleColor={handleColor}
-          handleStar={handleStar}
-          isStarred={isStarred}
+          note={formData}
           isMovable
         />
       </Paper>
@@ -103,6 +97,7 @@ DialogNote.propTypes = {
   handleColor: PropTypes.func,
   handleStar: PropTypes.func,
   isStarred: PropTypes.bool,
+  coll: PropTypes.string.isRequired,
 };
 
 export default connect(null, { updateNote })(DialogNote);
