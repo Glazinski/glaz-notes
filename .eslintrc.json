@@ -46,7 +46,9 @@
           "fetchLabels",
           "starNote",
           "changeNoteLabels",
-          "changeLabelNoteIds"
+          "changeLabelNoteIds",
+          "deleteNotesForever",
+          "deleteNoteFromState"
         ]
       }
     ]

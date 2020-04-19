@@ -22,15 +22,20 @@ const LabelList = (props) => {
     fetchLabels();
   }, []);
 
+  // useEffect(() => {
+  //   console.log('elo');
+  //   fetchLabels();
+  // }, [labels]);
+
   const items = _.values(labels).map((item) => (
     <ListItem
       key={item.labelId + 1}
       className={itemClassName}
       button
       component={Link}
-      to={`/label/${item.labelName}`}
-      selected={selectedIndex === `/${item.labelName}`}
-      onClick={() => handleItemClick(`/${item.labelName}`)}
+      to={`/label/${item.labelId}`}
+      selected={selectedIndex === `/label/${item.labelId}`}
+      onClick={() => handleItemClick(`/label/${item.labelId}`)}
     >
       <ListItemIcon><LabelOutlinedIcon /></ListItemIcon>
       <ListItemText primary={item.labelName} />

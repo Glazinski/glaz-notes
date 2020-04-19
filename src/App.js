@@ -81,7 +81,7 @@ const App = (props) => {
           />
 
           <Route
-            path="/label/:labelName"
+            path="/label/:labelId"
             render={(routerProps) => (
               <Home {...routerProps}>
                 <AnyLabel {...routerProps} />

@@ -8,6 +8,7 @@ import NoteForm from './NoteForm';
 // Redux
 import { connect } from 'react-redux';
 import { createNote } from '../../store/actions/notesActions';
+import { changeLabelNoteIds } from '../../store/actions/labelsActions';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -61,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CreateNote = (props) => {
-  const { colors } = props;
+  const { colors, labelsList, changeLabelNoteIds } = props;
   const classes = useStyles();
   const [formData, setFormData] = useState({
     title: '',
@@ -100,7 +101,6 @@ const CreateNote = (props) => {
     setFormData({ ...formData, isStarred: newIsStarred });
   };
 
-  // TODO: Set noteIds in labels
   const handleLabels = (labelsArr) => {
     setFormData({ ...formData, labels: [...labelsArr] });
   };
@@ -114,7 +114,16 @@ const CreateNote = (props) => {
       && !!title.trim().length || !!content.trim().length
     ) {
       setFormData({ ...formData });
-      props.createNote(uniqid(), formData);
+      const noteId = uniqid();
+      if (formData.labels.length > 0) {
+        formData.labels.forEach((labelId) => {
+          const newNoteIds = [noteId, ...labelsList[labelId].noteIds];
+
+          changeLabelNoteIds(labelId, newNoteIds);
+        });
+      }
+      // props.createNote(uniqid(), formData);
+      props.createNote(noteId, formData);
       setFormData({
         ...formData, title: '', content: '', colorName: 'Default', isStarred: false, labels: [],
       });
@@ -163,11 +172,14 @@ const CreateNote = (props) => {
 
 CreateNote.propTypes = {
   createNote: PropTypes.func.isRequired,
+  changeLabelNoteIds: PropTypes.func.isRequired,
   colors: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  labelsList: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 const mapStateToProps = (state) => ({
   colors: _.mapKeys(state.ui.colors, 'name'),
+  labelsList: state.labels,
 });
 
-export default connect(mapStateToProps, { createNote })(CreateNote);
+export default connect(mapStateToProps, { createNote, changeLabelNoteIds })(CreateNote);

@@ -5,7 +5,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import DialogNote from './DialogNote';
 import NoteSettings from './NoteSettings';
 import ChipList from './labels/ChipList';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 // Redux
 import { connect } from 'react-redux';
@@ -14,6 +14,7 @@ import {
   changeNoteColor,
   starNote,
   changeNoteLabels,
+  deleteNoteFromState,
 } from '../../store/actions/notesActions';
 
 import {
@@ -71,12 +72,14 @@ const Note = (props) => {
     changeNoteLabels,
     changeLabelNoteIds,
     starNote,
+    deleteNoteFromState,
     labelsList,
     note: {
       id, title, content, colorName, labels,
     },
   } = props;
   const { pathname } = useLocation();
+  const { labelId: labelIdParam } = useParams();
   const coll = pathname === '/' || pathname.includes('label') ? 'notes' : pathname.substr(1);
 
   const [open, setOpen] = useState(false);
@@ -111,22 +114,18 @@ const Note = (props) => {
   };
 
   const handleLabels = (labelsArr, labelId, type) => {
-    // const shouldBeMoved = !!(pathname.includes(labelName) && type === 'del');
-    // console.log(shouldBeMoved);
-    console.log(labelsList);
-    console.log(labelsArr, labelId, type);
-
     if (labelId && type) {
+      const shouldBeMoved = labelIdParam === labelsList[labelId].labelId && type === 'del';
+
       const newNoteIds = type === 'del'
         ? labelsList[labelId].noteIds.filter((item) => item !== id)
         : [id, ...labelsList[labelId].noteIds];
 
       changeLabelNoteIds(labelId, newNoteIds);
       changeNoteLabels(id, labelsArr);
+      if (shouldBeMoved) deleteNoteFromState(id);
     }
   };
-
-  // console.log(labels);
 
   const color = colorName ? colors[colorName].color : colors.Default;
 
@@ -217,6 +216,8 @@ Note.propTypes = {
   moveNoteFromTo: PropTypes.func.isRequired,
   changeNoteColor: PropTypes.func.isRequired,
   changeNoteLabels: PropTypes.func.isRequired,
+  changeLabelNoteIds: PropTypes.func.isRequired,
+  deleteNoteFromState: PropTypes.func.isRequired,
   starNote: PropTypes.func.isRequired,
 };
 
@@ -234,5 +235,6 @@ export default connect(
     starNote,
     changeNoteLabels,
     changeLabelNoteIds,
+    deleteNoteFromState,
   },
 )(Note);

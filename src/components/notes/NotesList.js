@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import DragContainer from '../../Layout/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import calculateLayout from '../../utils/calculateLayout';
@@ -29,7 +29,7 @@ const NoteList = (props) => {
     fetchNotes,
     labels,
   } = props;
-  const { labelName } = props.match.params;
+  const { labelId } = useParams();
   const { pathname } = useLocation();
   const coll = pathname === '/' ? 'notes' : pathname.substr(1);
 
@@ -46,16 +46,9 @@ const NoteList = (props) => {
   });
 
   useEffect(() => {
-    // console.log(labels[labelName]);
-
-    const id = labelName || false;
-    // fetchNotes(coll, id);
-    console.log(id);
+    const id = labelId || false;
     fetchNotes(coll, id);
     specifyColNum();
-
-    // fetchNotes(coll);
-    // specifyColNum();
   }, []);
 
   useEffect(() => {
@@ -67,10 +60,10 @@ const NoteList = (props) => {
   }, [notes, colNum]);
 
   useEffect(() => {
-    if (_.values(labels).length > 0 && labelName) {
-      fetchNotes(coll, labelName);
+    if (_.values(labels).length > 0 && labelId) {
+      fetchNotes(coll, labelId);
     }
-  }, [labelName]);
+  }, [labelId]);
 
   return (
     <div className={classes.container}>

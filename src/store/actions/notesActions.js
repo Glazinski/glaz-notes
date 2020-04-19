@@ -13,9 +13,10 @@ import {
   DELETE_NOTES_FOREVER,
   STAR_NOTE,
   CHANGE_NOTE_LABELS,
+  DELETE_NOTE_FROM_STATE,
 } from '../types';
 
-export const fetchNotes = (coll, labelName) => (
+export const fetchNotes = (coll, labelId) => (
   dispatch, getState, { getFirebase, getFirestore },
 ) => {
   const firebase = getFirebase();
@@ -23,17 +24,13 @@ export const fetchNotes = (coll, labelName) => (
   const userId = firebase.auth().currentUser.uid;
   dispatch({ type: NOTES_LOADING });
 
-  if (labelName) {
-    const labelRef = firestore.collection('labels').doc(userId).collection('userLabels');
+  if (labelId) {
+    const labelRef = firestore.collection('labels').doc(userId).collection('userLabels').doc(labelId);
     let arrOfNoteIds = [];
     labelRef
-      .where('labelName', '==', labelName)
       .get()
       .then((doc) => {
-        doc.forEach((item) => {
-          arrOfNoteIds = item.data().noteIds;
-        });
-        console.log(arrOfNoteIds);
+        arrOfNoteIds = doc.data().noteIds;
 
         if (arrOfNoteIds.length > 0) {
           return firestore.collection('notes')
@@ -238,6 +235,11 @@ export const deleteNotesForever = () => (dispatch, getState, { getFirebase, getF
       .delete();
   });
 };
+
+export const deleteNoteFromState = (noteId) => ({
+  type: DELETE_NOTE_FROM_STATE,
+  payload: { noteId },
+});
 
 export const updateNote = (noteId, newFormData, coll) => (
   dispatch, getState, { getFirebase, getFirestore },

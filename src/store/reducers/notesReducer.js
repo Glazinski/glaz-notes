@@ -14,6 +14,7 @@ import {
   DELETE_NOTES_FOREVER,
   STAR_NOTE,
   CHANGE_NOTE_LABELS,
+  DELETE_NOTE_FROM_STATE,
 } from '../types';
 
 const initState = {
@@ -38,6 +39,9 @@ export default (state = initState, action) => {
 
     case DELETE_NOTE_FOREVER:
       return { ...state, notes: _.omit(state.notes, action.payload) };
+
+    case DELETE_NOTE_FROM_STATE:
+      return { ...state, notes: _.omit(state.notes, action.payload.noteId) };
 
     case UPDATE_NOTE:
       return {

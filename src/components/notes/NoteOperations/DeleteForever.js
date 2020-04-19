@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { deleteNoteForever } from '../../../store/actions/notesActions';
@@ -23,7 +23,8 @@ const useStyles = makeStyles((theme) => ({
 const DeleteForever = (props) => {
   const classes = useStyles();
   const { noteId, deleteNoteForever } = props;
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const msg = 'Delete note forever?';
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -45,7 +46,7 @@ const DeleteForever = (props) => {
           <DeleteForeverIcon fontSize="small" color="inherit" />
         </IconButton>
       </Tooltip>
-      <Confirm open={open} handleClose={handleClose} handleDelete={handleDelete} />
+      <Confirm open={open} handleClose={handleClose} handleDelete={handleDelete} msg={msg} />
     </>
   );
 };

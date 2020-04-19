@@ -23,15 +23,12 @@ const ChipList = (props) => {
   const [chipData, setChipData] = useState(labels);
 
   const handleDelete = (chipToDelete) => () => {
-    console.log(chipToDelete);
     const chipArr = chipData.filter((chip) => chip !== chipToDelete);
     setChipData(chipArr);
     handleLabels(chipArr, chipToDelete, 'del');
   };
 
   useEffect(() => setChipData(labels), [labels]);
-
-  console.log(labelsList);
 
   const chips = _.values(labelsList).length > 0 ? chipData.map((item) => (
     <Chip

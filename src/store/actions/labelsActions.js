@@ -100,8 +100,6 @@ export const changeLabelNoteIds = (labelId, newNoteIds) => (
   const firestore = getFirestore();
   const userId = firebase.auth().currentUser.uid;
 
-  console.log(labelId, newNoteIds);
-
   dispatch({
     type: ADD_NOTE_TO_LABEL,
     payload: {
