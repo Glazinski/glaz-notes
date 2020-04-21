@@ -48,7 +48,8 @@
           "changeNoteLabels",
           "changeLabelNoteIds",
           "deleteNotesForever",
-          "deleteNoteFromState"
+          "deleteNoteFromState",
+          "uploadNoteImage"
         ]
       }
     ]

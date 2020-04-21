@@ -29,10 +29,12 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     // maxWidth: 520,
     width: 520,
+    maxHeight: 620,
     backgroundColor: theme.palette.background.default,
     boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
     margin: '0 auto 80px auto',
     transition: 'background-color .3s ease',
+    overflowY: 'auto',
   },
   content: {
     display: 'flex',
@@ -62,7 +64,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CreateNote = (props) => {
-  const { colors, labelsList, changeLabelNoteIds } = props;
+  const {
+    colors,
+    labelsList,
+    changeLabelNoteIds,
+    createNote,
+  } = props;
   const classes = useStyles();
   const [formData, setFormData] = useState({
     title: '',
@@ -71,7 +78,9 @@ const CreateNote = (props) => {
     colorName: 'Default',
     isStarred: false,
     labels: [],
+    imageUrl: '',
   });
+  const [tmpImage, setTmpImage] = useState(null);
   const [isFocused, setIsFocused] = useState(false);
   const [isListMode, setIsListMode] = useState(false);
 
@@ -105,6 +114,11 @@ const CreateNote = (props) => {
     setFormData({ ...formData, labels: [...labelsArr] });
   };
 
+  const handleImageUpload = (tmpImage, fd) => {
+    console.log(tmpImage, fd);
+    setTmpImage(tmpImage);
+  };
+
   useEffect(() => {
     const { title, content } = formData;
 
@@ -122,12 +136,13 @@ const CreateNote = (props) => {
           changeLabelNoteIds(labelId, newNoteIds);
         });
       }
-      // props.createNote(uniqid(), formData);
-      props.createNote(noteId, formData);
+      createNote(noteId, formData);
+      setTmpImage(null);
       setFormData({
         ...formData, title: '', content: '', colorName: 'Default', isStarred: false, labels: [],
       });
     } else {
+      setTmpImage(null);
       setFormData({
         ...formData, title: '', content: '', colorName: 'Default', isStarred: false, labels: [],
       });
@@ -148,11 +163,13 @@ const CreateNote = (props) => {
       {isFocused ? (
         <NoteForm
           note={formData}
+          image={tmpImage}
           handleChange={handleChange}
           handleClose={handleClose}
           handleColor={handleColor}
           handleStar={handleStar}
           handleLabels={handleLabels}
+          handleImageUpload={handleImageUpload}
           isMovable={false}
         />
       ) : (

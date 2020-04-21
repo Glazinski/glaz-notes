@@ -15,6 +15,7 @@ import {
   starNote,
   changeNoteLabels,
   deleteNoteFromState,
+  uploadNoteImage,
 } from '../../store/actions/notesActions';
 
 import {
@@ -30,7 +31,9 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 const useStyles = makeStyles((theme) => ({
   container: {
     position: 'relative',
+    // minHeight: 100,
     minHeight: 100,
+    maxWidth: 238,
     backgroundColor: theme.palette.background.default,
     padding: '10px',
     margin: '10px 0',
@@ -73,9 +76,10 @@ const Note = (props) => {
     changeLabelNoteIds,
     starNote,
     deleteNoteFromState,
+    uploadNoteImage,
     labelsList,
     note: {
-      id, title, content, colorName, labels,
+      id, title, content, colorName, labels, imageUrl,
     },
   } = props;
   const { pathname } = useLocation();
@@ -111,6 +115,10 @@ const Note = (props) => {
 
   const handleStar = (newIsStarred) => {
     starNote(id, newIsStarred, coll);
+  };
+
+  const handleImageUpload = (tmpImage = null, fd) => {
+    uploadNoteImage(id, fd, coll);
   };
 
   const handleLabels = (labelsArr, labelId, type) => {
@@ -171,6 +179,7 @@ const Note = (props) => {
                   handleColor={handleColor}
                   handleStar={handleStar}
                   handleLabels={handleLabels}
+                  handleImageUpload={handleImageUpload}
                   coll={coll}
                 />
               ) : null}
@@ -197,6 +206,7 @@ const Note = (props) => {
                 handleColor={handleColor}
                 handleStar={handleStar}
                 handleLabels={handleLabels}
+                handleImageUpload={handleImageUpload}
                 coll={coll}
                 note={props.note}
               />
@@ -218,6 +228,7 @@ Note.propTypes = {
   changeNoteLabels: PropTypes.func.isRequired,
   changeLabelNoteIds: PropTypes.func.isRequired,
   deleteNoteFromState: PropTypes.func.isRequired,
+  uploadNoteImage: PropTypes.func.isRequired,
   starNote: PropTypes.func.isRequired,
 };
 
@@ -236,5 +247,6 @@ export default connect(
     changeNoteLabels,
     changeLabelNoteIds,
     deleteNoteFromState,
+    uploadNoteImage,
   },
 )(Note);

@@ -1,3 +1,5 @@
+import axios from 'axios';
+import notesAPI from '../../api/notesAPI';
 import {
   SET_NOTE,
   SET_NOTE_ERRORS,
@@ -349,4 +351,32 @@ export const changeNoteLabels = (noteId, newLabels) => (
     console.error(err);
     dispatch({ type: SET_NOTE_ERRORS, payload: err });
   });
+};
+
+const setAuthorizationHeader = (token) => {
+  const FBIdToken = `Bearer ${token}`;
+  // eslint-disable-next-line dot-notation
+  axios.defaults.headers.common['Authorization'] = FBIdToken;
+};
+
+export const uploadNoteImage = (noteId, fd, coll) => (
+  dispatch, getState, { getFirebase },
+) => {
+  const firebase = getFirebase();
+
+  firebase.auth().currentUser.getIdToken(true)
+    .then(((idToken) => {
+      console.log(idToken);
+      return notesAPI.post('/test', fd, {
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+          noteId,
+          coll,
+        },
+      });
+    }))
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => console.log(err));
 };

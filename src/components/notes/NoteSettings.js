@@ -9,15 +9,11 @@ import ArchiveNote from './NoteOperations/ArchiveNote';
 import UnArchiveNote from './NoteOperations/UnArchiveNote';
 import StarNote from './NoteOperations/StarNote';
 import SetLabel from './NoteOperations/SetLabel';
+import UploadNoteImg from './NoteOperations/UploadNoteImg';
 import { useLocation } from 'react-router-dom';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-
-// MUI icons
-import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -50,6 +46,7 @@ const NoteSettings = (props) => {
     handleColor,
     handleStar,
     handleLabels,
+    handleImageUpload,
     note: {
       id: noteId, colorName: colorId, isStarred, labels,
     },
@@ -89,11 +86,7 @@ const NoteSettings = (props) => {
             handleColor={handleColor}
           />
 
-          <Tooltip title="Add image" aria-label="Add image">
-            <IconButton className={classes.iconBtn}>
-              <ImageOutlinedIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
+          <UploadNoteImg handleImageUpload={handleImageUpload} />
           {pathname === '/archive' ? (
             <UnArchiveNote handleNoteMove={handleNoteMove} />
           ) : isMovable ? (

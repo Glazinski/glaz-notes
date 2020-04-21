@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     padding: '10px',
+    // objectFit: 'fill',
   },
   paper: {
     maxWidth: 520,
@@ -41,6 +42,13 @@ const useStyles = makeStyles((theme) => ({
   date: {
     color: theme.palette.text.disabled,
   },
+  image: {
+    width: '100%',
+    // margin: 'auto',
+    // display: 'block',
+    // maxWidth: '100%',
+    // maxHeight: '100%',
+  },
 }));
 
 const NoteForm = (props) => {
@@ -50,6 +58,7 @@ const NoteForm = (props) => {
     handleClose,
     handleLabels,
     date,
+    image,
   } = props;
   const classes = useStyles();
   const textFieldEl = useRef(null);
@@ -76,97 +85,106 @@ const NoteForm = (props) => {
       justif="center"
       direction="column"
     >
-      <Grid item>
-        <TextField
-          onClick={isBin ? handleClick : null}
-          onChange={handleChange}
-          name="title"
-          value={title}
-          className={classes.textField}
-          InputProps={{
-            disableUnderline: true,
-            classes: { input: classes.textFieldLabel },
-          }}
-          placeholder="Title"
-          style={{
-            marginBottom: '20px',
-            width: '96%',
-          }}
-          // fullWidth
-          multiline
-          disabled={isBin}
-        />
-      </Grid>
-
-      <Grid item>
-        <TextField
-          onClick={isBin ? handleClick : null}
-          onChange={handleChange}
-          name="content"
-          value={content}
-          id="resized-label"
-          className={classes.textField}
-          InputProps={{
-            disableUnderline: true,
-            classes: { input: classes.textFieldLabel },
-          }}
-          placeholder="Take a note..."
-          inputRef={textFieldEl}
-          multiline
-          fullWidth
-          disabled={isBin}
-        />
-      </Grid>
-
-      <Grid
-        container
-        // justify="flex-end"
-        justify="space-between"
-        alignItems="center"
-      >
-        <Grid item>
-          <ChipList
-            handleLabels={handleLabels}
-            labels={labels}
-          />
-        </Grid>
-        {date ? (
-          <Typography
-            style={{ marginTop: '10px' }}
-            className={classes.date}
-            variant="caption"
-          >
-            Created at
-            {' '}
-            {date}
-          </Typography>
+      <div>
+        {image ? (
+          <Grid item>
+            <div style={{ width: '100%', height: '100%' }}>
+              <img className={classes.image} src={image} alt="" />
+            </div>
+          </Grid>
         ) : null}
-      </Grid>
-
-
-      <Grid
-        container
-        justify="space-between"
-        alignItems="center"
-        style={{ padding: '10px 10px 0 10px' }}
-      >
-        <Grid item xs={6}>
-          <NoteSettings
-            {...props}
-            isHovered
+        <Grid item>
+          <TextField
+            onClick={isBin ? handleClick : null}
+            onChange={handleChange}
+            name="title"
+            value={title}
+            className={classes.textField}
+            InputProps={{
+              disableUnderline: true,
+              classes: { input: classes.textFieldLabel },
+            }}
+            placeholder="Title"
+            style={{
+              marginBottom: '20px',
+              width: '96%',
+            }}
+          // fullWidth
+            multiline
+            disabled={isBin}
           />
         </Grid>
+
         <Grid item>
-          <Button onClick={handleClose} color="inherit">Close</Button>
+          <TextField
+            onClick={isBin ? handleClick : null}
+            onChange={handleChange}
+            name="content"
+            value={content}
+            id="resized-label"
+            className={classes.textField}
+            InputProps={{
+              disableUnderline: true,
+              classes: { input: classes.textFieldLabel },
+            }}
+            placeholder="Take a note..."
+            inputRef={textFieldEl}
+            multiline
+            fullWidth
+            disabled={isBin}
+          />
         </Grid>
-      </Grid>
-      <CustomSnackbar
-        info
-        msg="Can't edit in Recycle Bin"
-        open={open}
-        handleClick={handleClick}
-        handleClose={handleSnackClose}
-      />
+
+        <Grid
+          container
+        // justify="flex-end"
+          justify="space-between"
+          alignItems="center"
+        >
+          <Grid item>
+            <ChipList
+              handleLabels={handleLabels}
+              labels={labels}
+            />
+          </Grid>
+          {date ? (
+            <Typography
+              style={{ marginTop: '10px' }}
+              className={classes.date}
+              variant="caption"
+            >
+              Created at
+              {' '}
+              {date}
+            </Typography>
+          ) : null}
+        </Grid>
+
+        <Grid
+          container
+          justify="space-between"
+          alignItems="center"
+          style={{ padding: '10px 10px 0 10px' }}
+        >
+          <Grid item xs={6}>
+            <NoteSettings
+              {...props}
+              isHovered
+            />
+          </Grid>
+          <Grid item>
+            <Button onClick={handleClose} color="inherit">Close</Button>
+          </Grid>
+        </Grid>
+
+        <CustomSnackbar
+          info
+          msg="Can't edit in Recycle Bin"
+          open={open}
+          handleClick={handleClick}
+          handleClose={handleSnackClose}
+        />
+      </div>
     </Grid>
   );
 };

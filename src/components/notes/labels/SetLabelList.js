@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   item: {
     height: 25,
     margin: '5px 0',
+    // wordBreak: 'break-word',
   },
   iconBtn: {
     padding: '7px',
