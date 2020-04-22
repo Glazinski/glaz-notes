@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   container: {
     width: 500,
     heihgt: 200,
@@ -34,6 +34,7 @@ const DialogWindow = (props) => {
 DialogWindow.propTypes = {
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default DialogWindow;

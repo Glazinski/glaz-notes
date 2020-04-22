@@ -12,7 +12,7 @@ import { updateNote } from '../../store/actions/notesActions';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     width: 500,
     heihgt: 200,

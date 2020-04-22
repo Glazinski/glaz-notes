@@ -5,6 +5,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import DialogNote from './DialogNote';
 import NoteSettings from './NoteSettings';
 import ChipList from './labels/ChipList';
+import ImageContainer from '../ImageContainer';
 import { useLocation, useParams } from 'react-router-dom';
 
 // Redux
@@ -183,6 +184,8 @@ const Note = (props) => {
                   coll={coll}
                 />
               ) : null}
+              {/* <img src={imageUrl} alt="note" /> */}
+              <ImageContainer imageUrl={imageUrl} />
               {title.length <= 0 ? (
                 <div className={classes.content}>
                   {content}
@@ -192,13 +195,20 @@ const Note = (props) => {
                   {title}
                 </Typography>
               )}
-              <div className={classes.content}>
+              {/* <div className={classes.content}>
                 {title.length <= 0 ? null : content}
+              </div> */}
+              {title.length <= 0 ? null : (
+                <div className={classes.content}>
+                  {content}
+                </div>
+              )}
+              <div style={{ margin: '5px 0' }}>
+                <ChipList
+                  labels={labels}
+                  handleLabels={handleLabels}
+                />
               </div>
-              <ChipList
-                labels={labels}
-                handleLabels={handleLabels}
-              />
               <NoteSettings
                 isHovered={isHovered}
                 isMovable

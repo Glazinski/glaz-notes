@@ -7,6 +7,7 @@ import {
   MOVE_NOTE_CLEAR,
   NOTES_LOADING,
   NOTES_FETCHED,
+  FETCH_NOTE,
   CREATE_NOTE,
   DELETE_NOTE_FOREVER,
   UPDATE_NOTE,
@@ -30,6 +31,18 @@ export default (state = initState, action) => {
   switch (action.type) {
     case NOTES_FETCHED:
       return { ...state, notes: action.payload, loading: false };
+
+    case FETCH_NOTE: {
+      console.log(action.payload);
+      const { id } = action.payload;
+      return {
+        ...state,
+        notes: {
+          ...state.notes,
+          [id]: { ...action.payload },
+        },
+      };
+    }
 
     case NOTES_LOADING:
       return { ...state, loading: true };
@@ -120,7 +133,7 @@ export default (state = initState, action) => {
       };
 
     case SET_NOTE:
-      return { ...state, errors: null };
+      return { ...state, errors: null, loading: false };
 
     case SET_NOTE_ERRORS:
       return { ...state, errrors: action.payload };

@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export default axios.create({
-  baseURL: 'http://localhost:5000/glaz-notes-269221/europe-west3/api',
+  baseURL: 'https://europe-west3-glaz-notes-269221.cloudfunctions.net/api',
 });

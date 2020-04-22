@@ -115,7 +115,6 @@ const CreateNote = (props) => {
   };
 
   const handleImageUpload = (tmpImage, fd) => {
-    console.log(tmpImage, fd);
     setTmpImage(tmpImage);
   };
 

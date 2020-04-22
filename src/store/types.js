@@ -11,6 +11,7 @@ export const MOVE_NOTE_BACK = 'MOVE_NOTE_BACK';
 export const MOVE_NOTE_CLEAR = 'MOVE_NOTE_CLEAR';
 export const NOTES_LOADING = 'NOTES_LOADING';
 export const NOTES_FETCHED = 'NOTES_FETCHED';
+export const FETCH_NOTE = 'FETCH_NOTE';
 export const UPDATE_NOTE = 'UPDATE_NOTE';
 export const CREATE_NOTE = 'CREATE_NOTE';
 export const DELETE_NOTE_FOREVER = 'DELETE_NOTE_FOREVER';

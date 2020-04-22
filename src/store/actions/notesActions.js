@@ -8,6 +8,7 @@ import {
   MOVE_NOTE_CLEAR,
   NOTES_LOADING,
   NOTES_FETCHED,
+  FETCH_NOTE,
   CREATE_NOTE,
   DELETE_NOTE_FOREVER,
   UPDATE_NOTE,
@@ -16,6 +17,8 @@ import {
   STAR_NOTE,
   CHANGE_NOTE_LABELS,
   DELETE_NOTE_FROM_STATE,
+  LOADING_IMAGE,
+  LOADING_IMAGE_FINISHED,
 } from '../types';
 
 export const fetchNotes = (coll, labelId) => (
@@ -74,6 +77,27 @@ export const fetchNotes = (coll, labelId) => (
       })
       .catch((err) => console.log(err));
   }
+};
+
+export const fetchNote = (noteId, coll) => (
+  dispatch, getState, { getFirebase, getFirestore },
+) => {
+  const firebase = getFirebase();
+  const firestore = getFirestore();
+  const userId = firebase.auth().currentUser.uid;
+
+  firestore.collection(coll).doc(userId).collection('userNotes').doc(noteId)
+    .get()
+    .then((doc) => {
+      console.log(doc.data());
+      dispatch({
+        type: FETCH_NOTE,
+        payload: {
+          ...doc.data(),
+        },
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 export const createNote = (noteId, note) => (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -353,10 +377,10 @@ export const changeNoteLabels = (noteId, newLabels) => (
   });
 };
 
+// I may it use later for reusability
 const setAuthorizationHeader = (token) => {
   const FBIdToken = `Bearer ${token}`;
-  // eslint-disable-next-line dot-notation
-  axios.defaults.headers.common['Authorization'] = FBIdToken;
+  axios.defaults.headers.common.Authorization = FBIdToken;
 };
 
 export const uploadNoteImage = (noteId, fd, coll) => (
@@ -377,6 +401,7 @@ export const uploadNoteImage = (noteId, fd, coll) => (
     }))
     .then((res) => {
       console.log(res);
+      dispatch(fetchNote(noteId, coll));
     })
     .catch((err) => console.log(err));
 };

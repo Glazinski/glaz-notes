@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import NoteSettings from './NoteSettings';
 import CustomSnackbar from '../CustomSnackbar';
 import ChipList from './labels/ChipList';
+import ImageContainer from '../ImageContainer';
 import { useLocation } from 'react-router-dom';
 
 // MUI
@@ -16,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     padding: '10px',
-    // objectFit: 'fill',
   },
   paper: {
     maxWidth: 520,
@@ -39,6 +39,12 @@ const useStyles = makeStyles((theme) => ({
       fontSize: 5,
     },
   },
+  setContainer: {
+    display: 'flex',
+    justifContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 5,
+  },
   date: {
     color: theme.palette.text.disabled,
   },
@@ -53,7 +59,9 @@ const useStyles = makeStyles((theme) => ({
 
 const NoteForm = (props) => {
   const {
-    note: { title, content, labels },
+    note: {
+      title, content, labels, imageUrl,
+    },
     handleChange,
     handleClose,
     handleLabels,
@@ -65,6 +73,7 @@ const NoteForm = (props) => {
   const { pathname } = useLocation();
   const isBin = pathname === '/bin';
   const [open, setOpen] = useState(false);
+  const elo = image || (imageUrl || null);
 
   useEffect(() => {
     textFieldEl.current.focus();
@@ -79,74 +88,72 @@ const NoteForm = (props) => {
   };
 
   return (
-    <Grid
+    <div
       className={classes.root}
-      container
-      justif="center"
-      direction="column"
     >
+      {/* <ImageContainer imageUrl={imageUrl} /> */}
+      {elo ? (
+        <div style={{ marginBottom: 5 }}>
+          {/* <div style={{ width: '100%', height: '100%' }}> */}
+          <img className={classes.image} src={elo} alt="" />
+          {/* </div> */}
+        </div>
+      ) : null}
       <div>
-        {image ? (
-          <Grid item>
-            <div style={{ width: '100%', height: '100%' }}>
-              <img className={classes.image} src={image} alt="" />
-            </div>
-          </Grid>
-        ) : null}
-        <Grid item>
-          <TextField
-            onClick={isBin ? handleClick : null}
-            onChange={handleChange}
-            name="title"
-            value={title}
-            className={classes.textField}
-            InputProps={{
-              disableUnderline: true,
-              classes: { input: classes.textFieldLabel },
-            }}
-            placeholder="Title"
-            style={{
-              marginBottom: '20px',
-              width: '96%',
-            }}
+        <TextField
+          onClick={isBin ? handleClick : null}
+          onChange={handleChange}
+          name="title"
+          value={title}
+          className={classes.textField}
+          InputProps={{
+            disableUnderline: true,
+            classes: { input: classes.textFieldLabel },
+          }}
+          placeholder="Title"
+          style={{
+            marginBottom: '20px',
+            width: '96%',
+          }}
           // fullWidth
-            multiline
-            disabled={isBin}
-          />
-        </Grid>
+          multiline
+          disabled={isBin}
+        />
+      </div>
 
-        <Grid item>
-          <TextField
-            onClick={isBin ? handleClick : null}
-            onChange={handleChange}
-            name="content"
-            value={content}
-            id="resized-label"
-            className={classes.textField}
-            InputProps={{
-              disableUnderline: true,
-              classes: { input: classes.textFieldLabel },
-            }}
-            placeholder="Take a note..."
-            inputRef={textFieldEl}
-            multiline
-            fullWidth
-            disabled={isBin}
-          />
-        </Grid>
+      <div>
+        <TextField
+          onClick={isBin ? handleClick : null}
+          onChange={handleChange}
+          name="content"
+          value={content}
+          id="resized-label"
+          className={classes.textField}
+          InputProps={{
+            disableUnderline: true,
+            classes: { input: classes.textFieldLabel },
+          }}
+          placeholder="Take a note..."
+          inputRef={textFieldEl}
+          multiline
+          fullWidth
+          disabled={isBin}
+        />
+      </div>
 
-        <Grid
-          container
-        // justify="flex-end"
-          justify="space-between"
-          alignItems="center"
-        >
-          <Grid item>
-            <ChipList
-              handleLabels={handleLabels}
-              labels={labels}
-            />
-          </Grid>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        margin: '10px 0',
+      }}
+      >
+        <div>
+          <ChipList
+            handleLabels={handleLabels}
+            labels={labels}
+          />
+        </div>
+        <div>
           {date ? (
             <Typography
               style={{ marginTop: '10px' }}
@@ -158,34 +165,32 @@ const NoteForm = (props) => {
               {date}
             </Typography>
           ) : null}
-        </Grid>
-
-        <Grid
-          container
-          justify="space-between"
-          alignItems="center"
-          style={{ padding: '10px 10px 0 10px' }}
-        >
-          <Grid item xs={6}>
-            <NoteSettings
-              {...props}
-              isHovered
-            />
-          </Grid>
-          <Grid item>
-            <Button onClick={handleClose} color="inherit">Close</Button>
-          </Grid>
-        </Grid>
-
-        <CustomSnackbar
-          info
-          msg="Can't edit in Recycle Bin"
-          open={open}
-          handleClick={handleClick}
-          handleClose={handleSnackClose}
-        />
+        </div>
       </div>
-    </Grid>
+
+      <div
+        className={classes.setContainer}
+        // style={{ padding: '10px 10px 0 10px' }}
+      >
+        {/* <div> */}
+        <NoteSettings
+          {...props}
+          isHovered
+        />
+        {/* </div> */}
+        <div style={{ flexGrow: 4, display: 'flex', justifyContent: 'flex-end' }}>
+          <Button onClick={handleClose} color="inherit">Close</Button>
+        </div>
+      </div>
+
+      <CustomSnackbar
+        info
+        msg="Can't edit in Recycle Bin"
+        open={open}
+        handleClick={handleClick}
+        handleClose={handleSnackClose}
+      />
+    </div>
   );
 };
 

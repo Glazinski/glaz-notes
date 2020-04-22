@@ -1,9 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-
-// Redux
-import { connect } from 'react-redux';
-import { uploadNoteImage } from '../../../store/actions/notesActions';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -23,15 +19,10 @@ const useStyles = makeStyles((theme) => ({
 const UploadNoteImg = (props) => {
   const classes = useStyles();
   const fileInput = useRef(null);
-  const { uploadNoteImage, handleImageUpload } = props;
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [tmpImage, setTmpImage] = useState(null);
+  const { handleImageUpload } = props;
 
-  // useEffect(() => uploadNoteImage(), []);
 
   const handleImageSelect = (event) => {
-    // setSelectedImage(event.target.files[0]);
-    // setTmpImage(URL.createObjectURL(event.target.files[0]));
     const selImage = event.target.files[0];
     const tmpImage = URL.createObjectURL(event.target.files[0]);
 
@@ -39,13 +30,6 @@ const UploadNoteImg = (props) => {
     fd.append('image', selImage, selImage.name);
     handleImageUpload(tmpImage, fd);
   };
-
-  // const handleFileUpload = () => {
-  //   console.log('elo');
-  //   const fd = new FormData();
-  //   fd.append('image', selectedImage, 'elo');
-  //   handleImageUpload(tmpImage, fd);
-  // };
 
   return (
     <>
@@ -56,7 +40,6 @@ const UploadNoteImg = (props) => {
         onChange={handleImageSelect}
         ref={fileInput}
       />
-      {/* <img src={selectedImage} alt="" /> */}
       <Tooltip title="Add image" aria-label="Add image">
         <IconButton onClick={() => fileInput.current.click()} className={classes.iconBtn}>
           <ImageOutlinedIcon fontSize="small" />
@@ -67,7 +50,7 @@ const UploadNoteImg = (props) => {
 };
 
 UploadNoteImg.propTypes = {
-  uploadNoteImage: PropTypes.func.isRequired,
+  handleImageUpload: PropTypes.func.isRequired,
 };
 
-export default connect(null, { uploadNoteImage })(UploadNoteImg);
+export default UploadNoteImg;

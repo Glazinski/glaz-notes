@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexGrow: 1,
     justifyContent: 'space-between',
-    marginTop: '5px',
+    // marginTop: '5px',
     transition: 'opacity .3s ease',
   },
   binContainer: {
