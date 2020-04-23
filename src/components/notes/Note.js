@@ -195,14 +195,9 @@ const Note = (props) => {
                   {title}
                 </Typography>
               )}
-              {/* <div className={classes.content}>
+              <div className={classes.content}>
                 {title.length <= 0 ? null : content}
-              </div> */}
-              {title.length <= 0 ? null : (
-                <div className={classes.content}>
-                  {content}
-                </div>
-              )}
+              </div>
               <div style={{ margin: '5px 0' }}>
                 <ChipList
                   labels={labels}
@@ -244,7 +239,6 @@ Note.propTypes = {
 
 const mapStateToProps = (state) => ({
   colors: _.mapKeys(state.ui.colors, 'name'),
-  // labelsList: _.mapKeys(state.labels, 'labelName'),
   labelsList: state.labels,
 });
 

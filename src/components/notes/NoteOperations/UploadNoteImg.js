@@ -24,11 +24,13 @@ const UploadNoteImg = (props) => {
 
   const handleImageSelect = (event) => {
     const selImage = event.target.files[0];
-    const tmpImage = URL.createObjectURL(event.target.files[0]);
+    const tmpImage = selImage ? URL.createObjectURL(selImage) : null;
 
-    const fd = new FormData();
-    fd.append('image', selImage, selImage.name);
-    handleImageUpload(tmpImage, fd);
+    if (selImage) {
+      const fd = new FormData();
+      fd.append('image', selImage, selImage.name);
+      handleImageUpload(tmpImage, fd);
+    }
   };
 
   return (

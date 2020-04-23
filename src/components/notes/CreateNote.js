@@ -7,7 +7,7 @@ import NoteForm from './NoteForm';
 
 // Redux
 import { connect } from 'react-redux';
-import { createNote } from '../../store/actions/notesActions';
+import { createNote, uploadNoteImage } from '../../store/actions/notesActions';
 import { changeLabelNoteIds } from '../../store/actions/labelsActions';
 
 // MUI
@@ -69,6 +69,8 @@ const CreateNote = (props) => {
     labelsList,
     changeLabelNoteIds,
     createNote,
+    uploadNoteImage,
+    labels,
   } = props;
   const classes = useStyles();
   const [formData, setFormData] = useState({
@@ -77,10 +79,11 @@ const CreateNote = (props) => {
     createdAt: null,
     colorName: 'Default',
     isStarred: false,
-    labels: [],
+    labels,
     imageUrl: '',
   });
   const [tmpImage, setTmpImage] = useState(null);
+  const [tmpFD, setTmpFD] = useState(null);
   const [isFocused, setIsFocused] = useState(false);
   const [isListMode, setIsListMode] = useState(false);
 
@@ -114,8 +117,17 @@ const CreateNote = (props) => {
     setFormData({ ...formData, labels: [...labelsArr] });
   };
 
-  const handleImageUpload = (tmpImage, fd) => {
-    setTmpImage(tmpImage);
+  const handleImageUpload = (tmpImg, fd) => {
+    setTmpImage(tmpImg);
+    setTmpFD(fd);
+  };
+
+  const resetForm = () => {
+    setTmpImage(null);
+    setTmpFD(null);
+    setFormData({
+      ...formData, title: '', content: '', colorName: 'Default', isStarred: false,
+    });
   };
 
   useEffect(() => {
@@ -136,17 +148,16 @@ const CreateNote = (props) => {
         });
       }
       createNote(noteId, formData);
-      setTmpImage(null);
-      setFormData({
-        ...formData, title: '', content: '', colorName: 'Default', isStarred: false, labels: [],
-      });
+      if (tmpFD) {
+        uploadNoteImage(noteId, tmpFD, 'notes');
+      }
+      resetForm();
     } else {
-      setTmpImage(null);
-      setFormData({
-        ...formData, title: '', content: '', colorName: 'Default', isStarred: false, labels: [],
-      });
+      resetForm();
     }
   }, [isFocused]);
+
+  useEffect(() => setFormData({ ...formData, labels }), [labels]);
 
   const color = _.some(colors) ? colors[formData.colorName].color : null;
 
@@ -186,9 +197,15 @@ const CreateNote = (props) => {
   );
 };
 
+CreateNote.defaultProps = {
+  labels: [],
+};
+
 CreateNote.propTypes = {
   createNote: PropTypes.func.isRequired,
   changeLabelNoteIds: PropTypes.func.isRequired,
+  uploadNoteImage: PropTypes.func.isRequired,
+  labels: PropTypes.arrayOf(PropTypes.string),
   colors: PropTypes.oneOfType([PropTypes.object]).isRequired,
   labelsList: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
@@ -198,4 +215,8 @@ const mapStateToProps = (state) => ({
   labelsList: state.labels,
 });
 
-export default connect(mapStateToProps, { createNote, changeLabelNoteIds })(CreateNote);
+export default connect(mapStateToProps, {
+  createNote,
+  changeLabelNoteIds,
+  uploadNoteImage,
+})(CreateNote);

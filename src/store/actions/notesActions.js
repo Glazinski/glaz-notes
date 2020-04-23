@@ -238,6 +238,15 @@ export const deleteNoteForever = (noteId) => (
   const firestore = getFirestore();
   const userId = firebase.auth().currentUser.uid;
 
+  const imageUrl = getState().notes.notes[noteId].imageUrl.length > 0
+    ? getState().notes.notes[noteId].imageUrl : false;
+
+  console.log(imageUrl);
+
+  const data = {
+    imageUrl,
+  };
+
   dispatch({ type: DELETE_NOTE_FOREVER, payload: noteId });
 
   firestore
@@ -245,7 +254,29 @@ export const deleteNoteForever = (noteId) => (
     .doc(userId)
     .collection('userNotes')
     .doc(noteId)
-    .delete();
+    .delete()
+    .then(() => {
+      if (imageUrl) {
+        return firebase.auth().currentUser.getIdToken(true);
+      }
+
+      return null;
+    })
+    .then((idToken) => {
+      if (idToken) {
+        return notesAPI.delete('/notes/image/delete', {
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+          },
+          data,
+        });
+      }
+      return null;
+    })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => console.log(err));
 };
 
 export const deleteNotesForever = () => (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -319,8 +350,6 @@ export const changeNoteColor = (noteId, newColor, coll) => (
     console.error(err);
     dispatch({ type: SET_NOTE_ERRORS, payload: err });
   });
-
-  // CHANGE_NOTE_COLOR
 };
 
 export const starNote = (noteId, newIsStarred, coll) => (
@@ -391,7 +420,7 @@ export const uploadNoteImage = (noteId, fd, coll) => (
   firebase.auth().currentUser.getIdToken(true)
     .then(((idToken) => {
       console.log(idToken);
-      return notesAPI.post('/test', fd, {
+      return notesAPI.post('/notes/image', fd, {
         headers: {
           Authorization: `Bearer ${idToken}`,
           noteId,

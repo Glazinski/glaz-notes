@@ -8,7 +8,6 @@ import { useLocation } from 'react-router-dom';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
@@ -198,6 +197,7 @@ NoteForm.defaultProps = {
   date: null,
   title: null,
   content: null,
+  image: null,
 };
 
 NoteForm.propTypes = {
@@ -208,7 +208,7 @@ NoteForm.propTypes = {
   title: PropTypes.string,
   content: PropTypes.string,
   date: PropTypes.string,
-
+  image: PropTypes.string,
 };
 
 export default NoteForm;
