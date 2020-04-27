@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   title: {
-    marginLeft: 70,
+    // marginLeft: 70,
   },
 }));
 
@@ -104,6 +104,7 @@ const DragContainer = (props) => {
     console.log('new col', newState);
     setInitData(newState);
   };
+
   return (
     <>
       {initData.starredColumns['starred-column-1'].noteIds.length > 0 ? (

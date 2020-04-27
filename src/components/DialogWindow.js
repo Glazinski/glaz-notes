@@ -3,38 +3,43 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 
-const useStyles = makeStyles(() => ({
-  container: {
-    width: 500,
-    heihgt: 200,
-    padding: '10px',
-  },
+const useStyles = makeStyles((theme) => ({
   dialog: {
     marginBottom: '200px',
+  },
+  [theme.breakpoints.down('sm')]: {
+    marginBottom: '0',
   },
 }));
 
 const DialogWindow = (props) => {
   const {
-    open, handleClose, children,
+    open, handleClose, children, isFullScreen,
   } = props;
   const classes = useStyles();
 
   return (
     <Dialog
-      className={classes.dialog}
+      className={isFullScreen ? null : classes.dialog}
       open={open}
       onClose={handleClose}
+      fullScreen={isFullScreen}
+      // fullScreen
     >
       {children}
     </Dialog>
   );
 };
 
+DialogWindow.defaultProps = {
+  isFullScreen: false,
+};
+
 DialogWindow.propTypes = {
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
+  isFullScreen: PropTypes.bool,
 };
 
 export default DialogWindow;

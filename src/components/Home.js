@@ -84,8 +84,11 @@ const Home = ({ auth: { uid }, children }) => {
 
   const [open, setOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const handleDrawerToggle = () => setOpen(!open);
-  const handleMobileDrawerToggle = () => setMobileOpen(!mobileOpen);
+  const toggleDrawer = () => setOpen(!open);
+
+  const toggleMobileDrawer = (newOpen) => {
+    setMobileOpen(newOpen);
+  };
 
   const [selectedIndex, setSelectedIndex] = useState('/');
 
@@ -106,7 +109,7 @@ const Home = ({ auth: { uid }, children }) => {
               edge="start"
               color="inherit"
               aria-label="open drawer"
-              onClick={handleDrawerToggle}
+              onClick={toggleDrawer}
             >
               <MenuIcon />
             </IconButton>
@@ -117,7 +120,8 @@ const Home = ({ auth: { uid }, children }) => {
               edge="start"
               color="inherit"
               aria-label="open drawer"
-              onClick={handleMobileDrawerToggle}
+              onClick={() => toggleMobileDrawer(true)}
+              // onClick={() => console.log('cojest')}
             >
               <MenuIcon />
             </IconButton>
@@ -153,7 +157,7 @@ const Home = ({ auth: { uid }, children }) => {
           variant="temporary"
           anchor="left"
           open={mobileOpen}
-          onClose={handleMobileDrawerToggle}
+          onClose={() => toggleMobileDrawer(false)}
           classes={{
             paper: classes.drawerPaper,
           }}
@@ -162,6 +166,7 @@ const Home = ({ auth: { uid }, children }) => {
           <DrawerList
             selectedIndex={selectedIndex}
             handleListItemClick={handleListItemClick}
+            toggleMobileDrawer={toggleMobileDrawer}
           />
         </Drawer>
       </Hidden>

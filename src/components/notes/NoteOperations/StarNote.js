@@ -16,6 +16,10 @@ const useStyles = makeStyles((theme) => ({
     top: 10,
     right: 7,
     transition: 'opacity .3s ease',
+    [theme.breakpoints.down('sm')]: {
+      top: 15,
+      right: 10,
+    },
   },
   iconBtn: {
     padding: '7px',

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { fetchLabels } from './store/actions/labelsActions';
 import { fetchTheme, setColors } from './store/actions/uiActions';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -25,7 +26,7 @@ import Home from './components/Home';
 
 const App = (props) => {
   const {
-    theme, fetchTheme, setColors, auth: { uid },
+    theme, fetchTheme, setColors, fetchLabels, auth: { uid },
   } = props;
   const [prefersDarkMode, setPrefersDarkMode] = useState(theme);
 
@@ -37,6 +38,7 @@ const App = (props) => {
   useEffect(() => {
     if (uid) {
       fetchTheme();
+      fetchLabels();
     }
 
     if (theme === 'dark') {
@@ -113,4 +115,4 @@ App.propTypes = {
   auth: PropTypes.oneOfType([PropTypes.object]),
 };
 
-export default connect(mapStateToProps, { fetchTheme, setColors })(App);
+export default connect(mapStateToProps, { fetchTheme, setColors, fetchLabels })(App);

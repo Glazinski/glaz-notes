@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'relative',
     // maxWidth: 520,
-    width: 520,
+    maxWidth: 520,
     maxHeight: 620,
     backgroundColor: theme.palette.background.default,
     boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',

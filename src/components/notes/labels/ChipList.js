@@ -44,7 +44,6 @@ const ChipList = (props) => {
   return (
     <div
       className={classes.root}
-      style={{ marginTop: '10px' }}
     >
       {chips}
     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
@@ -17,15 +17,6 @@ const LabelList = (props) => {
   const {
     labels, itemClassName, handleItemClick, selectedIndex, fetchLabels,
   } = props;
-
-  useEffect(() => {
-    fetchLabels();
-  }, []);
-
-  // useEffect(() => {
-  //   console.log('elo');
-  //   fetchLabels();
-  // }, [labels]);
 
   const items = _.values(labels).map((item) => (
     <ListItem

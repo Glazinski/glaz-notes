@@ -43,6 +43,10 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
       cursor: 'default',
     },
+    [theme.breakpoints.down('xs')]: {
+      maxWidth: 'none',
+      width: '100%',
+    },
   },
   title: {
     // overflowWrap: 'anywhere',

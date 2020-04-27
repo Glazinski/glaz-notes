@@ -43,15 +43,13 @@ const useStyles = makeStyles((theme) => ({
 const DrawerList = (props) => {
   const classes = useStyles();
   const {
-    selectedIndex, handleListItemClick, moveNoteClear,
+    selectedIndex, handleListItemClick, moveNoteClear, toggleMobileDrawer,
   } = props;
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
 
   const handleItemClick = (index) => {
     moveNoteClear();
-    // if (handleMobileDrawerToggle) handleMobileDrawerToggle();
-    // handleMobileDrawerToggle();
     handleListItemClick(index);
   };
 
@@ -64,77 +62,79 @@ const DrawerList = (props) => {
   const handleClose = () => setOpen(false);
 
   return (
-    <List>
-      {/* {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-              <ListItem className={classes.item} button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))} */}
-      <ListItem
-        className={`${classes.item}`}
-        // classes={{ selected: classes.active }}
-        component={Link}
-        to="/"
-        button
-        selected={selectedIndex === '/'}
-        // onClick={() => handleListItemClick(0)}
-        onClick={() => handleItemClick('/')}
-      >
-        <ListItemIcon><EmojiObjectsOutlinedIcon /></ListItemIcon>
-        <ListItemText primary="Notes" />
-      </ListItem>
+    <div
+      role="presentation"
+      onClick={toggleMobileDrawer ? () => toggleMobileDrawer(false) : null}
+    >
+      <List>
+        <ListItem
+          className={`${classes.item}`}
+          component={Link}
+          to="/"
+          button
+          selected={selectedIndex === '/'}
+          onClick={() => handleItemClick('/')}
+        >
+          <ListItemIcon><EmojiObjectsOutlinedIcon /></ListItemIcon>
+          <ListItemText primary="Notes" />
+        </ListItem>
 
-      <Divider />
+        <Divider />
 
-      <Typography className={classes.subtitle} variant="overline">LABELS</Typography>
-      <DrawerLabelList
-        itemClassName={classes.item}
-        handleItemClick={handleItemClick}
-        selectedIndex={selectedIndex}
-      />
-      <ListItem
-        className={classes.item}
-        button
-        onClick={handleOpenClick}
-      >
-        <ListItemIcon><EditOutlinedIcon /></ListItemIcon>
-        <ListItemText primary="Edit label" />
-      </ListItem>
-      <EditLabels open={open} handleClose={handleClose} />
+        <Typography className={classes.subtitle} variant="overline">LABELS</Typography>
+        <DrawerLabelList
+          itemClassName={classes.item}
+          handleItemClick={handleItemClick}
+          selectedIndex={selectedIndex}
+        />
+        <ListItem
+          className={classes.item}
+          button
+          onClick={handleOpenClick}
+        >
+          <ListItemIcon><EditOutlinedIcon /></ListItemIcon>
+          <ListItemText primary="Edit label" />
+        </ListItem>
+        <EditLabels open={open} handleClose={handleClose} />
 
-      <Divider />
-      <ListItem
-        className={classes.item}
-        button
-        component={Link}
-        to="/archive"
-        selected={selectedIndex === '/archive'}
-        onClick={() => handleItemClick('/archive')}
-      >
-        <ListItemIcon><ArchiveOutlinedIcon /></ListItemIcon>
-        <ListItemText primary="Archive" />
-      </ListItem>
+        <Divider />
+        <ListItem
+          className={classes.item}
+          button
+          component={Link}
+          to="/archive"
+          selected={selectedIndex === '/archive'}
+          onClick={() => handleItemClick('/archive')}
+        >
+          <ListItemIcon><ArchiveOutlinedIcon /></ListItemIcon>
+          <ListItemText primary="Archive" />
+        </ListItem>
 
-      <ListItem
-        className={classes.item}
-        button
-        component={Link}
-        to="/bin"
-        selected={selectedIndex === '/bin'}
-        onClick={() => handleItemClick('/bin')}
-      >
-        <ListItemIcon><DeleteOutlinedIcon /></ListItemIcon>
-        <ListItemText primary="Bin" />
-      </ListItem>
-    </List>
+        <ListItem
+          className={classes.item}
+          button
+          component={Link}
+          to="/bin"
+          selected={selectedIndex === '/bin'}
+          onClick={() => handleItemClick('/bin')}
+        >
+          <ListItemIcon><DeleteOutlinedIcon /></ListItemIcon>
+          <ListItemText primary="Bin" />
+        </ListItem>
+      </List>
+    </div>
   );
+};
+
+DrawerList.defaultProps = {
+  toggleMobileDrawer: null,
 };
 
 DrawerList.propTypes = {
   selectedIndex: PropTypes.string.isRequired,
   handleListItemClick: PropTypes.func.isRequired,
   moveNoteClear: PropTypes.func.isRequired,
+  toggleMobileDrawer: PropTypes.func,
 };
 
 export default connect(null, { moveNoteClear })(DrawerList);

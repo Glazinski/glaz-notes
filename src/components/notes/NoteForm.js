@@ -14,8 +14,11 @@ import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    display: 'flex',
+    flexDirection: 'column',
     flexGrow: 1,
     padding: '10px',
+    height: '100%',
   },
   paper: {
     maxWidth: 520,
@@ -53,6 +56,10 @@ const useStyles = makeStyles((theme) => ({
     // display: 'block',
     // maxWidth: '100%',
     // maxHeight: '100%',
+  },
+  footer: {
+    marginTop: 'auto',
+    // alignSelf: 'flex-end',
   },
 }));
 
@@ -140,45 +147,47 @@ const NoteForm = (props) => {
         />
       </div>
 
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        margin: '10px 0',
-      }}
-      >
-        <div>
+      <div className={classes.footer}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          margin: '10px 0',
+        }}
+        >
+          {/* <div> */}
           <ChipList
             handleLabels={handleLabels}
             labels={labels}
           />
+          {/* </div> */}
+          <div>
+            {date ? (
+              <Typography
+                style={{ marginTop: '10px' }}
+                className={classes.date}
+                variant="caption"
+              >
+                Created at
+                {' '}
+                {date}
+              </Typography>
+            ) : null}
+          </div>
         </div>
-        <div>
-          {date ? (
-            <Typography
-              style={{ marginTop: '10px' }}
-              className={classes.date}
-              variant="caption"
-            >
-              Created at
-              {' '}
-              {date}
-            </Typography>
-          ) : null}
-        </div>
-      </div>
 
-      <div
-        className={classes.setContainer}
-        // style={{ padding: '10px 10px 0 10px' }}
-      >
-        {/* <div> */}
-        <NoteSettings
-          {...props}
-          isHovered
-        />
-        {/* </div> */}
-        <div style={{ flexGrow: 4, display: 'flex', justifyContent: 'flex-end' }}>
-          <Button onClick={handleClose} color="inherit">Close</Button>
+        <div
+          className={classes.setContainer}
+        >
+          {/* <div> */}
+          <NoteSettings
+            {...props}
+            isHovered
+          />
+          {/* </div> */}
+          <div style={{ flexGrow: 4, display: 'flex', justifyContent: 'flex-end' }}>
+            <Button onClick={handleClose} color="inherit">Close</Button>
+          </div>
         </div>
       </div>
 

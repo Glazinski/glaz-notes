@@ -9,16 +9,21 @@ import { connect } from 'react-redux';
 import { updateNote } from '../../store/actions/notesActions';
 
 // MUI
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     width: 500,
-    heihgt: 200,
     padding: '10px',
     overflowWrap: 'anywhere',
     transition: 'background-color .3s ease',
+    [theme.breakpoints.down('sm')]: {
+      height: '100%',
+      width: 'auto',
+      padding: '10px',
+    },
   },
   dialog: {
     marginBottom: '200px',
@@ -38,6 +43,8 @@ const DialogNote = (props) => {
     },
   } = props;
   const classes = useStyles();
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [formData, setFormData] = useState({
     title,
     content,
@@ -61,7 +68,7 @@ const DialogNote = (props) => {
   const date = createdAt ? moment(createdAt).format('MMM Do YY') : null;
 
   return (
-    <DialogWindow handleClose={handleModalClose} open={open}>
+    <DialogWindow handleClose={handleModalClose} open={open} isFullScreen={fullScreen}>
       <Paper
         className={classes.container}
         style={color ? { backgroundColor: color } : null}

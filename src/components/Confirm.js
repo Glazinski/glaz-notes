@@ -11,7 +11,9 @@ import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    width: 430,
+    // padding: theme.spacing(2),
+    width: 230,
+    // maxWidth: 430,
   },
   title: {
     fontSize: '1rem',
