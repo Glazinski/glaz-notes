@@ -12,6 +12,8 @@ import IconButton from '@material-ui/core/IconButton';
 
 // MUI icons
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
+import ViewAgendaOutlinedIcon from '@material-ui/icons/ViewAgendaOutlined';
+import ViewCompactOutlinedIcon from '@material-ui/icons/ViewCompactOutlined';
 
 const Settings = ({ signOut, changeTheme, theme }) => {
   const [anchorEl, setAnchorEl] = useState(null);

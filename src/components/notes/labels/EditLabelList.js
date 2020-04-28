@@ -139,7 +139,7 @@ const EditLabelList = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  labels: state.labels,
+  labels: state.labels.labels,
 });
 
 EditLabelList.propTypes = {

@@ -20,13 +20,21 @@ const useStyles = makeStyles((theme) => ({
     overflowWrap: 'anywhere',
     transition: 'background-color .3s ease',
     [theme.breakpoints.down('sm')]: {
-      height: '100%',
       width: 'auto',
-      padding: '10px',
+      padding: '0',
     },
   },
   dialog: {
     marginBottom: '200px',
+  },
+  formContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
+    padding: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      minHeight: '100vh',
+    },
   },
 }));
 
@@ -80,6 +88,7 @@ const DialogNote = (props) => {
           date={date}
           note={formData}
           isMovable
+          formClassName={classes.formContainer}
         />
       </Paper>
     </DialogWindow>

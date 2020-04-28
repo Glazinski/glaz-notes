@@ -243,7 +243,7 @@ Note.propTypes = {
 
 const mapStateToProps = (state) => ({
   colors: _.mapKeys(state.ui.colors, 'name'),
-  labelsList: state.labels,
+  labelsList: state.labels.labels,
 });
 
 export default connect(

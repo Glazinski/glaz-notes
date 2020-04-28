@@ -6,6 +6,7 @@ import Dialog from '@material-ui/core/Dialog';
 const useStyles = makeStyles((theme) => ({
   dialog: {
     marginBottom: '200px',
+    // objectFit: 'fill',
   },
   [theme.breakpoints.down('sm')]: {
     marginBottom: '0',
@@ -21,10 +22,10 @@ const DialogWindow = (props) => {
   return (
     <Dialog
       className={isFullScreen ? null : classes.dialog}
+      // className={classes.dialog}
       open={open}
       onClose={handleClose}
       fullScreen={isFullScreen}
-      // fullScreen
     >
       {children}
     </Dialog>

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import EditLabels from '../components/notes/labels/EditLabels';
 import DrawerLabelList from '../components/notes/labels/DrawerLabelList';
 
 // REDUX
 import { connect } from 'react-redux';
 import { moveNoteClear } from '../store/actions/notesActions';
+import { openEditLabels } from '../store/actions/labelsActions';
 
 // React router
 import {
@@ -43,10 +43,13 @@ const useStyles = makeStyles((theme) => ({
 const DrawerList = (props) => {
   const classes = useStyles();
   const {
-    selectedIndex, handleListItemClick, moveNoteClear, toggleMobileDrawer,
+    selectedIndex,
+    handleListItemClick,
+    moveNoteClear,
+    toggleMobileDrawer,
+    openEditLabels,
   } = props;
   const { pathname } = useLocation();
-  const [open, setOpen] = useState(false);
 
   const handleItemClick = (index) => {
     moveNoteClear();
@@ -56,10 +59,6 @@ const DrawerList = (props) => {
   useEffect(() => {
     handleItemClick(pathname);
   }, []);
-
-  const handleOpenClick = () => setOpen(true);
-
-  const handleClose = () => setOpen(false);
 
   return (
     <div
@@ -90,12 +89,12 @@ const DrawerList = (props) => {
         <ListItem
           className={classes.item}
           button
-          onClick={handleOpenClick}
+          // onClick={handleOpenClick}
+          onClick={openEditLabels}
         >
           <ListItemIcon><EditOutlinedIcon /></ListItemIcon>
           <ListItemText primary="Edit label" />
         </ListItem>
-        <EditLabels open={open} handleClose={handleClose} />
 
         <Divider />
         <ListItem
@@ -137,4 +136,4 @@ DrawerList.propTypes = {
   toggleMobileDrawer: PropTypes.func,
 };
 
-export default connect(null, { moveNoteClear })(DrawerList);
+export default connect(null, { moveNoteClear, openEditLabels })(DrawerList);

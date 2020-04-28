@@ -4,6 +4,8 @@ import {
   CREATE_LABEL,
   EDIT_LABEL_NAME,
   ADD_NOTE_TO_LABEL,
+  OPEN_EDIT_LABELS,
+  CLOSE_EDIT_LABELS,
 } from '../types';
 
 export const fetchLabels = () => (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -119,3 +121,11 @@ export const changeLabelNoteIds = (labelId, newNoteIds) => (
       console.error('Error updating document: ', error);
     });
 };
+
+export const openEditLabels = () => ({
+  type: OPEN_EDIT_LABELS,
+});
+
+export const closeEditLabels = () => ({
+  type: CLOSE_EDIT_LABELS,
+});

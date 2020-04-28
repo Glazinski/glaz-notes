@@ -13,6 +13,14 @@ const useStyles = makeStyles(() => ({
     maxWidth: '100%',
     maxHeight: '100%',
   },
+  delImage: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 23,
+    height: 23,
+    backgroundColor: 'black',
+  },
 }));
 
 const ImageContainer = (props) => {

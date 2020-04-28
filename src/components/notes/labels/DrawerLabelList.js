@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 
 // Redux
 import { connect } from 'react-redux';
-import { fetchLabels } from '../../../store/actions/labelsActions';
 
 // MUI
 import ListItem from '@material-ui/core/ListItem';
@@ -15,7 +14,7 @@ import LabelOutlinedIcon from '@material-ui/icons/LabelOutlined';
 
 const LabelList = (props) => {
   const {
-    labels, itemClassName, handleItemClick, selectedIndex, fetchLabels,
+    labels, itemClassName, handleItemClick, selectedIndex,
   } = props;
 
   const items = _.values(labels).map((item) => (
@@ -41,7 +40,7 @@ const LabelList = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  labels: state.labels,
+  labels: state.labels.labels,
 });
 
 LabelList.propTypes = {
@@ -49,7 +48,6 @@ LabelList.propTypes = {
   itemClassName: PropTypes.string.isRequired,
   handleItemClick: PropTypes.func.isRequired,
   selectedIndex: PropTypes.string.isRequired,
-  fetchLabels: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, { fetchLabels })(LabelList);
+export default connect(mapStateToProps)(LabelList);

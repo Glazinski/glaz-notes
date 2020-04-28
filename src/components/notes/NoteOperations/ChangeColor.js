@@ -13,7 +13,7 @@ import PaletteOutlinedIcon from '@material-ui/icons/PaletteOutlined';
 const useStyles = makeStyles((theme) => ({
   root: {
     position: 'relative',
-    zIndex: 1400,
+    zIndex: 1300,
   },
   iconBtn: {
     padding: '7px',

@@ -96,7 +96,7 @@ const SetLabel = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  labelsList: state.labels,
+  labelsList: state.labels.labels,
 });
 
 SetLabel.propTypes = {

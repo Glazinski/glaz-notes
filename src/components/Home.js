@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import clsx from 'clsx';
 import DrawerList from '../Layout/DrawerList';
 import Settings from './settings/Menu';
+import EditLabels from './notes/labels/EditLabels';
 import UndoNoteOperation from './notes/UndoNoteOperation';
 
 // Redux
@@ -11,6 +13,8 @@ import { connect } from 'react-redux';
 // React router
 import {
   Redirect,
+  useParams,
+  useLocation,
 } from 'react-router-dom';
 
 // MUI
@@ -76,11 +80,32 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 0,
   },
   toolbar: theme.mixins.toolbar,
+  // pageTitle: {
+  //   textTransform: 'capitalize',
+  // },
 }));
 
 
-const Home = ({ auth: { uid }, children }) => {
+const Home = (props) => {
   const classes = useStyles();
+  const { auth: { uid }, children, labelsList } = props;
+
+  const [navTitle, setNavtitle] = useState('Notes');
+  const { labelId } = useParams();
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (_.values(labelsList).length > 0) {
+      if (labelId) {
+        setNavtitle(labelsList[labelId].labelName);
+      } else if (pathname.length > 1) {
+        const string = pathname.substr(1);
+        setNavtitle(string.charAt(0).toUpperCase() + string.slice(1));
+      } else {
+        setNavtitle('Notes');
+      }
+    }
+  }, [labelsList, labelId, pathname]);
 
   const [open, setOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -126,9 +151,7 @@ const Home = ({ auth: { uid }, children }) => {
               <MenuIcon />
             </IconButton>
           </Hidden>
-          <Typography variant="h6">
-            Notes
-          </Typography>
+          <Typography variant="h6">{navTitle}</Typography>
           <div className={classes.grow} />
           <div>
             <Settings />
@@ -178,6 +201,7 @@ const Home = ({ auth: { uid }, children }) => {
         >
           <div className={classes.drawerHeader} />
           {children}
+          <EditLabels />
           <UndoNoteOperation />
         </main>
       </div>
@@ -187,10 +211,13 @@ const Home = ({ auth: { uid }, children }) => {
 
 const mapStateToProps = (state) => ({
   auth: state.firebase.auth,
+  labelsList: state.labels.labels,
 });
 
 Home.propTypes = {
   auth: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  labelsList: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default connect(mapStateToProps)(Home);

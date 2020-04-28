@@ -17,8 +17,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
-    padding: '10px',
-    height: '100%',
+    padding: theme.spacing(2),
+    // [theme.breakpoints.down('sm')]: {
+    //   minHeight: '100vh',
+    // },
   },
   paper: {
     maxWidth: 520,
@@ -59,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
   },
   footer: {
     marginTop: 'auto',
+    // marginTop: '100%',
     // alignSelf: 'flex-end',
   },
 }));
@@ -73,13 +76,14 @@ const NoteForm = (props) => {
     handleLabels,
     date,
     image,
+    formClassName,
   } = props;
   const classes = useStyles();
   const textFieldEl = useRef(null);
   const { pathname } = useLocation();
   const isBin = pathname === '/bin';
   const [open, setOpen] = useState(false);
-  const elo = image || (imageUrl || null);
+  const imgSrc = image || (imageUrl || null);
 
   useEffect(() => {
     textFieldEl.current.focus();
@@ -95,14 +99,13 @@ const NoteForm = (props) => {
 
   return (
     <div
-      className={classes.root}
+      // className={classes.root}
+      className={formClassName || classes.root}
     >
       {/* <ImageContainer imageUrl={imageUrl} /> */}
-      {elo ? (
+      {imgSrc ? (
         <div style={{ marginBottom: 5 }}>
-          {/* <div style={{ width: '100%', height: '100%' }}> */}
-          <img className={classes.image} src={elo} alt="" />
-          {/* </div> */}
+          <img className={classes.image} src={imgSrc} alt="" />
         </div>
       ) : null}
       <div>
@@ -155,12 +158,10 @@ const NoteForm = (props) => {
           margin: '10px 0',
         }}
         >
-          {/* <div> */}
           <ChipList
             handleLabels={handleLabels}
             labels={labels}
           />
-          {/* </div> */}
           <div>
             {date ? (
               <Typography
@@ -179,12 +180,10 @@ const NoteForm = (props) => {
         <div
           className={classes.setContainer}
         >
-          {/* <div> */}
           <NoteSettings
             {...props}
             isHovered
           />
-          {/* </div> */}
           <div style={{ flexGrow: 4, display: 'flex', justifyContent: 'flex-end' }}>
             <Button onClick={handleClose} color="inherit">Close</Button>
           </div>
@@ -207,10 +206,12 @@ NoteForm.defaultProps = {
   title: null,
   content: null,
   image: null,
+  formClassName: null,
 };
 
 NoteForm.propTypes = {
   note: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  formClassName: PropTypes.string,
   handleChange: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   handleLabels: PropTypes.func.isRequired,
