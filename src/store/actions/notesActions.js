@@ -100,20 +100,18 @@ export const fetchNote = (noteId, coll) => (
     .catch((err) => console.log(err));
 };
 
-export const createNote = (noteId, note) => (dispatch, getState, { getFirebase, getFirestore }) => {
+export const createNote = (noteId, note, applyDispatch) => (dispatch, getState, { getFirebase, getFirestore }) => {
   const firebase = getFirebase();
   const firestore = getFirestore();
   const userId = firebase.auth().currentUser.uid;
 
   const newNote = {
-    // title: note.title,
-    // content: note.content,
     ...note,
     id: noteId,
     createdAt: new Date().toISOString(),
   };
 
-  dispatch({ type: CREATE_NOTE, payload: newNote });
+  if (applyDispatch) dispatch({ type: CREATE_NOTE, payload: newNote });
 
   firestore.collection('notes')
     .doc(userId)

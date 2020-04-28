@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import CreateList from './CreateList';
 import uniqid from 'uniqid';
 import NoteForm from './NoteForm';
+import { useParams } from 'react-router-dom';
 
 // Redux
 import { connect } from 'react-redux';
@@ -64,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CreateNote = (props) => {
+  const classes = useStyles();
   const {
     colors,
     labelsList,
@@ -72,7 +74,7 @@ const CreateNote = (props) => {
     uploadNoteImage,
     labels,
   } = props;
-  const classes = useStyles();
+  const { labelId: labelIdParam } = useParams();
   const [formData, setFormData] = useState({
     title: '',
     content: '',
@@ -130,6 +132,16 @@ const CreateNote = (props) => {
     });
   };
 
+  const changeNoteIdsHelper = (noteId) => {
+    if (formData.labels.length > 0) {
+      formData.labels.forEach((labelId) => {
+        const newNoteIds = [noteId, ...labelsList[labelId].noteIds];
+
+        changeLabelNoteIds(labelId, newNoteIds);
+      });
+    }
+  };
+
   useEffect(() => {
     const { title, content } = formData;
 
@@ -140,14 +152,15 @@ const CreateNote = (props) => {
     ) {
       setFormData({ ...formData });
       const noteId = uniqid();
-      if (formData.labels.length > 0) {
-        formData.labels.forEach((labelId) => {
-          const newNoteIds = [noteId, ...labelsList[labelId].noteIds];
-
-          changeLabelNoteIds(labelId, newNoteIds);
-        });
+      if (_.includes(formData.labels, labelsList[labelIdParam].labelId)) {
+        changeNoteIdsHelper(noteId);
+        // True as a third argument means that I don't want to
+        // appear note on the screen when I create not
+        createNote(noteId, formData, true);
       }
-      createNote(noteId, formData);
+      changeNoteIdsHelper(noteId);
+
+      createNote(noteId, formData, false);
       if (tmpFD) {
         uploadNoteImage(noteId, tmpFD, 'notes');
       }
