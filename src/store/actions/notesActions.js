@@ -17,8 +17,6 @@ import {
   STAR_NOTE,
   CHANGE_NOTE_LABELS,
   DELETE_NOTE_FROM_STATE,
-  LOADING_IMAGE,
-  LOADING_IMAGE_FINISHED,
 } from '../types';
 
 export const fetchNotes = (coll, labelId) => (
@@ -37,25 +35,36 @@ export const fetchNotes = (coll, labelId) => (
       .then((doc) => {
         arrOfNoteIds = doc.data().noteIds;
 
-        if (arrOfNoteIds.length > 0) {
-          return firestore.collection('notes')
-            .doc(userId)
-            .collection('userNotes')
-            .where('id', 'in', arrOfNoteIds)
-            .orderBy('createdAt', 'desc')
-            .get();
-        }
+        if (arrOfNoteIds.length > 0) return arrOfNoteIds;
+
+        // if (arrOfNoteIds.length > 0) {
+        //   return firestore.collection('notes')
+        //     .doc(userId)
+        //     .collection('userNotes')
+        //     // .where('id', 'in', arrOfNoteIds)
+        //     .where('id', 'array-contains', arrOfNoteIds)
+        //     .orderBy('createdAt', 'desc')
+        //     .get();
+        // }
+
         dispatch({ type: NOTES_FETCHED, payload: {} });
         return null;
       })
       .then((querySnapshot) => {
         let notes = {};
 
-        querySnapshot.forEach((doc) => {
-          notes = { ...notes, [doc.id]: doc.data() };
-        });
-
-        dispatch({ type: NOTES_FETCHED, payload: notes });
+        querySnapshot.forEach((noteId) => firestore.collection('notes')
+          .doc(userId)
+          .collection('userNotes')
+          .doc(noteId)
+          .get()
+          .then((noteDoc) => {
+            notes = { ...notes, [noteDoc.data().id]: { ...noteDoc.data() } };
+            dispatch({ type: NOTES_FETCHED, payload: notes });
+          })
+          .catch((error) => {
+            console.log('Error getting document:', error);
+          }));
       })
       .catch((error) => {
         console.log('Error getting document:', error);
@@ -100,7 +109,9 @@ export const fetchNote = (noteId, coll) => (
     .catch((err) => console.log(err));
 };
 
-export const createNote = (noteId, note, applyDispatch) => (dispatch, getState, { getFirebase, getFirestore }) => {
+export const createNote = (noteId, note, applyDispatch) => (
+  dispatch, getState, { getFirebase, getFirestore },
+) => {
   const firebase = getFirebase();
   const firestore = getFirestore();
   const userId = firebase.auth().currentUser.uid;
@@ -239,7 +250,9 @@ export const deleteNoteForever = (noteId) => (
   const imageUrl = getState().notes.notes[noteId].imageUrl.length > 0
     ? getState().notes.notes[noteId].imageUrl : false;
 
-  console.log(imageUrl);
+  // TODO:
+  // const noteLabels = getState().notes.notes[noteId].labels.length > 0
+  //   ? getState().notes.notes[noteId].labels : null;
 
   const data = {
     imageUrl,
@@ -416,16 +429,13 @@ export const uploadNoteImage = (noteId, fd, coll) => (
   const firebase = getFirebase();
 
   firebase.auth().currentUser.getIdToken(true)
-    .then(((idToken) => {
-      console.log(idToken);
-      return notesAPI.post('/notes/image', fd, {
-        headers: {
-          Authorization: `Bearer ${idToken}`,
-          noteId,
-          coll,
-        },
-      });
-    }))
+    .then(((idToken) => notesAPI.post('/notes/image', fd, {
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+        noteId,
+        coll,
+      },
+    })))
     .then((res) => {
       console.log(res);
       dispatch(fetchNote(noteId, coll));

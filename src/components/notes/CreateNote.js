@@ -128,7 +128,7 @@ const CreateNote = (props) => {
     setTmpImage(null);
     setTmpFD(null);
     setFormData({
-      ...formData, title: '', content: '', colorName: 'Default', isStarred: false,
+      ...formData, title: '', content: '', colorName: 'Default', isStarred: false, labels,
     });
   };
 
@@ -152,15 +152,17 @@ const CreateNote = (props) => {
     ) {
       setFormData({ ...formData });
       const noteId = uniqid();
-      if (_.includes(formData.labels, labelsList[labelIdParam].labelId)) {
+      if (labelIdParam && _.includes(formData.labels, labelsList[labelIdParam].labelId) === false) {
         changeNoteIdsHelper(noteId);
         // True as a third argument means that I don't want to
         // appear note on the screen when I create not
+        createNote(noteId, formData, false);
+      } else {
+        changeNoteIdsHelper(noteId);
+
         createNote(noteId, formData, true);
       }
-      changeNoteIdsHelper(noteId);
 
-      createNote(noteId, formData, false);
       if (tmpFD) {
         uploadNoteImage(noteId, tmpFD, 'notes');
       }
