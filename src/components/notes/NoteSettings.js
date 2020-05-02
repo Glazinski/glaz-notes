@@ -96,10 +96,12 @@ const NoteSettings = (props) => {
             <DeleteNote handleNoteMove={handleNoteMove} />
           ) : null}
 
-          <SetLabel
-            labels={labels}
-            handleLabels={handleLabels}
-          />
+          {pathname !== '/archive' ? (
+            <SetLabel
+              labels={labels}
+              handleLabels={handleLabels}
+            />
+          ) : null}
         </div>
       </>
     );
@@ -120,6 +122,7 @@ NoteSettings.defaultProps = {
   handleStar: null,
   handleLabels: null,
   isStarred: null,
+  handleImageUpload: null,
 };
 
 NoteSettings.propTypes = {
@@ -131,6 +134,7 @@ NoteSettings.propTypes = {
   handleColor: PropTypes.func,
   handleStar: PropTypes.func,
   handleLabels: PropTypes.func,
+  handleImageUpload: PropTypes.func,
   isStarred: PropTypes.bool,
   note: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };

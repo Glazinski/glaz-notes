@@ -5,6 +5,7 @@ export const LOADING_UI = 'LOADING_UI';
 
 // Notes types
 export const SET_NOTE = 'SET_NOTE';
+export const SET_FILTERED_NOTES = 'SET_FILTERED_NOTES';
 export const SET_NOTE_ERRORS = 'SET_NOTE_ERRORS';
 export const MOVE_NOTE = 'MOVE_NOTE';
 export const MOVE_NOTE_BACK = 'MOVE_NOTE_BACK';

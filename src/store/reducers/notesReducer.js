@@ -16,6 +16,7 @@ import {
   STAR_NOTE,
   CHANGE_NOTE_LABELS,
   DELETE_NOTE_FROM_STATE,
+  SET_FILTERED_NOTES,
 } from '../types';
 
 const initState = {
@@ -33,7 +34,6 @@ export default (state = initState, action) => {
       return { ...state, notes: action.payload, loading: false };
 
     case FETCH_NOTE: {
-      console.log(action.payload);
       const { id } = action.payload;
       return {
         ...state,
@@ -56,18 +56,21 @@ export default (state = initState, action) => {
     case DELETE_NOTE_FROM_STATE:
       return { ...state, notes: _.omit(state.notes, action.payload.noteId) };
 
-    case UPDATE_NOTE:
+    case UPDATE_NOTE: {
+      const { noteId, title, content } = action.payload;
+
       return {
         ...state,
         notes: {
           ...state.notes,
-          [action.payload.noteId]: {
-            ...state.notes[action.payload.noteId],
-            title: action.payload.title,
-            content: action.payload.content,
+          [noteId]: {
+            ...state.notes[noteId],
+            title,
+            content,
           },
         },
       };
+    }
 
     case MOVE_NOTE:
       return {
@@ -90,17 +93,20 @@ export default (state = initState, action) => {
     case MOVE_NOTE_CLEAR:
       return { ...state, noteMoved: { open: false } };
 
-    case CHANGE_NOTE_COLOR:
+    case CHANGE_NOTE_COLOR: {
+      const { noteId, color } = action.payload;
+
       return {
         ...state,
         notes: {
           ...state.notes,
-          [action.payload.noteId]: {
-            ...state.notes[action.payload.noteId],
-            colorName: action.payload.color,
+          [noteId]: {
+            ...state.notes[noteId],
+            colorName: color,
           },
         },
       };
+    }
 
     case DELETE_NOTES_FOREVER:
       return {
@@ -108,27 +114,41 @@ export default (state = initState, action) => {
         notes: {},
       };
 
-    case STAR_NOTE:
+    case STAR_NOTE: {
+      const { noteId, newIsStarred } = action.payload;
+
       return {
         ...state,
         notes: {
           ...state.notes,
-          [action.payload.noteId]: {
-            ...state.notes[action.payload.noteId],
-            isStarred: action.payload.newIsStarred,
+          [noteId]: {
+            ...state.notes[noteId],
+            isStarred: newIsStarred,
           },
         },
       };
+    }
 
-    case CHANGE_NOTE_LABELS:
+    case CHANGE_NOTE_LABELS: {
+      const { noteId, newLabels } = action.payload;
+
       return {
         ...state,
         notes: {
           ...state.notes,
-          [action.payload.noteId]: {
-            ...state.notes[action.payload.noteId],
-            labels: [...action.payload.newLabels],
+          [noteId]: {
+            ...state.notes[noteId],
+            labels: [...newLabels],
           },
+        },
+      };
+    }
+
+    case SET_FILTERED_NOTES:
+      return {
+        ...state,
+        notes: {
+          ...action.payload.filteredNotes,
         },
       };
 

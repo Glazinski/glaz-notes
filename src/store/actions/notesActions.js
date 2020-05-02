@@ -17,7 +17,15 @@ import {
   STAR_NOTE,
   CHANGE_NOTE_LABELS,
   DELETE_NOTE_FROM_STATE,
+  SET_FILTERED_NOTES,
 } from '../types';
+
+export const setFilteredNotes = (filteredNotes) => ({
+  type: SET_FILTERED_NOTES,
+  payload: {
+    filteredNotes,
+  },
+});
 
 export const fetchNotes = (coll, labelId) => (
   dispatch, getState, { getFirebase, getFirestore },
@@ -36,16 +44,6 @@ export const fetchNotes = (coll, labelId) => (
         arrOfNoteIds = doc.data().noteIds;
 
         if (arrOfNoteIds.length > 0) return arrOfNoteIds;
-
-        // if (arrOfNoteIds.length > 0) {
-        //   return firestore.collection('notes')
-        //     .doc(userId)
-        //     .collection('userNotes')
-        //     // .where('id', 'in', arrOfNoteIds)
-        //     .where('id', 'array-contains', arrOfNoteIds)
-        //     .orderBy('createdAt', 'desc')
-        //     .get();
-        // }
 
         dispatch({ type: NOTES_FETCHED, payload: {} });
         return null;

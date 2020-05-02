@@ -37,7 +37,6 @@ const NoteList = (props) => {
     const { clientWidth } = document.body;
     if (clientWidth <= 600) setColNum(1);
     if (clientWidth > 600 && clientWidth <= 1100) setColNum(2);
-    // if (clientWidth <= 1100) setColNum(2);
     if (clientWidth > 1100 && clientWidth < 1350) setColNum(3);
     if (clientWidth >= 1350 && clientWidth < 1570) setColNum(4);
     if (clientWidth >= 1570) setColNum(5);

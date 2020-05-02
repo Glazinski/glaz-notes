@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import clsx from 'clsx';
 import DrawerList from '../Layout/DrawerList';
-import Settings from './settings/Menu';
+import Settings from './nav/Menu';
+import Search from './nav/Search';
 import EditLabels from './notes/labels/EditLabels';
 import UndoNoteOperation from './notes/UndoNoteOperation';
 
@@ -152,6 +153,7 @@ const Home = (props) => {
             </IconButton>
           </Hidden>
           <Typography variant="h6">{navTitle}</Typography>
+          <Search />
           <div className={classes.grow} />
           <div>
             <Settings />

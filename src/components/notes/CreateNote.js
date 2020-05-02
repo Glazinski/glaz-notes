@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-operators */
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
@@ -147,8 +148,8 @@ const CreateNote = (props) => {
 
     if (
       !isFocused && (title.length > 0 || content.length > 0)
-      // eslint-disable-next-line no-mixed-operators
-      && !!title.trim().length || !!content.trim().length
+      && (!!title.trim().length || !!content.trim().length)
+      || tmpImage
     ) {
       setFormData({ ...formData });
       const noteId = uniqid();
