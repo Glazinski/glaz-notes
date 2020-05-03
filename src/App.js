@@ -112,6 +112,8 @@ App.defaultProps = {
 App.propTypes = {
   theme: PropTypes.string.isRequired,
   fetchTheme: PropTypes.func.isRequired,
+  setColors: PropTypes.func.isRequired,
+  fetchLabels: PropTypes.func.isRequired,
   auth: PropTypes.oneOfType([PropTypes.object]),
 };
 

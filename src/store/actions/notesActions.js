@@ -97,7 +97,6 @@ export const fetchNote = (noteId, coll) => (
   firestore.collection(coll).doc(userId).collection('userNotes').doc(noteId)
     .get()
     .then((doc) => {
-      console.log(doc.data());
       dispatch({
         type: FETCH_NOTE,
         payload: {
@@ -214,7 +213,6 @@ export const moveNoteFromTo = (noteId, src, destination, msg = null, newFormData
       if (doc.exists) {
         note = {
           ...doc.data(),
-          // isStarred: destination === 'bin' ? false : doc.data().isStarred,
         };
         return firestore
           .collection(destination).doc(userId)

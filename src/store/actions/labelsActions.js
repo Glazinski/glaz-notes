@@ -178,8 +178,6 @@ export const changeLabelNoteIds = (labelId, newNoteIds) => (
   const label = firestore.collection('labels').doc(userId).collection('userLabels').doc(labelId);
   return label.update({
     noteIds: newNoteIds,
-  }).then(() => {
-    console.log('Document successfully updated!');
   })
     .catch((error) => {
     // The document probably doesn't exist.

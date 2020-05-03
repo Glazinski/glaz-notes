@@ -31,7 +31,6 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 const useStyles = makeStyles((theme) => ({
   container: {
     position: 'relative',
-    // minHeight: 100,
     minHeight: 100,
     maxWidth: 238,
     backgroundColor: theme.palette.background.default,
@@ -48,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   title: {
-    // overflowWrap: 'anywhere',
     wordBreak: 'break-word',
     direction: 'rtl',
     textAlign: 'left',
@@ -211,7 +209,7 @@ const Note = (props) => {
               <div className={classes.content}>
                 {title.length <= 0 ? null : content}
               </div>
-              <div style={{ margin: '7px 0' }}>
+              <div style={{ margin: '10px 0' }}>
                 <ChipList
                   labels={labels}
                   handleLabels={handleLabels}
