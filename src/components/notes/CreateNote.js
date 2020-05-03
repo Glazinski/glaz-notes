@@ -125,6 +125,11 @@ const CreateNote = (props) => {
     setTmpFD(fd);
   };
 
+  const handleImageDelete = () => {
+    setTmpImage(null);
+    setTmpFD(null);
+  };
+
   const resetForm = () => {
     setTmpImage(null);
     setTmpFD(null);
@@ -196,6 +201,7 @@ const CreateNote = (props) => {
           handleStar={handleStar}
           handleLabels={handleLabels}
           handleImageUpload={handleImageUpload}
+          handleImageDelete={handleImageDelete}
           isMovable={false}
         />
       ) : (

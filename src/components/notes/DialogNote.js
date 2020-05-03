@@ -6,7 +6,7 @@ import moment from 'moment';
 
 // Redux
 import { connect } from 'react-redux';
-import { updateNote } from '../../store/actions/notesActions';
+import { updateNote, deleteNoteImage } from '../../store/actions/notesActions';
 
 // MUI
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -46,6 +46,7 @@ const DialogNote = (props) => {
     color,
     coll,
     note,
+    deleteNoteImage,
     note: {
       id, content, title, createdAt,
     },
@@ -71,6 +72,11 @@ const DialogNote = (props) => {
     }
   };
 
+  const handleImageDelete = () => {
+    console.log('siemano');
+    deleteNoteImage(id, coll);
+  };
+
   useEffect(() => setFormData({ ...note }), [note]);
 
   const date = createdAt ? moment(createdAt).format('MMM Do YY') : null;
@@ -85,6 +91,7 @@ const DialogNote = (props) => {
           {...props}
           handleChange={handleChange}
           handleClose={handleModalClose}
+          handleImageDelete={handleImageDelete}
           date={date}
           note={formData}
           isMovable
@@ -116,4 +123,4 @@ DialogNote.propTypes = {
   coll: PropTypes.string.isRequired,
 };
 
-export default connect(null, { updateNote })(DialogNote);
+export default connect(null, { updateNote, deleteNoteImage })(DialogNote);

@@ -1,4 +1,6 @@
+import _ from 'lodash';
 import uniqid from 'uniqid';
+import history from '../../utils/history';
 import {
   FETCH_LABELS,
   CREATE_LABEL,
@@ -6,6 +8,8 @@ import {
   ADD_NOTE_TO_LABEL,
   OPEN_EDIT_LABELS,
   CLOSE_EDIT_LABELS,
+  DELETE_LABEL,
+  SET_NOTES,
 } from '../types';
 
 export const fetchLabels = () => (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -89,10 +93,71 @@ export const editLabelName = (labelId, newLabelName) => (
     });
 };
 
-export const removeLabel = (labelName) => (dispatch, getState, { getFirebase, getFirestore }) => {
+export const removeLabel = (labelId, move) => (
+  dispatch, getState, { getFirebase, getFirestore },
+) => {
   const firebase = getFirebase();
   const firestore = getFirestore();
   const userId = firebase.auth().currentUser.uid;
+  const { noteIds: labelNoteIds } = getState().labels.labels[labelId];
+
+  const changedNotes = labelNoteIds.map((noteId) => {
+    let newNote = getState().notes.notes[noteId];
+    newNote = {
+      ...newNote,
+      labels: _.without(newNote.labels, labelId),
+    };
+    return newNote;
+  });
+
+  dispatch({
+    type: SET_NOTES,
+    payload: {
+      changedNotes: _.keyBy(changedNotes, 'id'),
+    },
+  });
+
+  firestore
+    .collection('labels')
+    .doc(userId)
+    .collection('userLabels')
+    .doc(labelId)
+    .get()
+    .then((doc) => {
+      const { noteIds } = doc.data();
+      if (noteIds.length > 0) {
+        return noteIds.forEach((noteId) => {
+          firestore
+            .collection('notes')
+            .doc(userId)
+            .collection('userNotes')
+            .doc(noteId)
+            .update({
+              labels: firestore.FieldValue.arrayRemove(labelId),
+            });
+        });
+      }
+
+      return null;
+    })
+    .then(() => firestore
+      .collection('labels')
+      .doc(userId)
+      .collection('userLabels')
+      .doc(labelId)
+      .delete())
+    .then(() => {
+      if (move) {
+        history.push('/');
+      }
+      dispatch({
+        type: DELETE_LABEL,
+        payload: {
+          labelId,
+        },
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 export const changeLabelNoteIds = (labelId, newNoteIds) => (

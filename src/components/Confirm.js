@@ -12,8 +12,11 @@ import Button from '@material-ui/core/Button';
 const useStyles = makeStyles((theme) => ({
   container: {
     // padding: theme.spacing(2),
-    width: 230,
-    // maxWidth: 430,
+    // width: 230,
+    maxWidth: 430,
+    [theme.breakpoints.down('sm')]: {
+      width: '80vw',
+    },
   },
   title: {
     fontSize: '1rem',

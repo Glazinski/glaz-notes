@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
+import { useParams } from 'react-router-dom';
+import Confirm from '../../Confirm';
 
 // Redux
 import { connect } from 'react-redux';
-import { editLabelName } from '../../../store/actions/labelsActions';
+import {
+  editLabelName,
+  removeLabel,
+} from '../../../store/actions/labelsActions';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -42,11 +47,17 @@ const useStyles = makeStyles((theme) => ({
 
 const EditLabelList = (props) => {
   const classes = useStyles();
-  const { labels, editLabelName } = props;
+  const {
+    labels,
+    editLabelName,
+    removeLabel,
+  } = props;
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [isHoveredIndex, setIsHoveredIndex] = useState(null);
   const [labelNames, setLabelNames] = useState(_.mapValues(labels, 'labelName'));
+  const [open, setOpen] = useState(false);
   const inputs = [];
+  const { labelId: labelIdParam } = useParams();
 
   useEffect(() => {
     setLabelNames(_.mapValues(labels, 'labelName'));
@@ -79,6 +90,26 @@ const EditLabelList = (props) => {
     editLabelName(labelId, labelNames[labelId]);
   };
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleLabelDelete = (labelId) => {
+    if (labelIdParam === labelId) {
+      removeLabel(labelId, true);
+    } else {
+      removeLabel(labelId);
+    }
+
+    handleClose();
+  };
+
+  const confMsg = 'We’ll delete this label and remove it from all of your Keep notes. Your notes won’t be deleted.';
+
   return _.values(labels).map((label, index) => (
     <ClickAwayListener key={label.labelId} onClickAway={() => handleFocusOut(index)}>
       <div
@@ -89,17 +120,33 @@ const EditLabelList = (props) => {
       >
         {isHoveredIndex === index || selectedIndex === index ? (
           <Tooltip title="Delete label" aria-label="Delete label">
-            <IconButton className={classes.iconBtn}>
+            <IconButton
+              onClick={handleClickOpen}
+              className={classes.iconBtn}
+            >
               <DeleteIcon fontSize="small" />
             </IconButton>
           </Tooltip>
         ) : (
           <Tooltip title="Cancel" aria-label="Cancel">
-            <IconButton className={classes.iconBtn}>
+            <IconButton
+              onClick={() => {
+                handleClickOpen();
+                handleFocusOn(index);
+              }}
+              className={classes.iconBtn}
+            >
               <LabelIcon fontSize="small" />
             </IconButton>
           </Tooltip>
         )}
+
+        <Confirm
+          open={open}
+          handleClose={handleClose}
+          handleDelete={() => handleLabelDelete(label.labelId)}
+          msg={confMsg}
+        />
 
         <div>
           <TextField
@@ -146,4 +193,7 @@ EditLabelList.propTypes = {
   editLabelName: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, { editLabelName })(EditLabelList);
+export default connect(mapStateToProps, {
+  editLabelName,
+  removeLabel,
+})(EditLabelList);

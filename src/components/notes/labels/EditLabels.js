@@ -5,7 +5,10 @@ import EditLabelList from './EditLabelList';
 
 // Redux
 import { connect } from 'react-redux';
-import { createLabel, closeEditLabels } from '../../../store/actions/labelsActions';
+import {
+  createLabel,
+  closeEditLabels,
+} from '../../../store/actions/labelsActions';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -46,7 +49,9 @@ const useStyles = makeStyles((theme) => ({
 const EditLabels = (props) => {
   const classes = useStyles();
   const {
-    open, createLabel, closeEditLabels,
+    open,
+    createLabel,
+    closeEditLabels,
   } = props;
   const [isFocused, setIsFocused] = useState(false);
   const [newLabel, setNewLabel] = useState('');
@@ -143,4 +148,7 @@ const mapStateToProps = (state) => ({
   open: state.labels.isEditLabelsOpen,
 });
 
-export default connect(mapStateToProps, { createLabel, closeEditLabels })(EditLabels);
+export default connect(mapStateToProps, {
+  createLabel,
+  closeEditLabels,
+})(EditLabels);

@@ -18,6 +18,7 @@ import {
   CHANGE_NOTE_LABELS,
   DELETE_NOTE_FROM_STATE,
   SET_FILTERED_NOTES,
+  DELETE_NOTE_IMAGE,
 } from '../types';
 
 export const setFilteredNotes = (filteredNotes) => ({
@@ -437,6 +438,53 @@ export const uploadNoteImage = (noteId, fd, coll) => (
     .then((res) => {
       console.log(res);
       dispatch(fetchNote(noteId, coll));
+    })
+    .catch((err) => console.log(err));
+};
+
+export const deleteNoteImage = (noteId, coll) => (
+  dispatch, getState, { getFirebase, getFirestore },
+) => {
+  const firebase = getFirebase();
+  const firestore = getFirestore();
+  const userId = firebase.auth().currentUser.uid;
+
+  const imageUrl = getState().notes.notes[noteId].imageUrl.length > 0
+    ? getState().notes.notes[noteId].imageUrl : false;
+
+  const data = {
+    imageUrl,
+  };
+
+  dispatch({
+    type: DELETE_NOTE_IMAGE,
+    payload: {
+      noteId,
+    },
+  });
+
+  firestore
+    .collection(coll)
+    .doc(userId)
+    .collection('userNotes')
+    .doc(noteId)
+    .update({
+      imageUrl: '',
+    })
+    .then(() => firebase.auth().currentUser.getIdToken(true))
+    .then((idToken) => {
+      if (idToken) {
+        return notesAPI.delete('/notes/image/delete', {
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+          },
+          data,
+        });
+      }
+      return null;
+    })
+    .then((res) => {
+      console.log(res);
     })
     .catch((err) => console.log(err));
 };

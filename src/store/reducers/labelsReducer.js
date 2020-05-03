@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   FETCH_LABELS,
   CREATE_LABEL,
@@ -5,6 +6,7 @@ import {
   ADD_NOTE_TO_LABEL,
   OPEN_EDIT_LABELS,
   CLOSE_EDIT_LABELS,
+  DELETE_LABEL,
 } from '../types';
 
 const initState = {
@@ -51,6 +53,15 @@ export default (state = initState, action) => {
             noteIds: newNoteIds,
           },
         },
+      };
+    }
+
+    case DELETE_LABEL: {
+      const { labelId } = action.payload;
+
+      return {
+        ...state,
+        labels: _.omit(state.labels, labelId),
       };
     }
 

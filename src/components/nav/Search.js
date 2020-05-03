@@ -64,6 +64,7 @@ const Search = (props) => {
     setSearch(value);
   };
 
+  // TODO: Fix bug when user remove ltters from search bar
   useEffect(() => {
     const filteredNotes = notes.filter((note) => {
       const cond1 = note.title.toLowerCase().indexOf(search.toLowerCase());

@@ -7,6 +7,7 @@ export const LOADING_UI = 'LOADING_UI';
 export const SET_NOTE = 'SET_NOTE';
 export const SET_FILTERED_NOTES = 'SET_FILTERED_NOTES';
 export const SET_NOTE_ERRORS = 'SET_NOTE_ERRORS';
+export const SET_NOTES = 'SET_NOTES';
 export const MOVE_NOTE = 'MOVE_NOTE';
 export const MOVE_NOTE_BACK = 'MOVE_NOTE_BACK';
 export const MOVE_NOTE_CLEAR = 'MOVE_NOTE_CLEAR';
@@ -21,6 +22,7 @@ export const DELETE_NOTES_FOREVER = 'DELETE_NOTES_FOREVER';
 export const STAR_NOTE = 'STAR_NOTE';
 export const CHANGE_NOTE_LABELS = 'CHANGE_NOTE_LABELS';
 export const DELETE_NOTE_FROM_STATE = 'DELETE_NOTE_FROM_STATE';
+export const DELETE_NOTE_IMAGE = 'DELETE_NOTE_IMAGE';
 
 // Labels types
 export const FETCH_LABELS = 'FETCH_LABELS';
@@ -29,6 +31,7 @@ export const EDIT_LABEL_NAME = 'EDIT_LABEL_NAME';
 export const ADD_NOTE_TO_LABEL = 'ADD_NOTE_TO_LABEL';
 export const OPEN_EDIT_LABELS = 'OPEN_EDIT_LABELS';
 export const CLOSE_EDIT_LABELS = 'CLOSE_EDIT_LABELS';
+export const DELETE_LABEL = 'DELETE_LABEL';
 
 // UI types
 export const LOADING_SUCCESS = 'LOADING_SUCCESS';

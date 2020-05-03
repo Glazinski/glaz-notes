@@ -52,17 +52,8 @@ const useStyles = makeStyles((theme) => ({
   date: {
     color: theme.palette.text.disabled,
   },
-  image: {
-    width: '100%',
-    // margin: 'auto',
-    // display: 'block',
-    // maxWidth: '100%',
-    // maxHeight: '100%',
-  },
   footer: {
     marginTop: 'auto',
-    // marginTop: '100%',
-    // alignSelf: 'flex-end',
   },
 }));
 
@@ -74,6 +65,7 @@ const NoteForm = (props) => {
     handleChange,
     handleClose,
     handleLabels,
+    handleImageDelete,
     date,
     image,
     formClassName,
@@ -102,12 +94,7 @@ const NoteForm = (props) => {
       // className={classes.root}
       className={formClassName || classes.root}
     >
-      {/* <ImageContainer imageUrl={imageUrl} /> */}
-      {imgSrc ? (
-        <div style={{ marginBottom: 5 }}>
-          <img className={classes.image} src={imgSrc} alt="" />
-        </div>
-      ) : null}
+      <ImageContainer imageUrl={imgSrc} handleImageDelete={handleImageDelete} />
       <div>
         <TextField
           onClick={isBin ? handleClick : null}
@@ -215,6 +202,7 @@ NoteForm.propTypes = {
   handleChange: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   handleLabels: PropTypes.func.isRequired,
+  handleImageDelete: PropTypes.func.isRequired,
   title: PropTypes.string,
   content: PropTypes.string,
   date: PropTypes.string,

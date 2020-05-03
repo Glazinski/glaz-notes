@@ -17,6 +17,8 @@ import {
   CHANGE_NOTE_LABELS,
   DELETE_NOTE_FROM_STATE,
   SET_FILTERED_NOTES,
+  DELETE_NOTE_IMAGE,
+  SET_NOTES,
 } from '../types';
 
 const initState = {
@@ -151,6 +153,31 @@ export default (state = initState, action) => {
           ...action.payload.filteredNotes,
         },
       };
+
+    case DELETE_NOTE_IMAGE: {
+      const { noteId } = action.payload;
+      return {
+        ...state,
+        notes: {
+          ...state.notes,
+          [noteId]: {
+            ...state.notes[noteId],
+            imageUrl: '',
+          },
+        },
+      };
+    }
+
+    case SET_NOTES: {
+      const { changedNotes } = action.payload;
+      return {
+        ...state,
+        notes: {
+          ...state.notes,
+          ...changedNotes,
+        },
+      };
+    }
 
     case SET_NOTE:
       return { ...state, errors: null, loading: false };

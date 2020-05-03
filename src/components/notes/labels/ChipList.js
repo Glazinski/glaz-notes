@@ -30,6 +30,7 @@ const ChipList = (props) => {
 
   useEffect(() => setChipData(labels), [labels]);
 
+  // console.log(labels);
   const chips = _.values(labelsList).length > 0 ? chipData.map((item) => (
     <Chip
       key={item}
