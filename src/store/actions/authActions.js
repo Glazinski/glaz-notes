@@ -42,6 +42,7 @@ export const signUp = (newUser) => (dispatch, getState, { getFirebase, getFirest
     .then((res) => firestore.collection('users').doc(res.user.uid).set({
       firstName: newUser.firstName,
       lastName: newUser.lastName,
+      theme: 'light',
     }))
     .then(() => {
       history.push('/');

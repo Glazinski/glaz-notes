@@ -1,4 +1,5 @@
 import axios from 'axios';
+import _ from 'lodash';
 import notesAPI from '../../api/notesAPI';
 import {
   SET_NOTE,
@@ -52,18 +53,22 @@ export const fetchNotes = (coll, labelId) => (
       .then((querySnapshot) => {
         let notes = {};
 
-        querySnapshot.forEach((noteId) => firestore.collection('notes')
-          .doc(userId)
-          .collection('userNotes')
-          .doc(noteId)
-          .get()
-          .then((noteDoc) => {
-            notes = { ...notes, [noteDoc.data().id]: { ...noteDoc.data() } };
-            dispatch({ type: NOTES_FETCHED, payload: notes });
-          })
-          .catch((error) => {
-            console.log('Error getting document:', error);
-          }));
+        if (querySnapshot) {
+          querySnapshot.forEach((noteId) => firestore.collection('notes')
+            .doc(userId)
+            .collection('userNotes')
+            .doc(noteId)
+            .get()
+            .then((noteDoc) => {
+              notes = { ...notes, [noteDoc.data().id]: { ...noteDoc.data() } };
+              dispatch({ type: NOTES_FETCHED, payload: notes });
+            })
+            .catch((error) => {
+              console.log('Error getting document:', error);
+            }));
+        }
+
+        return null;
       })
       .catch((error) => {
         console.log('Error getting document:', error);
@@ -248,8 +253,20 @@ export const deleteNoteForever = (noteId) => (
     ? getState().notes.notes[noteId].imageUrl : false;
 
   // TODO:
-  // const noteLabels = getState().notes.notes[noteId].labels.length > 0
-  //   ? getState().notes.notes[noteId].labels : null;
+  const noteLabels = getState().notes.notes[noteId].labels.length > 0
+    ? getState().notes.notes[noteId].labels : null;
+
+  noteLabels.forEach((labelId) => {
+    firestore
+      .collection('labels')
+      .doc(userId)
+      .collection('userLabels')
+      .doc(labelId)
+      .update({
+        noteIds: firestore.FieldValue.arrayRemove(noteId),
+      })
+      .catch((err) => console.log(err));
+  });
 
   const data = {
     imageUrl,
@@ -294,6 +311,23 @@ export const deleteNotesForever = () => (dispatch, getState, { getFirebase, getF
   const noteIds = Object.getOwnPropertyNames(getState().notes.notes);
 
   dispatch({ type: DELETE_NOTES_FOREVER });
+
+  _.values(getState().notes.notes).forEach((note) => {
+    const { id: noteId, labels } = note;
+    if (labels.length > 0) {
+      labels.forEach((labelId) => {
+        firestore
+          .collection('labels')
+          .doc(userId)
+          .collection('userLabels')
+          .doc(labelId)
+          .update({
+            noteIds: firestore.FieldValue.arrayRemove(noteId),
+          })
+          .catch((err) => console.log(err));
+      });
+    }
+  });
 
   noteIds.forEach((id) => {
     firestore.collection('bin').doc(userId).collection('userNotes').doc(id)
