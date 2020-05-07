@@ -5,6 +5,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import DialogNote from './DialogNote';
 import NoteSettings from './NoteSettings';
 import ChipList from './labels/ChipList';
+import ImageContainer from '../ImageContainer';
 import { useLocation, useParams } from 'react-router-dom';
 
 // Redux
@@ -31,7 +32,7 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 const useStyles = makeStyles((theme) => ({
   container: {
     position: 'relative',
-    minHeight: 100,
+    // minHeight: 100,
     maxWidth: 238,
     backgroundColor: theme.palette.background.default,
     padding: '10px',
@@ -64,11 +65,6 @@ const useStyles = makeStyles((theme) => ({
     margin: '5px 0 5px 0',
     minHeight: '20px',
     overflowWrap: 'anywhere',
-  },
-  image: {
-    display: 'block',
-    maxWidth: '100%',
-    maxHeight: '100%',
   },
 }));
 
@@ -148,7 +144,8 @@ const Note = (props) => {
     <Draggable
       draggableId={id}
       index={index}
-      isDragDisabled={pathname !== '/'}
+      // isDragDisabled={pathname !== '/'}
+      isDragDisabled
     >
       {(provided) => (
         <ClickAwayListener onClickAway={handleHoverOff}>
@@ -190,13 +187,8 @@ const Note = (props) => {
                   coll={coll}
                 />
               ) : null}
-              {/* <img src={imageUrl} alt="note" /> */}
-              {/* <ImageContainer imageUrl={imageUrl} /> */}
-              {imageUrl ? (
-                <div style={{ marginBottom: 5 }}>
-                  <img className={classes.image} src={imageUrl} alt="" />
-                </div>
-              ) : null}
+              {/* {renderImage()} */}
+              <ImageContainer id={id} imageUrl={imageUrl} preview />
               {title.length <= 0 ? (
                 <div className={classes.content}>
                   {content}

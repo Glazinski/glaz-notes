@@ -52,7 +52,6 @@ const SetLabelList = (props) => {
       newChecked.splice(currentIndex, 1);
     }
 
-    console.log(newChecked, newType, value);
     setChecked(newChecked);
   };
 

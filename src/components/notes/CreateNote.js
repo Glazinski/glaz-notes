@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    padding: theme.spacing(1),
   },
   title: {
     color: theme.palette.text.disabled,
@@ -207,11 +208,11 @@ const CreateNote = (props) => {
       ) : (
         <div className={classes.content}>
           <Typography className={classes.title}>Take a note...</Typography>
-          <Tooltip title="New list" aria-label="New list">
+          {/* <Tooltip title="New list" aria-label="New list">
             <IconButton onClick={handleList}>
               <CheckBoxOutlinedIcon />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
         </div>
       )}
     </Paper>

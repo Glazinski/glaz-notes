@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import ReactResizeDetector, { withResizeDetector } from 'react-resize-detector';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { useLocation, useParams } from 'react-router-dom';
 import DragContainer from '../../Layout/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import calculateLayout from '../../utils/calculateLayout';
+
 
 // Redux
 import { connect } from 'react-redux';
@@ -28,28 +30,26 @@ const NoteList = (props) => {
     loading,
     fetchNotes,
     labels,
+    width,
   } = props;
   const { labelId } = useParams();
   const { pathname } = useLocation();
   const coll = pathname === '/' ? 'notes' : pathname.substr(1);
+  const container = useRef(null);
 
-  const specifyColNum = () => {
-    const { clientWidth } = document.body;
-    if (clientWidth <= 600) setColNum(1);
-    if (clientWidth > 600 && clientWidth <= 1100) setColNum(2);
-    if (clientWidth > 1100 && clientWidth < 1350) setColNum(3);
-    if (clientWidth >= 1350 && clientWidth < 1570) setColNum(4);
-    if (clientWidth >= 1570) setColNum(5);
+  const handleResize = (cntWidth) => {
+    if (cntWidth <= 530) setColNum(1);
+    if (cntWidth > 530 && cntWidth <= 765) setColNum(2);
+    if (cntWidth > 765 && cntWidth < 1050) setColNum(3);
+    if (cntWidth >= 1050 && cntWidth < 1350) setColNum(4);
+    if (cntWidth >= 1350 && cntWidth < 1565) setColNum(5);
+    if (cntWidth >= 1565 && cntWidth < 1850) setColNum(6);
+    if (cntWidth >= 1850) setColNum(7);
   };
-
-  window.addEventListener('resize', () => {
-    specifyColNum();
-  });
 
   useEffect(() => {
     const id = labelId || false;
     fetchNotes(coll, id);
-    specifyColNum();
   }, []);
 
   useEffect(() => {
@@ -67,11 +67,16 @@ const NoteList = (props) => {
   }, [labelId]);
 
   return (
-    <div className={classes.container}>
-      {layout && !loading ? (
-        <DragContainer layout={layout} />
-      ) : null}
-    </div>
+    <ReactResizeDetector
+      onResize={handleResize}
+      handleWidth
+    >
+      <div className={classes.container} ref={container}>
+        {layout && !loading ? (
+          <DragContainer layout={layout} />
+        ) : null}
+      </div>
+    </ReactResizeDetector>
   );
 };
 
@@ -93,4 +98,4 @@ const mapStateToProps = (state) => ({
   labels: _.mapKeys(state.labels, 'labelName'),
 });
 
-export default connect(mapStateToProps, { fetchNotes })(NoteList);
+export default connect(mapStateToProps, { fetchNotes })(withResizeDetector(NoteList));

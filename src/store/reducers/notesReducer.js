@@ -19,6 +19,8 @@ import {
   SET_FILTERED_NOTES,
   DELETE_NOTE_IMAGE,
   SET_NOTES,
+  LOADING_NOTE_IMAGE,
+  LOADING_NOTE_IMAGE_FINISH,
 } from '../types';
 
 const initState = {
@@ -27,6 +29,10 @@ const initState = {
   loading: false,
   noteMoved: {
     open: false,
+  },
+  loadingNoteImage: {
+    noteId: '',
+    loading: false,
   },
 };
 
@@ -178,6 +184,35 @@ export default (state = initState, action) => {
         },
       };
     }
+
+    case LOADING_NOTE_IMAGE: {
+      console.log(action.payload);
+      const { noteId } = action.payload;
+
+      return {
+        ...state,
+        loadingNoteImage: {
+          noteId,
+          loading: true,
+        },
+        notes: {
+          ...state.notes,
+          [noteId]: {
+            ...state.notes[noteId],
+            imageUrl: '',
+          },
+        },
+      };
+    }
+
+    case LOADING_NOTE_IMAGE_FINISH:
+      return {
+        ...state,
+        loadingNoteImage: {
+          noteId: '',
+          loading: false,
+        },
+      };
 
     case SET_NOTE:
       return { ...state, errors: null, loading: false };

@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 const NoteForm = (props) => {
   const {
     note: {
-      title, content, labels, imageUrl,
+      id, title, content, labels, imageUrl,
     },
     handleChange,
     handleClose,
@@ -94,7 +94,7 @@ const NoteForm = (props) => {
       // className={classes.root}
       className={formClassName || classes.root}
     >
-      <ImageContainer imageUrl={imgSrc} handleImageDelete={handleImageDelete} />
+      <ImageContainer id={id} imageUrl={imgSrc} handleImageDelete={handleImageDelete} />
       <div>
         <TextField
           onClick={isBin ? handleClick : null}

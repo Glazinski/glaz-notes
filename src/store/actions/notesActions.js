@@ -20,6 +20,8 @@ import {
   DELETE_NOTE_FROM_STATE,
   SET_FILTERED_NOTES,
   DELETE_NOTE_IMAGE,
+  LOADING_NOTE_IMAGE,
+  LOADING_NOTE_IMAGE_FINISH,
 } from '../types';
 
 export const setFilteredNotes = (filteredNotes) => ({
@@ -256,17 +258,19 @@ export const deleteNoteForever = (noteId) => (
   const noteLabels = getState().notes.notes[noteId].labels.length > 0
     ? getState().notes.notes[noteId].labels : null;
 
-  noteLabels.forEach((labelId) => {
-    firestore
-      .collection('labels')
-      .doc(userId)
-      .collection('userLabels')
-      .doc(labelId)
-      .update({
-        noteIds: firestore.FieldValue.arrayRemove(noteId),
-      })
-      .catch((err) => console.log(err));
-  });
+  if (noteLabels && noteLabels.length > 0) {
+    noteLabels.forEach((labelId) => {
+      firestore
+        .collection('labels')
+        .doc(userId)
+        .collection('userLabels')
+        .doc(labelId)
+        .update({
+          noteIds: firestore.FieldValue.arrayRemove(noteId),
+        })
+        .catch((err) => console.log(err));
+    });
+  }
 
   const data = {
     imageUrl,
@@ -459,6 +463,12 @@ export const uploadNoteImage = (noteId, fd, coll) => (
 ) => {
   const firebase = getFirebase();
 
+  dispatch({
+    type: LOADING_NOTE_IMAGE,
+    payload: {
+      noteId,
+    },
+  });
   firebase.auth().currentUser.getIdToken(true)
     .then(((idToken) => notesAPI.post('/notes/image', fd, {
       headers: {
@@ -470,6 +480,7 @@ export const uploadNoteImage = (noteId, fd, coll) => (
     .then((res) => {
       console.log(res);
       dispatch(fetchNote(noteId, coll));
+      dispatch({ type: LOADING_NOTE_IMAGE_FINISH });
     })
     .catch((err) => console.log(err));
 };
