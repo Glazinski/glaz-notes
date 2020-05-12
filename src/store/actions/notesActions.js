@@ -480,7 +480,12 @@ export const uploadNoteImage = (noteId, fd, coll) => (
     .then((res) => {
       console.log(res);
       dispatch(fetchNote(noteId, coll));
-      dispatch({ type: LOADING_NOTE_IMAGE_FINISH });
+      dispatch({
+        type: LOADING_NOTE_IMAGE_FINISH,
+        payload: {
+          noteId,
+        },
+      });
     })
     .catch((err) => console.log(err));
 };

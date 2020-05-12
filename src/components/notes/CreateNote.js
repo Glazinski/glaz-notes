@@ -121,7 +121,7 @@ const CreateNote = (props) => {
     setFormData({ ...formData, labels: [...labelsArr] });
   };
 
-  const handleImageUpload = (tmpImg, fd) => {
+  const handleImageUpload = (fd, tmpImg) => {
     setTmpImage(tmpImg);
     setTmpFD(fd);
   };
@@ -154,7 +154,7 @@ const CreateNote = (props) => {
 
     if (
       !isFocused && (title.length > 0 || content.length > 0)
-      && (!!title.trim().length || !!content.trim().length)
+      && (title.trim().length || content.trim().length)
       || tmpImage
     ) {
       setFormData({ ...formData });

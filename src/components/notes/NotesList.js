@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import ReactResizeDetector, { withResizeDetector } from 'react-resize-detector';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { useLocation, useParams } from 'react-router-dom';
 import DragContainer from '../../Layout/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import calculateLayout from '../../utils/calculateLayout';
+import useResponsiveBreakpoints from '../../hooks/useResponsiveBreakpoints';
 
 
 // Redux
 import { connect } from 'react-redux';
 import { fetchNotes } from '../../store/actions/notesActions';
-
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -19,7 +18,6 @@ const useStyles = makeStyles(() => ({
     margin: '0 auto',
   },
 }));
-
 
 const NoteList = (props) => {
   const [colNum, setColNum] = useState(2);
@@ -30,22 +28,36 @@ const NoteList = (props) => {
     loading,
     fetchNotes,
     labels,
-    width,
+    view,
   } = props;
   const { labelId } = useParams();
   const { pathname } = useLocation();
   const coll = pathname === '/' ? 'notes' : pathname.substr(1);
   const container = useRef(null);
+  const breakSize = useResponsiveBreakpoints(container, [
+    { xs: 535 },
+    { sm: 800 },
+    { md: 1200 },
+    { lg: 1500 },
+    { xl: 1800 },
+    { xxl: 2000 },
+  ]);
 
-  const handleResize = (cntWidth) => {
-    if (cntWidth <= 530) setColNum(1);
-    if (cntWidth > 530 && cntWidth <= 765) setColNum(2);
-    if (cntWidth > 765 && cntWidth < 1050) setColNum(3);
-    if (cntWidth >= 1050 && cntWidth < 1350) setColNum(4);
-    if (cntWidth >= 1350 && cntWidth < 1565) setColNum(5);
-    if (cntWidth >= 1565 && cntWidth < 1850) setColNum(6);
-    if (cntWidth >= 1850) setColNum(7);
-  };
+  useEffect(() => {
+    if (view === 'list') {
+      setColNum(1);
+    } else {
+      switch (breakSize) {
+        case 'xs': setColNum(1); break;
+        case 'sm': setColNum(2); break;
+        case 'md': setColNum(3); break;
+        case 'lg': setColNum(4); break;
+        case 'xl': setColNum(5); break;
+        case 'xxl': setColNum(6); break;
+        default: break;
+      }
+    }
+  }, [breakSize, view]);
 
   useEffect(() => {
     const id = labelId || false;
@@ -67,16 +79,11 @@ const NoteList = (props) => {
   }, [labelId]);
 
   return (
-    <ReactResizeDetector
-      onResize={handleResize}
-      handleWidth
-    >
-      <div className={classes.container} ref={container}>
-        {layout && !loading ? (
-          <DragContainer layout={layout} />
-        ) : null}
-      </div>
-    </ReactResizeDetector>
+    <div className={classes.container} ref={container}>
+      {layout && !loading ? (
+        <DragContainer layout={layout} />
+      ) : null}
+    </div>
   );
 };
 
@@ -90,12 +97,14 @@ NoteList.propTypes = {
   labels: PropTypes.oneOfType([PropTypes.object]),
   loading: PropTypes.bool.isRequired,
   fetchNotes: PropTypes.func.isRequired,
+  view: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   notes: state.notes.notes,
   loading: state.notes.loading,
   labels: _.mapKeys(state.labels, 'labelName'),
+  view: state.ui.view,
 });
 
-export default connect(mapStateToProps, { fetchNotes })(withResizeDetector(NoteList));
+export default connect(mapStateToProps, { fetchNotes })(NoteList);

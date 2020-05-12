@@ -7,11 +7,9 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
   container: {
     minWidth: '256px',
-    // border: '1px solid black',
-    // margin: '8px 0',
     borderRadius: '4px',
     display: 'flex',
-    flexDirection: 'colunn',
+    justifyContent: 'center',
 
     [theme.breakpoints.down('xs')]: {
       width: '100%',

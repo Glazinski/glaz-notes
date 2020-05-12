@@ -30,10 +30,7 @@ const initState = {
   noteMoved: {
     open: false,
   },
-  loadingNoteImage: {
-    noteId: '',
-    loading: false,
-  },
+  loadingNoteImage: [],
 };
 
 export default (state = initState, action) => {
@@ -186,15 +183,11 @@ export default (state = initState, action) => {
     }
 
     case LOADING_NOTE_IMAGE: {
-      console.log(action.payload);
       const { noteId } = action.payload;
 
       return {
         ...state,
-        loadingNoteImage: {
-          noteId,
-          loading: true,
-        },
+        loadingNoteImage: [...state.loadingNoteImage, noteId],
         notes: {
           ...state.notes,
           [noteId]: {
@@ -205,14 +198,14 @@ export default (state = initState, action) => {
       };
     }
 
-    case LOADING_NOTE_IMAGE_FINISH:
+    case LOADING_NOTE_IMAGE_FINISH: {
+      const { noteId } = action.payload;
+
       return {
         ...state,
-        loadingNoteImage: {
-          noteId: '',
-          loading: false,
-        },
+        loadingNoteImage: _.without(state.loadingNoteImage, noteId),
       };
+    }
 
     case SET_NOTE:
       return { ...state, errors: null, loading: false };

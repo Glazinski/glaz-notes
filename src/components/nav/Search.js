@@ -76,6 +76,8 @@ const Search = (props) => {
       return null;
     });
 
+    console.log(filteredNotes);
+
     if (search.length === 0) {
       const id = labelId || false;
       fetchNotes(coll, id);

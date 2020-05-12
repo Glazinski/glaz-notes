@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import { useLocation } from 'react-router-dom';
 
 // Redux
@@ -47,9 +48,7 @@ const ImageContainer = (props) => {
     imageUrl,
     handleImageDelete,
     preview,
-    loadingNoteImage: {
-      noteId, loading,
-    },
+    loadingNoteImage,
   } = props;
   const [isHovered, setIsHovered] = useState(false);
   const { pathname } = useLocation();
@@ -59,7 +58,7 @@ const ImageContainer = (props) => {
   const handleHoverOff = () => setIsHovered(false);
 
   const renderImage = () => {
-    if (noteId === id && loading) {
+    if (id === loadingNoteImage[loadingNoteImage.findIndex((nid) => nid === id)]) {
       return (
         <div className={classes.loadingContainer}>
           <CircularProgress size={50} />
@@ -108,9 +107,6 @@ ImageContainer.defaultProps = {
   imageUrl: null,
   id: null,
   preview: false,
-  noteId: null,
-  loading: false,
-  loadingNoteImage: null,
   handleImageDelete: null,
 };
 
@@ -119,9 +115,7 @@ ImageContainer.propTypes = {
   handleImageDelete: PropTypes.func,
   id: PropTypes.string,
   preview: PropTypes.bool,
-  loadingNoteImage: PropTypes.oneOfType([PropTypes.object]),
-  noteId: PropTypes.string,
-  loading: PropTypes.bool,
+  loadingNoteImage: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 const mapStateToProps = (state) => ({

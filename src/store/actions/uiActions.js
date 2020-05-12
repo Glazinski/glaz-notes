@@ -1,9 +1,13 @@
 import {
-  FETCH_THEME,
+  FETCH_USER_UI,
+  CHANGE_THEME,
   SET_COLORS,
+  CHANGE_VIEW,
 } from '../types';
 
-export const fetchTheme = () => (dispatch, getState, { getFirebase, getFirestore }) => {
+export const fetchUserUi = () => (
+  dispatch, getState, { getFirebase, getFirestore },
+) => {
   const firebase = getFirebase();
   const firestore = getFirestore();
   const userId = firebase.auth().currentUser.uid;
@@ -17,8 +21,14 @@ export const fetchTheme = () => (dispatch, getState, { getFirebase, getFirestore
         console.log('No matching documents.');
       }
 
-      const { theme } = snapshot.data();
-      return dispatch({ type: FETCH_THEME, payload: theme });
+      const { theme, view } = snapshot.data();
+      return dispatch({
+        type: FETCH_USER_UI,
+        payload: {
+          theme,
+          view,
+        },
+      });
     })
     .catch((err) => console.error('Error during fetching theme', err));
 };
@@ -30,7 +40,7 @@ export const changeTheme = (newTheme) => (dispatch, getState, { getFirebase, get
 
   const themeRef = firestore.collection('users').doc(userId);
 
-  dispatch({ type: FETCH_THEME, payload: newTheme });
+  dispatch({ type: CHANGE_THEME, payload: newTheme });
 
   return themeRef.update({
     theme: newTheme,
@@ -44,3 +54,18 @@ export const setColors = (colors) => ({
     colors,
   },
 });
+
+export const changeView = (newView) => (dispatch, getState, { getFirebase, getFirestore }) => {
+  const firebase = getFirebase();
+  const firestore = getFirestore();
+  const userId = firebase.auth().currentUser.uid;
+
+  const viewRef = firestore.collection('users').doc(userId);
+
+  dispatch({ type: CHANGE_VIEW, payload: { newView } });
+
+  return viewRef.update({
+    view: newView,
+  })
+    .catch((err) => console.error('Error updating document: ', err));
+};

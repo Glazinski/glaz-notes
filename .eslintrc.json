@@ -51,7 +51,8 @@
           "deleteNoteFromState",
           "uploadNoteImage",
           "setFilteredNotes",
-          "setColors"
+          "setColors",
+          "fetchUserUi"
         ]
       }
     ]

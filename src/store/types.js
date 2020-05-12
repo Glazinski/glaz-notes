@@ -1,7 +1,6 @@
 export const SET_ERRORS = 'SET_ERRORS';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 export const LOADING_USER = 'LOADING_USER';
-export const LOADING_UI = 'LOADING_UI';
 
 // Notes types
 export const SET_NOTE = 'SET_NOTE';
@@ -36,7 +35,9 @@ export const CLOSE_EDIT_LABELS = 'CLOSE_EDIT_LABELS';
 export const DELETE_LABEL = 'DELETE_LABEL';
 
 // UI types
-export const LOADING_SUCCESS = 'LOADING_SUCCESS';
-export const LOADING_FAILURE = 'LOADING_FAILURE';
+export const FETCH_USER_UI = 'FETCH_USER_UI';
 export const FETCH_THEME = 'FETCH_THEME';
+export const CHANGE_THEME = 'CHANGE_THEME';
 export const SET_COLORS = 'SET_COLORS';
+export const FETCH_VIEW = 'FETCH_VIEW';
+export const CHANGE_VIEW = 'CHANGE_VIEW';

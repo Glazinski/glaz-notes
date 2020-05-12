@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     // minHeight: 100,
     maxWidth: 238,
+    // maxWidth: '80%',
     backgroundColor: theme.palette.background.default,
     padding: '10px',
     margin: '10px 0',
@@ -120,7 +121,7 @@ const Note = (props) => {
     starNote(id, newIsStarred, coll);
   };
 
-  const handleImageUpload = (tmpImage = null, fd) => {
+  const handleImageUpload = (fd) => {
     uploadNoteImage(id, fd, coll);
   };
 
@@ -187,7 +188,6 @@ const Note = (props) => {
                   coll={coll}
                 />
               ) : null}
-              {/* {renderImage()} */}
               <ImageContainer id={id} imageUrl={imageUrl} preview />
               {title.length <= 0 ? (
                 <div className={classes.content}>

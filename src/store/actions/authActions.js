@@ -43,6 +43,7 @@ export const signUp = (newUser) => (dispatch, getState, { getFirebase, getFirest
       firstName: newUser.firstName,
       lastName: newUser.lastName,
       theme: 'light',
+      view: 'grid',
     }))
     .then(() => {
       history.push('/');

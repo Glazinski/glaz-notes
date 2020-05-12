@@ -29,7 +29,7 @@ const UploadNoteImg = (props) => {
     if (selImage) {
       const fd = new FormData();
       fd.append('image', selImage, selImage.name);
-      handleImageUpload(tmpImage, fd);
+      handleImageUpload(fd, tmpImage);
     }
   };
 

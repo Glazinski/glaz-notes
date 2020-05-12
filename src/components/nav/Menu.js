@@ -3,19 +3,20 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { signOut } from '../../store/actions/authActions';
 import { changeTheme } from '../../store/actions/uiActions';
+import View from './View';
 
 // MUI
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import Hidden from '@material-ui/core/Hidden';
 
 // MUI icons
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
-import ViewAgendaOutlinedIcon from '@material-ui/icons/ViewAgendaOutlined';
-import ViewCompactOutlinedIcon from '@material-ui/icons/ViewCompactOutlined';
 
-const Settings = ({ signOut, changeTheme, theme }) => {
+const Settings = (props) => {
+  const { signOut, changeTheme, theme } = props;
   const [anchorEl, setAnchorEl] = useState(null);
   const handleClick = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
@@ -32,7 +33,10 @@ const Settings = ({ signOut, changeTheme, theme }) => {
   };
 
   return (
-    <>
+    <div style={{ display: 'flex' }}>
+      <Hidden only={['xs']}>
+        <View />
+      </Hidden>
       <Tooltip title="settings" aria-label="settings" placement="bottom">
         <IconButton edge="end" color="inherit" onClick={handleClick}>
           <SettingsOutlinedIcon />
@@ -60,12 +64,14 @@ const Settings = ({ signOut, changeTheme, theme }) => {
         </MenuItem>
         <MenuItem onClick={handleSignOut}>Logout</MenuItem>
       </Menu>
-    </>
+    </div>
   );
 };
 
 Settings.propTypes = {
   signOut: PropTypes.func.isRequired,
+  changeTheme: PropTypes.func.isRequired,
+  theme: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
