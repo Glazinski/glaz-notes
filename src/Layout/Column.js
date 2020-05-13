@@ -31,7 +31,7 @@ const Column = (props) => {
         droppableId={id}
         // isDropDisabled={props.isDropDisabled}
       >
-        {(provided, snapshot) => (
+        {(provided) => (
           <div
             className={classes.list}
             ref={provided.innerRef}

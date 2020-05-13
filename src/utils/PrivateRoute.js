@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 const AuthRoute = ({ component: Component, auth, ...rest }) => (
   <Route
     {...rest}
-    // render={(props) => (auth.uid ? <Redirect to="/" /> : <Component {...props} />)}
     render={(props) => (auth.uid ? <Redirect to="/" /> : <Component {...props} />)}
   />
 );
@@ -16,7 +15,8 @@ const mapStateToProps = (state) => ({
 });
 
 AuthRoute.propTypes = {
-  auth: PropTypes.oneOfType([PropTypes.object]),
+  auth: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  component: PropTypes.elementType.isRequired,
 };
 
 export default connect(mapStateToProps)(AuthRoute);

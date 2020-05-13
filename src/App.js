@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchLabels } from './store/actions/labelsActions';
 import {
-  fetchUserUi, fetchTheme, fetchView, setColors,
+  fetchUserUi, setColors,
 } from './store/actions/uiActions';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';

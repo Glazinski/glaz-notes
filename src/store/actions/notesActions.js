@@ -1,4 +1,3 @@
-import axios from 'axios';
 import _ from 'lodash';
 import notesAPI from '../../api/notesAPI';
 import {
@@ -452,64 +451,16 @@ export const changeNoteLabels = (noteId, newLabels) => (
   });
 };
 
-// I may it use later for reusability
-const setAuthorizationHeader = (token) => {
-  const FBIdToken = `Bearer ${token}`;
-  axios.defaults.headers.common.Authorization = FBIdToken;
-};
-
-export const uploadNoteImage = (noteId, fd, coll) => (
-  dispatch, getState, { getFirebase },
-) => {
-  const firebase = getFirebase();
-
-  dispatch({
-    type: LOADING_NOTE_IMAGE,
-    payload: {
-      noteId,
-    },
-  });
-  firebase.auth().currentUser.getIdToken(true)
-    .then(((idToken) => notesAPI.post('/notes/image', fd, {
-      headers: {
-        Authorization: `Bearer ${idToken}`,
-        noteId,
-        coll,
-      },
-    })))
-    .then((res) => {
-      console.log(res);
-      dispatch(fetchNote(noteId, coll));
-      dispatch({
-        type: LOADING_NOTE_IMAGE_FINISH,
-        payload: {
-          noteId,
-        },
-      });
-    })
-    .catch((err) => console.log(err));
-};
-
-export const deleteNoteImage = (noteId, coll) => (
+const deleteImage = (noteId, coll, imageUrl) => (
   dispatch, getState, { getFirebase, getFirestore },
 ) => {
   const firebase = getFirebase();
   const firestore = getFirestore();
   const userId = firebase.auth().currentUser.uid;
 
-  const imageUrl = getState().notes.notes[noteId].imageUrl.length > 0
-    ? getState().notes.notes[noteId].imageUrl : false;
-
   const data = {
     imageUrl,
   };
-
-  dispatch({
-    type: DELETE_NOTE_IMAGE,
-    payload: {
-      noteId,
-    },
-  });
 
   firestore
     .collection(coll)
@@ -531,8 +482,59 @@ export const deleteNoteImage = (noteId, coll) => (
       }
       return null;
     })
-    .then((res) => {
-      console.log(res);
+    .catch((err) => console.log(err));
+};
+
+export const uploadNoteImage = (noteId, fd, coll) => (
+  dispatch, getState, { getFirebase },
+) => {
+  const firebase = getFirebase();
+
+  const imageUrl = getState().notes.notes[noteId].imageUrl.length > 0
+    ? getState().notes.notes[noteId].imageUrl : false;
+
+  if (imageUrl) {
+    dispatch(deleteImage(noteId, coll, imageUrl));
+  }
+
+  dispatch({
+    type: LOADING_NOTE_IMAGE,
+    payload: {
+      noteId,
+    },
+  });
+  firebase.auth().currentUser.getIdToken(true)
+    .then(((idToken) => notesAPI.post('/notes/image', fd, {
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+        noteId,
+        coll,
+      },
+    })))
+    .then(() => {
+      dispatch(fetchNote(noteId, coll));
+      dispatch({
+        type: LOADING_NOTE_IMAGE_FINISH,
+        payload: {
+          noteId,
+        },
+      });
     })
     .catch((err) => console.log(err));
+};
+
+export const deleteNoteImage = (noteId, coll) => (
+  dispatch, getState,
+) => {
+  const imageUrl = getState().notes.notes[noteId].imageUrl.length > 0
+    ? getState().notes.notes[noteId].imageUrl : false;
+
+  dispatch({
+    type: DELETE_NOTE_IMAGE,
+    payload: {
+      noteId,
+    },
+  });
+
+  dispatch(deleteImage(noteId, coll, imageUrl));
 };

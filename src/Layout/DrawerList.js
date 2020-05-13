@@ -27,7 +27,7 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   item: {
     margin: '10px 0',
     borderRadius: '0 50px 50px 0',
@@ -134,6 +134,7 @@ DrawerList.propTypes = {
   handleListItemClick: PropTypes.func.isRequired,
   moveNoteClear: PropTypes.func.isRequired,
   toggleMobileDrawer: PropTypes.func,
+  openEditLabels: PropTypes.func.isRequired,
 };
 
 export default connect(null, { moveNoteClear, openEditLabels })(DrawerList);

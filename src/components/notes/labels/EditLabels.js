@@ -142,6 +142,7 @@ const EditLabels = (props) => {
 EditLabels.propTypes = {
   open: PropTypes.bool.isRequired,
   createLabel: PropTypes.func.isRequired,
+  closeEditLabels: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({

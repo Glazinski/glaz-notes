@@ -12,6 +12,9 @@ import SetLabel from './NoteOperations/SetLabel';
 import UploadNoteImg from './NoteOperations/UploadNoteImg';
 import { useLocation } from 'react-router-dom';
 
+// Redux
+import { connect } from 'react-redux';
+
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -20,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexGrow: 1,
     justifyContent: 'space-between',
-    // marginTop: '5px',
     transition: 'opacity .3s ease',
   },
   binContainer: {
@@ -47,11 +49,12 @@ const NoteSettings = (props) => {
     handleStar,
     handleLabels,
     handleImageUpload,
+    settingsClassName,
     note: {
       id: noteId, colorName: colorId, isStarred, labels,
     },
   } = props;
-  const classes = useStyles();
+  const classes = useStyles(props);
   const { pathname } = useLocation();
   const coll = pathname === '/' ? 'notes' : pathname.substr(1);
 
@@ -76,7 +79,7 @@ const NoteSettings = (props) => {
           isStarred={isStarred}
         />
         <div
-          className={classes.container}
+          className={`${classes.container} ${settingsClassName}`}
           style={isHovered ? { opacity: '1', pointerEvents: 'auto' } : { opacity: '0', pointerEvents: 'none' }}
         >
           <ChangeColor
@@ -123,6 +126,7 @@ NoteSettings.defaultProps = {
   handleLabels: null,
   isStarred: null,
   handleImageUpload: null,
+  settingsClassName: null,
 };
 
 NoteSettings.propTypes = {
@@ -137,6 +141,11 @@ NoteSettings.propTypes = {
   handleImageUpload: PropTypes.func,
   isStarred: PropTypes.bool,
   note: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  settingsClassName: PropTypes.string,
 };
 
-export default NoteSettings;
+const mapStateToProps = (state) => ({
+  view: state.ui.view,
+});
+
+export default connect(mapStateToProps)(NoteSettings);

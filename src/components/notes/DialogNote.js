@@ -73,7 +73,6 @@ const DialogNote = (props) => {
   };
 
   const handleImageDelete = () => {
-    console.log('siemano');
     deleteNoteImage(id, coll);
   };
 
@@ -121,6 +120,7 @@ DialogNote.propTypes = {
   handleStar: PropTypes.func,
   isStarred: PropTypes.bool,
   coll: PropTypes.string.isRequired,
+  deleteNoteImage: PropTypes.func.isRequired,
 };
 
 export default connect(null, { updateNote, deleteNoteImage })(DialogNote);

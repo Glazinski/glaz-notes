@@ -52,7 +52,14 @@
           "uploadNoteImage",
           "setFilteredNotes",
           "setColors",
-          "fetchUserUi"
+          "fetchUserUi",
+          "signOut",
+          "changeTheme",
+          "changeView",
+          "deleteNoteImage",
+          "removeLabel",
+          "closeEditLabels",
+          "openEditLabels"
         ]
       }
     ]

@@ -6,7 +6,6 @@ import Dialog from '@material-ui/core/Dialog';
 const useStyles = makeStyles((theme) => ({
   dialog: {
     marginBottom: '200px',
-    // objectFit: 'fill',
   },
   [theme.breakpoints.down('sm')]: {
     marginBottom: '0',

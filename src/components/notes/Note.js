@@ -67,10 +67,17 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '20px',
     overflowWrap: 'anywhere',
   },
+  note: {
+    justifyContent: ({ view }) => (view === 'list' ? 'normal' : 'space-between'),
+    marginRight: ({ view }) => (view === 'list' ? 'auto' : 'none'),
+    '& > *': {
+      margin: ({ view }) => (view === 'list' ? '0 10px' : '0'),
+    },
+  },
 }));
 
 const Note = (props) => {
-  const classes = useStyles();
+  const classes = useStyles(props);
   const {
     colors,
     index,
@@ -82,6 +89,7 @@ const Note = (props) => {
     deleteNoteFromState,
     uploadNoteImage,
     labelsList,
+    view,
     note: {
       id, title, content, colorName, labels, imageUrl,
     },
@@ -163,9 +171,11 @@ const Note = (props) => {
               style={open ? {
                 backgroundColor: color,
                 opacity: '0',
+                maxWidth: view === 'list' ? '525px' : null,
               } : {
                 backgroundColor: color,
                 opacity: '1',
+                maxWidth: view === 'list' ? '525px' : null,
               }}
             >
               <div
@@ -208,6 +218,7 @@ const Note = (props) => {
                 />
               </div>
               <NoteSettings
+                settingsClassName={classes.note}
                 isHovered={isHovered}
                 isMovable
                 handleNoteMove={handleNoteMove}
@@ -238,11 +249,13 @@ Note.propTypes = {
   deleteNoteFromState: PropTypes.func.isRequired,
   uploadNoteImage: PropTypes.func.isRequired,
   starNote: PropTypes.func.isRequired,
+  view: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   colors: _.mapKeys(state.ui.colors, 'name'),
   labelsList: state.labels.labels,
+  view: state.ui.view,
 });
 
 export default connect(
