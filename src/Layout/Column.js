@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Droppable } from 'react-beautiful-dnd';
 import Note from '../components/notes/Note';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -37,23 +36,14 @@ const Column = (props) => {
       <Typography variant="overline" className={classes.title}>
         {id[id.length - 1] === '1' ? title : null}
       </Typography>
-      <Droppable
-        droppableId={id}
-        // isDropDisabled={props.isDropDisabled}
+      <div
+        className={classes.list}
       >
-        {(provided) => (
-          <div
-            className={classes.list}
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-          >
-            {!notes.includes(null) ? notes.map((note, index) => (
-              <Note key={note.id} note={note} index={index} />
-            )) : null}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
+        {!notes.includes(null) ? notes.map((note, index) => (
+          <Note key={note.id} note={note} index={index} />
+        )) : null}
+      </div>
+
     </div>
   );
 };

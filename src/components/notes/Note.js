@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import { Draggable } from 'react-beautiful-dnd';
 import DialogNote from './DialogNote';
 import NoteSettings from './NoteSettings';
 import ChipList from './labels/ChipList';
@@ -150,90 +149,78 @@ const Note = (props) => {
   const color = colorName ? colors[colorName].color : colors.Default;
 
   return (
-    <Draggable
-      draggableId={id}
-      index={index}
-      isDragDisabled={pathname !== '/' && view !== 'list'}
-      // isDragDisabled
-    >
-      {(provided) => (
-        <ClickAwayListener onClickAway={handleHoverOff}>
+    <ClickAwayListener onClickAway={handleHoverOff}>
+      <div
+        onMouseEnter={handleHoverOn}
+        onMouseLeave={handleHoverOff}
+      >
+        <Paper
+          className={classes.container}
+          variant="outlined"
+          style={open ? {
+            backgroundColor: color,
+            opacity: '0',
+            maxWidth: view === 'list' ? '525px' : null,
+          } : {
+            backgroundColor: color,
+            opacity: '1',
+            maxWidth: view === 'list' ? '525px' : null,
+          }}
+        >
           <div
-            onMouseEnter={handleHoverOn}
-            onMouseLeave={handleHoverOff}
-            {...provided.dragHandleProps}
-            {...provided.draggableProps}
-            ref={provided.innerRef}
-          >
-            <Paper
-              className={classes.container}
-              variant="outlined"
-              style={open ? {
-                backgroundColor: color,
-                opacity: '0',
-                maxWidth: view === 'list' ? '525px' : null,
-              } : {
-                backgroundColor: color,
-                opacity: '1',
-                maxWidth: view === 'list' ? '525px' : null,
-              }}
-            >
-              <div
-                aria-hidden="true"
-                className={classes.btn}
-                onClick={handleClickOpen}
-              />
-              {open ? (
-                <DialogNote
-                  handleClose={handleClose}
-                  open={open}
-                  color={color}
-                  note={props.note}
-                  handleHoverClose={handleHoverOff}
-                  handleNoteMove={handleNoteMove}
-                  handleColor={handleColor}
-                  handleStar={handleStar}
-                  handleLabels={handleLabels}
-                  handleImageUpload={handleImageUpload}
-                  coll={coll}
-                />
-              ) : null}
-              <ImageContainer id={id} imageUrl={imageUrl} preview />
-              {title.length <= 0 ? (
-                <div className={classes.content}>
-                  {content}
-                </div>
-              ) : (
-                <Typography className={classes.title} variant="h6">
-                  {title}
-                </Typography>
-              )}
-              <div className={classes.content}>
-                {title.length <= 0 ? null : content}
-              </div>
-              <div style={{ margin: '10px 0' }}>
-                <ChipList
-                  labels={labels}
-                  handleLabels={handleLabels}
-                />
-              </div>
-              <NoteSettings
-                settingsClassName={classes.note}
-                isHovered={isHovered}
-                isMovable
-                handleNoteMove={handleNoteMove}
-                handleColor={handleColor}
-                handleStar={handleStar}
-                handleLabels={handleLabels}
-                handleImageUpload={handleImageUpload}
-                coll={coll}
-                note={props.note}
-              />
-            </Paper>
+            aria-hidden="true"
+            className={classes.btn}
+            onClick={handleClickOpen}
+          />
+          {open ? (
+            <DialogNote
+              handleClose={handleClose}
+              open={open}
+              color={color}
+              note={props.note}
+              handleHoverClose={handleHoverOff}
+              handleNoteMove={handleNoteMove}
+              handleColor={handleColor}
+              handleStar={handleStar}
+              handleLabels={handleLabels}
+              handleImageUpload={handleImageUpload}
+              coll={coll}
+            />
+          ) : null}
+          <ImageContainer id={id} imageUrl={imageUrl} preview />
+          {title.length <= 0 ? (
+            <div className={classes.content}>
+              {content}
+            </div>
+          ) : (
+            <Typography className={classes.title} variant="h6">
+              {title}
+            </Typography>
+          )}
+          <div className={classes.content}>
+            {title.length <= 0 ? null : content}
           </div>
-        </ClickAwayListener>
-      )}
-    </Draggable>
+          <div style={{ margin: '10px 0' }}>
+            <ChipList
+              labels={labels}
+              handleLabels={handleLabels}
+            />
+          </div>
+          <NoteSettings
+            settingsClassName={classes.note}
+            isHovered={isHovered}
+            isMovable
+            handleNoteMove={handleNoteMove}
+            handleColor={handleColor}
+            handleStar={handleStar}
+            handleLabels={handleLabels}
+            handleImageUpload={handleImageUpload}
+            coll={coll}
+            note={props.note}
+          />
+        </Paper>
+      </div>
+    </ClickAwayListener>
   );
 };
 
