@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { useLocation, useParams } from 'react-router-dom';
 
 // Redux
 import { connect } from 'react-redux';
-import { setFilteredNotes, fetchNotes } from '../../store/actions/notesActions';
+import { setFilteredNotes } from '../../store/actions/notesActions';
 
 // MUI
 import { fade, makeStyles } from '@material-ui/core/styles';
@@ -53,11 +52,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Search = (props) => {
   const classes = useStyles();
-  const { notes, setFilteredNotes, fetchNotes } = props;
+  const { notes, setFilteredNotes } = props;
   const [search, setSearch] = useState('');
-  const { labelId } = useParams();
-  const { pathname } = useLocation();
-  const coll = pathname === '/' ? 'notes' : pathname.substr(1);
 
   const handleChange = (event) => {
     const { value } = event.target;
@@ -69,22 +65,21 @@ const Search = (props) => {
     const filteredNotes = notes.filter((note) => {
       const cond1 = note.title.toLowerCase().indexOf(search.toLowerCase());
       const cond2 = note.content.toLowerCase().indexOf(search.toLowerCase());
-      if (cond1 !== -1 || cond2 !== -1) {
+      if ((cond1 !== -1 || cond2 !== -1) && search.length > 0) {
         return note;
       }
 
       return null;
     });
 
-    console.log(filteredNotes);
-
-    if (search.length === 0) {
-      const id = labelId || false;
-      fetchNotes(coll, id);
-    } else {
+    if (filteredNotes.length > 0) {
       setFilteredNotes(_.keyBy(filteredNotes, 'id'));
+    } else if (search.length > 0) {
+      setFilteredNotes({ msg: 'No matching results.' });
+    } else {
+      setFilteredNotes({});
     }
-  }, [search]);
+  }, [search, _.values(notes).length]);
 
   return (
     <div className={classes.search}>
@@ -112,7 +107,6 @@ const mapStateToProps = (state) => ({
 Search.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object])).isRequired,
   setFilteredNotes: PropTypes.func.isRequired,
-  fetchNotes: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, { setFilteredNotes, fetchNotes })(Search);
+export default connect(mapStateToProps, { setFilteredNotes })(Search);

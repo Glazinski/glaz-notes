@@ -1,13 +1,14 @@
 import {
   FETCH_USER_UI,
   SET_COLORS,
+  CHANGE_THEME,
   CHANGE_VIEW,
 } from '../types';
 
 const initState = {
   theme: 'light',
-  colors: {},
   view: 'grid',
+  colors: {},
 };
 
 export default (state = initState, action) => {
@@ -19,6 +20,11 @@ export default (state = initState, action) => {
 
     case SET_COLORS:
       return { ...state, colors: action.payload.colors };
+
+    case CHANGE_THEME: {
+      const { newTheme } = action.payload;
+      return { ...state, theme: newTheme };
+    }
 
     case CHANGE_VIEW: {
       const { newView } = action.payload;

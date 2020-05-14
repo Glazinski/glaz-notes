@@ -13,7 +13,7 @@ const useStyles = makeStyles(() => ({
     zIndex: 1100,
   },
   chip: {
-    marginLeft: 5,
+    margin: '5px 0 5px 5px',
   },
 }));
 

@@ -153,8 +153,8 @@ const Note = (props) => {
     <Draggable
       draggableId={id}
       index={index}
-      // isDragDisabled={pathname !== '/'}
-      isDragDisabled
+      isDragDisabled={pathname !== '/' && view !== 'list'}
+      // isDragDisabled
     >
       {(provided) => (
         <ClickAwayListener onClickAway={handleHoverOff}>

@@ -40,7 +40,7 @@ export const changeTheme = (newTheme) => (dispatch, getState, { getFirebase, get
 
   const themeRef = firestore.collection('users').doc(userId);
 
-  dispatch({ type: CHANGE_THEME, payload: newTheme });
+  dispatch({ type: CHANGE_THEME, payload: { newTheme } });
 
   return themeRef.update({
     theme: newTheme,

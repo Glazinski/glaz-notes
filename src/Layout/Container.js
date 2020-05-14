@@ -3,20 +3,16 @@ import PropTypes from 'prop-types';
 import { DragDropContext } from 'react-beautiful-dnd';
 import Column from './Column';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(() => ({
   container: {
     display: 'flex',
     justifyContent: 'center',
   },
-  title: {
-    // marginLeft: 70,
-  },
 }));
 
-const DragContainer = (props) => {
-  const { layout } = props;
+const Container = (props) => {
+  const { layout, msg } = props;
   const [initData, setInitData] = useState(layout);
 
   useEffect(() => {
@@ -39,20 +35,17 @@ const DragContainer = (props) => {
       return;
     }
 
-    const start = initData.columns[source.droppableId];
-    const finish = initData.columns[destination.droppableId];
+    let columnName = '';
+    if (destination.droppableId.substr(0, destination.droppableId.length - 2) === 'starred-column') {
+      columnName = 'starredColumns';
+    } else {
+      columnName = 'columns';
+    }
 
-    // let notePosition = 0;
-    // const colNum = 3;
-    // const startColIndex = start.index;
-    // const finishColIndex = finish.index;
-    // console.log(source, destination);
-    // console.log(start, finish);
-    // console.log(startColIndex, finishColIndex);
+    const start = initData[columnName][source.droppableId];
+    const finish = initData[columnName][destination.droppableId];
 
     if (start === finish) {
-      // notePosition = finishColIndex + (destination.index * colNum);
-      // console.log('POZYCJA', notePosition);
       const newNoteIds = Array.from(start.noteIds);
       newNoteIds.splice(source.index, 1);
       newNoteIds.splice(destination.index, 0, draggableId);
@@ -64,8 +57,8 @@ const DragContainer = (props) => {
 
       const newState = {
         ...initData,
-        columns: {
-          ...initData.columns,
+        [columnName]: {
+          ...initData[columnName],
           [newColumn.id]: newColumn,
         },
       };
@@ -74,9 +67,6 @@ const DragContainer = (props) => {
       setInitData(newState);
       return;
     }
-
-    // notePosition = finishColIndex + (destination.index * colNum);
-    // console.log('POZYCJA', notePosition);
 
     const startNoteIds = Array.from(start.noteIds);
     startNoteIds.splice(source.index, 1);
@@ -94,8 +84,8 @@ const DragContainer = (props) => {
 
     const newState = {
       ...initData,
-      columns: {
-        ...initData.columns,
+      [columnName]: {
+        ...initData[columnName],
         [newStart.id]: newStart,
         [newFinish.id]: newFinish,
       },
@@ -105,11 +95,12 @@ const DragContainer = (props) => {
     setInitData(newState);
   };
 
+  if (msg) return <div style={{ display: 'flex', justifyContent: 'center' }}>{msg}</div>;
+
   return (
     <>
       {initData.starredColumns['starred-column-1'].noteIds.length > 0 ? (
         <>
-          <Typography className={classes.title} variant="overline">STARRED</Typography>
           <DragDropContext
             onDragEnd={onDragEnd}
           >
@@ -123,7 +114,7 @@ const DragContainer = (props) => {
                 const column = initData.starredColumns[columnId];
                 const notes = column.noteIds.map((noteId) => initData.notes[noteId]);
 
-                return <Column key={column.id} column={column} notes={notes} />;
+                return <Column key={column.id} column={column} notes={notes} title="STARRED" />;
               })}
             </div>
           </DragDropContext>
@@ -133,12 +124,6 @@ const DragContainer = (props) => {
 
       {initData.columns['column-1'].noteIds.length > 0 ? (
         <>
-          <Typography
-            className={classes.title}
-            variant="overline"
-          >
-            OTHERS
-          </Typography>
           <DragDropContext
             onDragEnd={onDragEnd}
           >
@@ -147,7 +132,7 @@ const DragContainer = (props) => {
                 const column = initData.columns[columnId];
                 const notes = column.noteIds.map((noteId) => initData.notes[noteId]);
 
-                return <Column key={column.id} column={column} notes={notes} />;
+                return <Column key={column.id} column={column} notes={notes} title="OTHERS" />;
               })}
             </div>
           </DragDropContext>
@@ -157,8 +142,13 @@ const DragContainer = (props) => {
   );
 };
 
-DragContainer.propTypes = {
-  layout: PropTypes.oneOfType([PropTypes.object]).isRequired,
+Container.defaultProps = {
+  msg: null,
 };
 
-export default DragContainer;
+Container.propTypes = {
+  layout: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  msg: PropTypes.string,
+};
+
+export default Container;

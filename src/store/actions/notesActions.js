@@ -37,6 +37,7 @@ export const fetchNotes = (coll, labelId) => (
   const firestore = getFirestore();
   const userId = firebase.auth().currentUser.uid;
   dispatch({ type: NOTES_LOADING });
+  dispatch({ type: SET_FILTERED_NOTES, payload: { filteredNotes: {} } });
 
   if (labelId) {
     const labelRef = firestore.collection('labels').doc(userId).collection('userLabels').doc(labelId);
@@ -61,8 +62,10 @@ export const fetchNotes = (coll, labelId) => (
             .doc(noteId)
             .get()
             .then((noteDoc) => {
-              notes = { ...notes, [noteDoc.data().id]: { ...noteDoc.data() } };
-              dispatch({ type: NOTES_FETCHED, payload: notes });
+              if (noteDoc.data()) {
+                notes = { ...notes, [noteDoc.data().id]: { ...noteDoc.data() } };
+                dispatch({ type: NOTES_FETCHED, payload: notes });
+              }
             })
             .catch((error) => {
               console.log('Error getting document:', error);

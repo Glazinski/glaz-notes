@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import { Droppable } from 'react-beautiful-dnd';
 import Note from '../components/notes/Note';
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
   container: {
+    position: 'relative',
     minWidth: '256px',
     borderRadius: '4px',
     display: 'flex',
@@ -15,6 +17,11 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
     },
   },
+  title: {
+    position: 'absolute',
+    top: -20,
+    left: 10,
+  },
   list: {
     padding: '8px',
     flexGrow: 1,
@@ -23,10 +30,13 @@ const useStyles = makeStyles((theme) => ({
 
 const Column = (props) => {
   const classes = useStyles();
-  const { notes, column: { id } } = props;
+  const { notes, title, column: { id } } = props;
 
   return (
     <div className={classes.container}>
+      <Typography variant="overline" className={classes.title}>
+        {id[id.length - 1] === '1' ? title : null}
+      </Typography>
       <Droppable
         droppableId={id}
         // isDropDisabled={props.isDropDisabled}
@@ -55,6 +65,7 @@ Column.defaultProps = {
 Column.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.object),
   column: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  title: PropTypes.string.isRequired,
 };
 
 export default Column;

@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { useLocation, useParams } from 'react-router-dom';
-import DragContainer from '../../Layout/Container';
+import Container from '../../Layout/Container';
 import { makeStyles } from '@material-ui/core/styles';
-import calculateLayout from '../../utils/calculateLayout';
 import useResponsiveBreakpoints from '../../hooks/useResponsiveBreakpoints';
-
+import useMasonryLayout from '../../hooks/useMasonryLayout';
 
 // Redux
 import { connect } from 'react-redux';
@@ -20,8 +19,6 @@ const useStyles = makeStyles(() => ({
 }));
 
 const NoteList = (props) => {
-  const [colNum, setColNum] = useState(2);
-  const [layout, setLayout] = useState(null);
   const classes = useStyles();
   const {
     notes,
@@ -29,6 +26,7 @@ const NoteList = (props) => {
     fetchNotes,
     labels,
     view,
+    filteredNotes,
   } = props;
   const { labelId } = useParams();
   const { pathname } = useLocation();
@@ -42,35 +40,13 @@ const NoteList = (props) => {
     { xl: 1800 },
     { xxl: 2000 },
   ]);
-
-  useEffect(() => {
-    if (view === 'list') {
-      setColNum(1);
-    } else {
-      switch (breakSize) {
-        case 'xs': setColNum(1); break;
-        case 'sm': setColNum(2); break;
-        case 'md': setColNum(3); break;
-        case 'lg': setColNum(4); break;
-        case 'xl': setColNum(5); break;
-        case 'xxl': setColNum(6); break;
-        default: break;
-      }
-    }
-  }, [breakSize, view]);
+  const notesList = (!_.has(filteredNotes, 'msg') && _.values(filteredNotes).length > 0) ? filteredNotes : notes;
+  const layout = useMasonryLayout(notesList, breakSize, view);
 
   useEffect(() => {
     const id = labelId || false;
     fetchNotes(coll, id);
   }, []);
-
-  useEffect(() => {
-    if (notes && colNum) {
-      const lay = calculateLayout(notes, colNum);
-
-      setLayout(lay);
-    }
-  }, [notes, colNum]);
 
   useEffect(() => {
     if (_.values(labels).length > 0 && labelId) {
@@ -81,7 +57,7 @@ const NoteList = (props) => {
   return (
     <div className={classes.container} ref={container}>
       {layout && !loading ? (
-        <DragContainer layout={layout} />
+        <Container layout={layout} msg={_.has(filteredNotes, 'msg') ? filteredNotes.msg : null} />
       ) : null}
     </div>
   );
@@ -89,6 +65,7 @@ const NoteList = (props) => {
 
 NoteList.defaultProps = {
   notes: null,
+  filteredNotes: null,
   labels: null,
 };
 
@@ -98,10 +75,12 @@ NoteList.propTypes = {
   loading: PropTypes.bool.isRequired,
   fetchNotes: PropTypes.func.isRequired,
   view: PropTypes.string.isRequired,
+  filteredNotes: PropTypes.oneOfType([PropTypes.object]),
 };
 
 const mapStateToProps = (state) => ({
   notes: state.notes.notes,
+  filteredNotes: state.notes.filteredNotes,
   loading: state.notes.loading,
   labels: _.mapKeys(state.labels, 'labelName'),
   view: state.ui.view,

@@ -30,6 +30,7 @@ const initState = {
   noteMoved: {
     open: false,
   },
+  filteredNotes: {},
   loadingNoteImage: [],
 };
 
@@ -152,9 +153,12 @@ export default (state = initState, action) => {
     case SET_FILTERED_NOTES:
       return {
         ...state,
-        notes: {
+        filteredNotes: {
           ...action.payload.filteredNotes,
         },
+        // notes: {
+        //   ...action.payload.filteredNotes,
+        // },
       };
 
     case DELETE_NOTE_IMAGE: {
