@@ -23,14 +23,7 @@ If you don't want to create an account you can log in using these credentials
 
 ## Explanation
 
-It's just a showcase app. It is made only for practice purposes. I implemented only most important features.
-
-## Features
-
-- Only functional components with hooks
-- UI built with Material-UI and some custom styling
-- State management built with redux
-- Backend built with firebase
+It's just a showcase app, based on Google Keep. It is made only for practice purposes. I implemented only most important features.
 
 ## How to run it locally?
 
