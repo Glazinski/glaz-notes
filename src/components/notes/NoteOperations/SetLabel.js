@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import SetLabelList from '../labels/SetLabelList';
-
-// Redux
-import { connect } from 'react-redux';
-
-// MUI
+import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Popover from '@material-ui/core/Popover';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
-
-// MUI icons
 import LabelOutlinedIcon from '@material-ui/icons/LabelOutlined';
+
+import SetLabelList from '../labels/SetLabelList';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,13 +15,11 @@ const useStyles = makeStyles((theme) => ({
   },
   list: {
     position: 'absolute',
-    // bottom: '100%',
     top: '100%',
     right: 0,
     width: 225,
     minHeight: 50,
     zIndex: 99999,
-    // padding: theme.spacing(1),
   },
   iconBtn: {
     padding: '7px',
@@ -36,7 +29,8 @@ const useStyles = makeStyles((theme) => ({
 
 const SetLabel = (props) => {
   const classes = useStyles();
-  const { labels, labelsList, handleLabels } = props;
+  const { labels, handleLabels } = props;
+  const labelsList = useSelector((state) => state.labels.labels);
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -53,22 +47,14 @@ const SetLabel = (props) => {
   const title = labels.length > 0 ? 'Change label' : 'Add label';
 
   return (
-    <div
-      className={classes.root}
-      // onMouseEnter={handleHoverOn}
-      // onMouseLeave={handleHoverOut}
-      // onClick={handleClick}
-    >
+    <div className={classes.root}>
       <Tooltip title={title} aria-label={title}>
         <IconButton onClick={handleClick} className={classes.iconBtn}>
           <LabelOutlinedIcon fontSize="small" />
         </IconButton>
       </Tooltip>
 
-      {/* <button aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
-        Open Popover
-      </button> */}
-      {open ? (
+      {open && (
         <Popover
           id={id}
           anchorEl={anchorEl}
@@ -88,21 +74,15 @@ const SetLabel = (props) => {
             handleLabels={handleLabels}
             labelsList={labelsList}
           />
-          {/* <SetLabelList handleLabels={handleLabels} labelsList={_.values(labelsList)} /> */}
         </Popover>
-      ) : null}
+      )}
     </div>
   );
 };
 
-const mapStateToProps = (state) => ({
-  labelsList: state.labels.labels,
-});
-
 SetLabel.propTypes = {
   labels: PropTypes.arrayOf(PropTypes.string).isRequired,
-  labelsList: PropTypes.oneOfType([PropTypes.object]).isRequired,
   handleLabels: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps)(SetLabel);
+export default SetLabel;

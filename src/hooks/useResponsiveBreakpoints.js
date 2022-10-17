@@ -15,7 +15,6 @@ const findBreakPoint = (breakpoints, width) => {
 };
 
 export default (elRef, breakpoints) => {
-  // let mounted = true;
   const firstQuery = Object.keys(breakpoints[0])[0];
   const [breakSize, setBreakSize] = useState(firstQuery);
 
@@ -25,7 +24,7 @@ export default (elRef, breakpoints) => {
       const { width } = entries[0].contentRect;
 
       setBreakSize(findBreakPoint(breakpoints, width));
-    }),
+    })
   );
 
   useEffect(() => {

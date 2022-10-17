@@ -13,15 +13,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DialogWindow = (props) => {
-  const {
-    open, handleClose, children, isFullScreen,
-  } = props;
+  const { open, handleClose, children, isFullScreen } = props;
   const classes = useStyles();
 
   return (
     <Dialog
       className={isFullScreen ? null : classes.dialog}
-      // className={classes.dialog}
       open={open}
       onClose={handleClose}
       fullScreen={isFullScreen}

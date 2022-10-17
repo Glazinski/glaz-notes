@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import validate from '../../utils/validate';
-
-// Redux
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { signUp, clearForm } from '../../store/actions/authActions';
-
-// React router
 import { Link } from 'react-router-dom';
-
-// MUI
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -18,9 +10,9 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import MuiLink from '@material-ui/core/Link';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
-// MUI Icons
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+
+import validate from '../../utils/validate';
 
 const useStyles = makeStyles((theme) => ({
   ...theme.spreadThis,
@@ -45,7 +37,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignUp = (props) => {
+const SignUp = () => {
+  const dispatch = useDispatch();
+  const { loading, authErrors } = useSelector((state) => state.auth);
   const classes = useStyles();
   const [formData, setFormData] = useState({
     email: '',
@@ -61,13 +55,11 @@ const SignUp = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    props.signUp(formData);
+    dispatch(signUp(formData));
   };
-
-  const { auth: { loading, authErrors } } = props;
   const [errors, setErrors] = useState({});
 
-  useEffect(() => () => props.clearForm(), []);
+  useEffect(() => () => dispatch(clearForm()), []);
 
   useEffect(() => {
     const err = validate(authErrors);
@@ -166,7 +158,11 @@ const SignUp = (props) => {
                 >
                   Sign up
                   {loading && (
-                  <CircularProgress color="primary" size={24} className={classes.buttonProgress} />
+                    <CircularProgress
+                      color="primary"
+                      size={24}
+                      className={classes.buttonProgress}
+                    />
                   )}
                 </Button>
               </Grid>
@@ -177,15 +173,4 @@ const SignUp = (props) => {
     </form>
   );
 };
-
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-});
-
-SignUp.propTypes = {
-  auth: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  signUp: PropTypes.func.isRequired,
-  clearForm: PropTypes.func.isRequired,
-};
-
-export default connect(mapStateToProps, { signUp, clearForm })(SignUp);
+export default SignUp;

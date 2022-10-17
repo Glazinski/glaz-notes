@@ -1,14 +1,13 @@
 import React, { useEffect, useRef } from 'react';
-import _ from 'lodash';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
-import Container from '../../Layout/Container';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import _ from 'lodash';
+
+import Container from '../../Layout/Container';
 import useResponsiveBreakpoints from '../../hooks/useResponsiveBreakpoints';
 import useMasonryLayout from '../../hooks/useMasonryLayout';
-
-// Redux
-import { connect } from 'react-redux';
 import { fetchNotes } from '../../store/actions/notesActions';
 
 const useStyles = makeStyles(() => ({
@@ -20,14 +19,7 @@ const useStyles = makeStyles(() => ({
 
 const NoteList = (props) => {
   const classes = useStyles();
-  const {
-    notes,
-    loading,
-    fetchNotes,
-    labels,
-    view,
-    filteredNotes,
-  } = props;
+  const { notes, loading, fetchNotes, labels, view, filteredNotes } = props;
   const { labelId } = useParams();
   const { pathname } = useLocation();
   const coll = pathname === '/' ? 'notes' : pathname.substr(1);
@@ -40,7 +32,10 @@ const NoteList = (props) => {
     { xl: 1800 },
     { xxl: 2000 },
   ]);
-  const notesList = (!_.has(filteredNotes, 'msg') && _.values(filteredNotes).length > 0) ? filteredNotes : notes;
+  const notesList =
+    !_.has(filteredNotes, 'msg') && _.values(filteredNotes).length > 0
+      ? filteredNotes
+      : notes;
   const layout = useMasonryLayout(notesList, breakSize, view);
 
   useEffect(() => {
@@ -57,7 +52,10 @@ const NoteList = (props) => {
   return (
     <div className={classes.container} ref={container}>
       {layout && !loading ? (
-        <Container layout={layout} msg={_.has(filteredNotes, 'msg') ? filteredNotes.msg : null} />
+        <Container
+          layout={layout}
+          msg={_.has(filteredNotes, 'msg') ? filteredNotes.msg : null}
+        />
       ) : null}
     </div>
   );

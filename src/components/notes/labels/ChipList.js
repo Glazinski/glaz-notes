@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
-
-// Redux
-import { connect } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -19,7 +17,8 @@ const useStyles = makeStyles(() => ({
 
 const ChipList = (props) => {
   const classes = useStyles();
-  const { labels, labelsList, handleLabels } = props;
+  const { labels, handleLabels } = props;
+  const labelsList = useSelector((state) => state.labels.labels);
   const [chipData, setChipData] = useState(labels);
 
   const handleDelete = (chipToDelete) => () => {
@@ -30,25 +29,20 @@ const ChipList = (props) => {
 
   useEffect(() => setChipData(labels), [labels]);
 
-  // console.log(labels);
-  const chips = _.values(labelsList).length > 0 ? chipData.map((item) => (
-    <Chip
-      key={item}
-      className={classes.chip}
-      variant="outlined"
-      label={labelsList[item].labelName}
-      onDelete={handleDelete(item)}
-      size="small"
-    />
-  )) : null;
+  const chips =
+    _.values(labelsList).length > 0 &&
+    chipData.map((item) => (
+      <Chip
+        key={item}
+        className={classes.chip}
+        variant="outlined"
+        label={labelsList[item].labelName}
+        onDelete={handleDelete(item)}
+        size="small"
+      />
+    ));
 
-  return (
-    <div
-      className={classes.root}
-    >
-      {chips}
-    </div>
-  );
+  return <div className={classes.root}>{chips}</div>;
 };
 
 ChipList.propTypes = {
@@ -56,17 +50,12 @@ ChipList.propTypes = {
   handleLabels: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  labelsList: state.labels.labels,
-});
-
 ChipList.defaultProps = {
   labels: [],
 };
 
 ChipList.propTypes = {
-  labelsList: PropTypes.oneOfType([PropTypes.object]).isRequired,
   labels: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default connect(mapStateToProps)(ChipList);
+export default ChipList;

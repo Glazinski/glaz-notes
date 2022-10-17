@@ -71,7 +71,6 @@ export default (state = initState, action) => {
     case CLOSE_EDIT_LABELS:
       return { ...state, isEditLabelsOpen: false };
 
-
     default:
       return { ...state };
   }

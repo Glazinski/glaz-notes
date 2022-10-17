@@ -21,7 +21,6 @@ const UploadNoteImg = (props) => {
   const fileInput = useRef(null);
   const { handleImageUpload } = props;
 
-
   const handleImageSelect = (event) => {
     const selImage = event.target.files[0];
     const tmpImage = selImage ? URL.createObjectURL(selImage) : null;

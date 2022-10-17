@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
-
-// Redux
-import { connect } from 'react-redux';
-
-// MUI
+import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
@@ -41,14 +37,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ImageContainer = (props) => {
+  const { id, imageUrl, handleImageDelete, preview } = props;
+  const loadingNoteImage = useSelector((state) => state.notes.loadingNoteImage);
   const classes = useStyles();
-  const {
-    id,
-    imageUrl,
-    handleImageDelete,
-    preview,
-    loadingNoteImage,
-  } = props;
   const [isHovered, setIsHovered] = useState(false);
   const { pathname } = useLocation();
 
@@ -57,19 +48,23 @@ const ImageContainer = (props) => {
   const handleHoverOff = () => setIsHovered(false);
 
   const renderImage = () => {
-    if (id === loadingNoteImage[loadingNoteImage.findIndex((nid) => nid === id)]) {
+    if (
+      id === loadingNoteImage[loadingNoteImage.findIndex((nid) => nid === id)]
+    ) {
       return (
         <div className={classes.loadingContainer}>
           <CircularProgress size={50} />
         </div>
       );
-    } if (preview && imageUrl) {
+    }
+    if (preview && imageUrl) {
       return (
         <div style={{ marginBottom: 5 }}>
           <img className={classes.viewImage} src={imageUrl} alt="" />
         </div>
       );
-    } if (imageUrl) {
+    }
+    if (imageUrl) {
       return (
         <div
           className={classes.container}
@@ -95,11 +90,7 @@ const ImageContainer = (props) => {
     return null;
   };
 
-  return (
-    <>
-      {renderImage()}
-    </>
-  );
+  return <>{renderImage()}</>;
 };
 
 ImageContainer.defaultProps = {
@@ -114,11 +105,6 @@ ImageContainer.propTypes = {
   handleImageDelete: PropTypes.func,
   id: PropTypes.string,
   preview: PropTypes.bool,
-  loadingNoteImage: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  loadingNoteImage: state.notes.loadingNoteImage,
-});
-
-export default connect(mapStateToProps)(ImageContainer);
+export default ImageContainer;

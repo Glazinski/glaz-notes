@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { setFilteredNotes } from '../../store/actions/notesActions';
 
 // MUI
-import { fade, makeStyles } from '@material-ui/core/styles';
+import { alpha, makeStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 
@@ -15,9 +15,9 @@ const useStyles = makeStyles((theme) => ({
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.action.hover, 0.05),
+    backgroundColor: alpha(theme.palette.action.hover, 0.05),
     '&:hover': {
-      backgroundColor: fade(theme.palette.action.hover, 0.10),
+      backgroundColor: alpha(theme.palette.action.hover, 0.1),
     },
     marginRight: theme.spacing(2),
     marginLeft: theme.spacing(3),

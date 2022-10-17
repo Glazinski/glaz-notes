@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import _ from 'lodash';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+
 import NotesList from '../components/notes/NotesList';
 import { deleteNotesForever } from '../store/actions/notesActions';
 import Confirm from '../components/Confirm';
@@ -10,10 +10,13 @@ import Confirm from '../components/Confirm';
 import Button from '@material-ui/core/Button';
 
 const Bin = (props) => {
-  const { deleteNotesForever, notesLength } = props;
-
+  const dispatch = useDispatch();
+  const notesLength = useSelector(
+    (state) => _.values(state.notes.notes).length
+  );
   const [open, setOpen] = useState(false);
-  const msg = 'Empty bin? All notes in Recycle Bin will be permanently deleted.';
+  const msg =
+    'Empty bin? All notes in Recycle Bin will be permanently deleted.';
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -24,37 +27,36 @@ const Bin = (props) => {
   };
 
   const handleDelete = () => {
-    deleteNotesForever();
+    dispatch(deleteNotesForever());
     handleClose();
   };
 
   return (
     <>
-      {notesLength > 0 ? (
+      {notesLength > 0 && (
         <>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
           >
-            <Button color="secondary" onClick={handleClickOpen}>Empty Bin</Button>
+            <Button color="secondary" onClick={handleClickOpen}>
+              Empty Bin
+            </Button>
           </div>
-          <Confirm open={open} handleClose={handleClose} handleDelete={handleDelete} msg={msg} />
+          <Confirm
+            open={open}
+            handleClose={handleClose}
+            handleDelete={handleDelete}
+            msg={msg}
+          />
         </>
-      ) : null}
+      )}
       <NotesList {...props} />
     </>
   );
 };
 
-Bin.propTypes = {
-  deleteNotesForever: PropTypes.func.isRequired,
-  notesLength: PropTypes.number.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  notesLength: _.values(state.notes.notes).length,
-});
-
-export default connect(mapStateToProps, { deleteNotesForever })(Bin);
+export default Bin;

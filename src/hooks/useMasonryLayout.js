@@ -1,25 +1,32 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+
 import calculateLayout from '../utils/calculateLayout';
+
+const columnNumMap = {
+  xs: 1,
+  sm: 2,
+  md: 3,
+  lg: 4,
+  xl: 5,
+  xxl: 6,
+};
 
 export default (data, breakSize, view) => {
   const [colNum, setColNum] = useState(2);
   const [layout, setLayout] = useState(null);
 
-  useEffect(() => {
+  const handleColumnNum = useCallback(() => {
     if (view === 'list') {
       setColNum(1);
-    } else {
-      switch (breakSize) {
-        case 'xs': setColNum(1); break;
-        case 'sm': setColNum(2); break;
-        case 'md': setColNum(3); break;
-        case 'lg': setColNum(4); break;
-        case 'xl': setColNum(5); break;
-        case 'xxl': setColNum(6); break;
-        default: break;
-      }
+      return;
     }
+
+    setColNum(columnNumMap[breakSize]);
   }, [breakSize, view]);
+
+  useEffect(() => {
+    handleColumnNum();
+  }, [handleColumnNum]);
 
   useEffect(() => {
     if (data && colNum) {

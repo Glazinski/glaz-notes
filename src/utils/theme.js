@@ -1,4 +1,4 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createTheme } from '@material-ui/core/styles';
 
 const spreadThis = {
   customError: {
@@ -16,7 +16,7 @@ const spreadThis = {
 
 export default (typeOfTheme) => {
   if (typeOfTheme === 'dark') {
-    return createMuiTheme({
+    return createTheme({
       palette: {
         type: 'dark',
         primary: {
@@ -29,7 +29,7 @@ export default (typeOfTheme) => {
       spreadThis,
     });
   }
-  return createMuiTheme({
+  return createTheme({
     palette: {
       type: 'light',
       action: {

@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { fetchLabels } from './store/actions/labelsActions';
-import {
-  fetchUserUi, setColors,
-} from './store/actions/uiActions';
+import { useSelector, useDispatch } from 'react-redux';
+import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+
 import myTheme from './utils/theme';
 import Notes from './pages/Notes';
 import Bin from './pages/Bin';
@@ -14,46 +11,42 @@ import Archive from './pages/Archive';
 import AnyLabel from './pages/AnyLabel';
 import darkColors from './utils/darkColors';
 import lightColors from './utils/lightColors';
-
-// React router
-import {
-  Router, Route, Switch, Redirect,
-} from 'react-router-dom';
+import { fetchUserUi, setColors } from './store/actions/uiActions';
+import { fetchLabels } from './store/actions/labelsActions';
 import PrivateRoute from './utils/PrivateRoute';
 import history from './utils/history';
-
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
 import Home from './components/Home';
 
-const App = (props) => {
-  const {
-    theme,
-    fetchUserUi,
-    setColors,
-    fetchLabels,
-    auth: { uid },
-  } = props;
+const App = () => {
+  const dispatch = useDispatch();
+  const theme = useSelector((state) => state.ui.theme);
+  const { uid } = useSelector((state) => state.firebase.auth);
   const [prefersDarkMode, setPrefersDarkMode] = useState(theme);
 
   const MuiTheme = React.useMemo(
     () => myTheme(prefersDarkMode),
-    [prefersDarkMode],
+    [prefersDarkMode]
   );
+
+  const handleTheme = () => {
+    setPrefersDarkMode(theme);
+    if (theme === 'dark') {
+      dispatch(setColors(darkColors));
+      return;
+    }
+
+    dispatch(setColors(lightColors));
+  };
 
   useEffect(() => {
     if (uid) {
-      fetchUserUi();
-      fetchLabels();
+      dispatch(fetchUserUi());
+      dispatch(fetchLabels());
     }
 
-    if (theme === 'dark') {
-      setColors(darkColors);
-    } else {
-      setColors(lightColors);
-    }
-
-    setPrefersDarkMode(theme);
+    handleTheme();
   }, [uid, theme]);
 
   return (
@@ -87,7 +80,6 @@ const App = (props) => {
               </Home>
             )}
           />
-
           <Route
             path="/label/:labelId"
             render={(routerProps) => (
@@ -106,25 +98,4 @@ const App = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  theme: state.ui.theme,
-  auth: state.firebase.auth,
-});
-
-App.defaultProps = {
-  auth: null,
-};
-
-App.propTypes = {
-  theme: PropTypes.string.isRequired,
-  fetchUserUi: PropTypes.func.isRequired,
-  setColors: PropTypes.func.isRequired,
-  fetchLabels: PropTypes.func.isRequired,
-  auth: PropTypes.oneOfType([PropTypes.object]),
-};
-
-export default connect(mapStateToProps, {
-  setColors,
-  fetchLabels,
-  fetchUserUi,
-})(App);
+export default App;

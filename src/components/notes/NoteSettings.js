@@ -50,21 +50,18 @@ const NoteSettings = (props) => {
     handleLabels,
     handleImageUpload,
     settingsClassName,
-    note: {
-      id: noteId, colorName: colorId, isStarred, labels,
-    },
+    note: { id: noteId, colorName: colorId, isStarred, labels },
   } = props;
   const classes = useStyles(props);
   const { pathname } = useLocation();
-  const coll = pathname === '/' ? 'notes' : pathname.substr(1);
+  const stylesOnHover = isHovered
+    ? { opacity: '1', pointerEvents: 'auto' }
+    : { opacity: '0', pointerEvents: 'none' };
 
   const renderItems = () => {
     if (pathname === '/bin') {
       return (
-        <div
-          className={classes.binContainer}
-          style={isHovered ? { opacity: '1', pointerEvents: 'auto' } : { opacity: '0', pointerEvents: 'none' }}
-        >
+        <div className={classes.binContainer} style={stylesOnHover}>
           <DeleteForever noteId={noteId} />
           <Restore handleNoteMove={handleNoteMove} />
         </div>
@@ -80,12 +77,11 @@ const NoteSettings = (props) => {
         />
         <div
           className={`${classes.container} ${settingsClassName}`}
-          style={isHovered ? { opacity: '1', pointerEvents: 'auto' } : { opacity: '0', pointerEvents: 'none' }}
+          style={stylesOnHover}
         >
           <ChangeColor
             colorId={colorId}
             noteId={noteId}
-            coll={coll}
             handleColor={handleColor}
           />
 
@@ -95,26 +91,17 @@ const NoteSettings = (props) => {
           ) : isMovable ? (
             <ArchiveNote handleNoteMove={handleNoteMove} />
           ) : null}
-          {isMovable ? (
-            <DeleteNote handleNoteMove={handleNoteMove} />
-          ) : null}
+          {isMovable && <DeleteNote handleNoteMove={handleNoteMove} />}
 
-          {pathname !== '/archive' ? (
-            <SetLabel
-              labels={labels}
-              handleLabels={handleLabels}
-            />
-          ) : null}
+          {pathname !== '/archive' && (
+            <SetLabel labels={labels} handleLabels={handleLabels} />
+          )}
         </div>
       </>
     );
   };
 
-  return (
-    <>
-      {renderItems()}
-    </>
-  );
+  return <>{renderItems()}</>;
 };
 
 NoteSettings.defaultProps = {

@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import _ from 'lodash';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import _ from 'lodash';
+
 import NotesList from '../components/notes/NotesList';
 import CreateNote from '../components/notes/CreateNote';
 
-// Redux
-import { connect } from 'react-redux';
-
 const AnyLabel = (props) => {
-  const { labelsList } = props;
+  const labelsList = useSelector((state) => state.labels.labels);
   const { labelId } = useParams();
   const [labels, setLabels] = useState([]);
 
@@ -29,17 +27,8 @@ const AnyLabel = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  labelsList: state.labels.labels,
-});
-
 AnyLabel.defaultProps = {
   labelId: null,
 };
 
-AnyLabel.propTypes = {
-  labelsList: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  labelId: PropTypes.string,
-};
-
-export default connect(mapStateToProps)(AnyLabel);
+export default AnyLabel;

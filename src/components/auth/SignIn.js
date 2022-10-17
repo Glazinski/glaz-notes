@@ -1,16 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import validate from '../../utils/validate';
-
-// Redux
-import { connect } from 'react-redux';
-import { signIn, clearForm } from '../../store/actions/authActions';
-
-// React router
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-
-// MUI
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -19,9 +10,10 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import MuiLink from '@material-ui/core/Link';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
-// MUI Icons
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+
+import validate from '../../utils/validate';
+import { signIn, clearForm } from '../../store/actions/authActions';
 
 const useStyles = makeStyles((theme) => ({
   ...theme.spreadThis,
@@ -46,7 +38,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignIn = (props) => {
+const SignIn = () => {
+  const dispatch = useDispatch();
+  const { loading, authErrors } = useSelector((state) => state.auth);
   const form = useRef(null);
 
   const [formData, setFormData] = useState({
@@ -61,20 +55,17 @@ const SignIn = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    props.signIn(formData);
+    dispatch(signIn(formData));
   };
 
   const classes = useStyles();
-  const { auth: { loading, authErrors } } = props;
   const [errors, setErrors] = useState({});
 
-  useEffect(() => () => props.clearForm(), []);
+  useEffect(() => () => dispatch(clearForm()), []);
 
   useEffect(() => {
     const err = validate(authErrors);
     setErrors({ ...err });
-
-    // return () => console.log('elo');
   }, [authErrors]);
 
   return (
@@ -121,7 +112,9 @@ const SignIn = (props) => {
               />
             </Grid>
             {errors.general && (
-            <Typography className={classes.customError} variant="body2">{errors.general}</Typography>
+              <Typography className={classes.customError} variant="body2">
+                {errors.general}
+              </Typography>
             )}
             <Grid
               container
@@ -150,7 +143,11 @@ const SignIn = (props) => {
                 >
                   Login
                   {loading && (
-                  <CircularProgress color="primary" size={24} className={classes.buttonProgress} />
+                    <CircularProgress
+                      color="primary"
+                      size={24}
+                      className={classes.buttonProgress}
+                    />
                   )}
                 </Button>
               </Grid>
@@ -162,14 +159,4 @@ const SignIn = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-});
-
-SignIn.propTypes = {
-  clearForm: PropTypes.func.isRequired,
-  signIn: PropTypes.func.isRequired,
-  auth: PropTypes.oneOfType([PropTypes.object]).isRequired,
-};
-
-export default connect(mapStateToProps, { signIn, clearForm })(SignIn);
+export default SignIn;

@@ -18,9 +18,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     flexGrow: 1,
     padding: theme.spacing(2),
-    // [theme.breakpoints.down('sm')]: {
-    //   minHeight: '100vh',
-    // },
   },
   paper: {
     maxWidth: 520,
@@ -59,9 +56,7 @@ const useStyles = makeStyles((theme) => ({
 
 const NoteForm = (props) => {
   const {
-    note: {
-      id, title, content, labels, imageUrl,
-    },
+    note: { id, title, content, labels, imageUrl },
     handleChange,
     handleClose,
     handleLabels,
@@ -75,7 +70,7 @@ const NoteForm = (props) => {
   const { pathname } = useLocation();
   const isBin = pathname === '/bin';
   const [open, setOpen] = useState(false);
-  const imgSrc = image || (imageUrl || null);
+  const imgSrc = image || imageUrl || null;
 
   useEffect(() => {
     textFieldEl.current.focus();
@@ -90,11 +85,12 @@ const NoteForm = (props) => {
   };
 
   return (
-    <div
-      // className={classes.root}
-      className={formClassName || classes.root}
-    >
-      <ImageContainer id={id} imageUrl={imgSrc} handleImageDelete={handleImageDelete} />
+    <div className={formClassName || classes.root}>
+      <ImageContainer
+        id={id}
+        imageUrl={imgSrc}
+        handleImageDelete={handleImageDelete}
+      />
       <div>
         <TextField
           onClick={isBin ? handleClick : null}
@@ -111,7 +107,6 @@ const NoteForm = (props) => {
             marginBottom: '20px',
             width: '96%',
           }}
-          // fullWidth
           multiline
           disabled={isBin}
         />
@@ -138,17 +133,15 @@ const NoteForm = (props) => {
       </div>
 
       <div className={classes.footer}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          margin: '10px 0',
-        }}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            margin: '10px 0',
+          }}
         >
-          <ChipList
-            handleLabels={handleLabels}
-            labels={labels}
-          />
+          <ChipList handleLabels={handleLabels} labels={labels} />
           <div>
             {date ? (
               <Typography
@@ -156,23 +149,20 @@ const NoteForm = (props) => {
                 className={classes.date}
                 variant="caption"
               >
-                Created at
-                {' '}
-                {date}
+                Created at {date}
               </Typography>
             ) : null}
           </div>
         </div>
 
-        <div
-          className={classes.setContainer}
-        >
-          <NoteSettings
-            {...props}
-            isHovered
-          />
-          <div style={{ flexGrow: 4, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button onClick={handleClose} color="inherit">Close</Button>
+        <div className={classes.setContainer}>
+          <NoteSettings {...props} isHovered />
+          <div
+            style={{ flexGrow: 4, display: 'flex', justifyContent: 'flex-end' }}
+          >
+            <Button onClick={handleClose} color="inherit">
+              Close
+            </Button>
           </div>
         </div>
       </div>

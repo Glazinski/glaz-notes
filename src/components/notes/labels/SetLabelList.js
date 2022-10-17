@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-
-// MUI
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
@@ -21,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
   item: {
     height: 25,
     margin: '5px 0',
-    // wordBreak: 'break-word',
   },
   iconBtn: {
     padding: '7px',
@@ -42,7 +39,6 @@ const SetLabelList = (props) => {
     const newChecked = [...checked];
     const newType = currentIndex !== -1 ? 'del' : 'add';
 
-    // console.log(_.mapKeys(labelsList, 'labelName')[value].labelId);
     setType(newType);
     setCurValue(value);
 
@@ -56,21 +52,13 @@ const SetLabelList = (props) => {
   };
 
   useEffect(() => {
-    // console.log(curValue, type);
     handleLabels(checked, curValue, type);
   }, [checked]);
 
-  // console.log(checked);
-  // console.log(labels);
-  // console.log(_.values(_.mapValues(labelsList, 'labelId')));
-
   return (
     <Paper className={classes.list}>
-      <List
-        subheader={<ListSubheader>Label note</ListSubheader>}
-      >
+      <List subheader={<ListSubheader>Label note</ListSubheader>}>
         {_.values(_.mapValues(labelsList, 'labelId')).map((labelId) => {
-          // const { labelName, labelId } = label;
           const id = `checkbox-list-label-${labelId}`;
 
           return (
@@ -90,10 +78,7 @@ const SetLabelList = (props) => {
                 disableRipple
                 inputProps={{ 'aria-labelledby': id }}
               />
-              <ListItemText
-                id={id}
-                primary={labelsList[labelId].labelName}
-              />
+              <ListItemText id={id} primary={labelsList[labelId].labelName} />
             </ListItem>
           );
         })}

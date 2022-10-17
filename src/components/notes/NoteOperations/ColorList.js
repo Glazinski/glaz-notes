@@ -59,7 +59,6 @@ const ColorList = (props) => {
   const { colorId, colors, handleColorChange } = props;
   const [checkedIndex, setCheckedIndex] = useState(colorId);
 
-
   const handleChecked = (colorName) => {
     handleColorChange(colorName);
     setCheckedIndex(colorName);
