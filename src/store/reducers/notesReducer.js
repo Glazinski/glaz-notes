@@ -54,7 +54,10 @@ export default (state = initState, action) => {
       return { ...state, loading: true };
 
     case CREATE_NOTE:
-      return { ...state, notes: { [action.payload.id]: action.payload, ...state.notes } };
+      return {
+        ...state,
+        notes: { [action.payload.id]: action.payload, ...state.notes },
+      };
 
     case DELETE_NOTE_FOREVER:
       return { ...state, notes: _.omit(state.notes, action.payload) };
@@ -92,7 +95,10 @@ export default (state = initState, action) => {
     case MOVE_NOTE_BACK:
       return {
         ...state,
-        notes: { [state.noteMoved.noteId]: state.noteMoved.note, ...state.notes },
+        notes: {
+          [state.noteMoved.noteId]: state.noteMoved.note,
+          ...state.notes,
+        },
         noteMoved: { open: false },
       };
 
@@ -156,9 +162,6 @@ export default (state = initState, action) => {
         filteredNotes: {
           ...action.payload.filteredNotes,
         },
-        // notes: {
-        //   ...action.payload.filteredNotes,
-        // },
       };
 
     case DELETE_NOTE_IMAGE: {
@@ -215,7 +218,7 @@ export default (state = initState, action) => {
       return { ...state, errors: null, loading: false };
 
     case SET_NOTE_ERRORS:
-      return { ...state, errrors: action.payload };
+      return { ...state, errors: action.payload };
 
     default:
       return state;

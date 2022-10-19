@@ -1,18 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import DrawerLabelList from '../components/notes/labels/DrawerLabelList';
-
-// REDUX
 import { connect } from 'react-redux';
-import { moveNoteClear } from '../store/actions/notesActions';
-import { openEditLabels } from '../store/actions/labelsActions';
-
-// React router
-import {
-  Link, useLocation,
-} from 'react-router-dom';
-
-// MUI
+import { Link, useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -20,12 +9,14 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-
-// MUI icons
 import EmojiObjectsOutlinedIcon from '@material-ui/icons/EmojiObjectsOutlined';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined';
+
+import { moveNoteClear } from '../store/actions/notesActions';
+import { openEditLabels } from '../store/actions/labelsActions';
+import DrawerLabelList from '../components/notes/labels/DrawerLabelList';
 
 const useStyles = makeStyles(() => ({
   item: {
@@ -74,25 +65,26 @@ const DrawerList = (props) => {
           selected={selectedIndex === '/'}
           onClick={() => handleItemClick('/')}
         >
-          <ListItemIcon><EmojiObjectsOutlinedIcon /></ListItemIcon>
+          <ListItemIcon>
+            <EmojiObjectsOutlinedIcon />
+          </ListItemIcon>
           <ListItemText primary="Notes" />
         </ListItem>
 
         <Divider />
 
-        <Typography className={classes.subtitle} variant="overline">LABELS</Typography>
+        <Typography className={classes.subtitle} variant="overline">
+          LABELS
+        </Typography>
         <DrawerLabelList
           itemClassName={classes.item}
           handleItemClick={handleItemClick}
           selectedIndex={selectedIndex}
         />
-        <ListItem
-          className={classes.item}
-          button
-          // onClick={handleOpenClick}
-          onClick={openEditLabels}
-        >
-          <ListItemIcon><EditOutlinedIcon /></ListItemIcon>
+        <ListItem className={classes.item} button onClick={openEditLabels}>
+          <ListItemIcon>
+            <EditOutlinedIcon />
+          </ListItemIcon>
           <ListItemText primary="Edit label" />
         </ListItem>
 
@@ -105,7 +97,9 @@ const DrawerList = (props) => {
           selected={selectedIndex === '/archive'}
           onClick={() => handleItemClick('/archive')}
         >
-          <ListItemIcon><ArchiveOutlinedIcon /></ListItemIcon>
+          <ListItemIcon>
+            <ArchiveOutlinedIcon />
+          </ListItemIcon>
           <ListItemText primary="Archive" />
         </ListItem>
 
@@ -117,7 +111,9 @@ const DrawerList = (props) => {
           selected={selectedIndex === '/bin'}
           onClick={() => handleItemClick('/bin')}
         >
-          <ListItemIcon><DeleteOutlinedIcon /></ListItemIcon>
+          <ListItemIcon>
+            <DeleteOutlinedIcon />
+          </ListItemIcon>
           <ListItemText primary="Bin" />
         </ListItem>
       </List>

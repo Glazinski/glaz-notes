@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import NoteSettings from './NoteSettings';
-import CustomSnackbar from '../CustomSnackbar';
-import ChipList from './labels/ChipList';
-import ImageContainer from '../ImageContainer';
 import { useLocation } from 'react-router-dom';
-
-// MUI
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
+
+import ChipList from './labels/ChipList';
+import ImageContainer from '../ImageContainer';
+import NoteSettings from './NoteSettings';
+import CustomSnackbar from '../CustomSnackbar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -143,7 +142,7 @@ const NoteForm = (props) => {
         >
           <ChipList handleLabels={handleLabels} labels={labels} />
           <div>
-            {date ? (
+            {date && (
               <Typography
                 style={{ marginTop: '10px' }}
                 className={classes.date}
@@ -151,7 +150,7 @@ const NoteForm = (props) => {
               >
                 Created at {date}
               </Typography>
-            ) : null}
+            )}
           </div>
         </div>
 

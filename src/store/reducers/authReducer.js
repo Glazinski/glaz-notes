@@ -1,8 +1,4 @@
-import {
-  SET_ERRORS,
-  CLEAR_ERRORS,
-  LOADING_USER,
-} from '../types';
+import { SET_ERRORS, CLEAR_ERRORS, LOADING_USER } from '../types';
 
 const initState = {
   authErrors: null,
@@ -12,11 +8,9 @@ const initState = {
 export default (state = initState, action) => {
   switch (action.type) {
     case CLEAR_ERRORS:
-      // console.log('login success');
       return { ...state, authErrors: null, loading: false };
 
     case SET_ERRORS:
-      // console.log('login failed', action.err);
       return { ...state, authErrors: action.err, loading: false };
 
     case LOADING_USER:

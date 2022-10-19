@@ -1,6 +1,11 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
+import { connect } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
+
+import UploadNoteImg from './NoteOperations/UploadNoteImg';
 import ChangeColor from './NoteOperations/ChangeColor';
 import DeleteNote from './NoteOperations/Delete';
 import DeleteForever from './NoteOperations/DeleteForever';
@@ -9,14 +14,6 @@ import ArchiveNote from './NoteOperations/ArchiveNote';
 import UnArchiveNote from './NoteOperations/UnArchiveNote';
 import StarNote from './NoteOperations/StarNote';
 import SetLabel from './NoteOperations/SetLabel';
-import UploadNoteImg from './NoteOperations/UploadNoteImg';
-import { useLocation } from 'react-router-dom';
-
-// Redux
-import { connect } from 'react-redux';
-
-// MUI
-import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   container: {

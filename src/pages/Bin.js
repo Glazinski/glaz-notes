@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import _ from 'lodash';
+import Button from '@material-ui/core/Button';
 
 import NotesList from '../components/notes/NotesList';
 import { deleteNotesForever } from '../store/actions/notesActions';
 import Confirm from '../components/Confirm';
-
-// MUI
-import Button from '@material-ui/core/Button';
 
 const Bin = (props) => {
   const dispatch = useDispatch();

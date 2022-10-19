@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-// MUI
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -19,13 +17,7 @@ const useStyles = makeStyles((theme) => ({
 
 const CustomSnackbar = (props) => {
   const classes = useStyles();
-  const {
-    open,
-    msg,
-    handleClose,
-    handleClick,
-    info,
-  } = props;
+  const { open, msg, handleClose, handleClick, info } = props;
 
   const handleSnackClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -53,7 +45,7 @@ const CustomSnackbar = (props) => {
       <SnackbarContent
         className={classes.root}
         message={msg}
-        action={(
+        action={
           <>
             {!info ? (
               <Button
@@ -74,7 +66,7 @@ const CustomSnackbar = (props) => {
               <CloseIcon fontSize="small" />
             </IconButton>
           </>
-        )}
+        }
       />
     </Snackbar>
   );

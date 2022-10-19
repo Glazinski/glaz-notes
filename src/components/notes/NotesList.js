@@ -51,12 +51,12 @@ const NoteList = (props) => {
 
   return (
     <div className={classes.container} ref={container}>
-      {layout && !loading ? (
+      {layout && !loading && (
         <Container
           layout={layout}
           msg={_.has(filteredNotes, 'msg') ? filteredNotes.msg : null}
         />
-      ) : null}
+      )}
     </div>
   );
 };

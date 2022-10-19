@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import DialogWindow from '../DialogWindow';
 import NoteForm from './NoteForm';
 import moment from 'moment';
-
-// Redux
-import { connect } from 'react-redux';
-import { updateNote, deleteNoteImage } from '../../store/actions/notesActions';
-
-// MUI
+import { useDispatch } from 'react-redux';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+
+import DialogWindow from '../DialogWindow';
+import { deleteNoteImage, updateNote } from '../../store/actions/notesActions';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -42,15 +39,12 @@ const DialogNote = (props) => {
   const {
     handleClose,
     open,
-    updateNote,
     color,
     coll,
     note,
-    deleteNoteImage,
-    note: {
-      id, content, title, createdAt,
-    },
+    note: { id, content, title, createdAt },
   } = props;
+  const dispatch = useDispatch();
   const classes = useStyles();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -68,12 +62,12 @@ const DialogNote = (props) => {
   const handleModalClose = () => {
     handleClose();
     if (formData.title !== title || formData.content !== content) {
-      updateNote(id, formData, coll);
+      dispatch(updateNote(id, formData, coll));
     }
   };
 
   const handleImageDelete = () => {
-    deleteNoteImage(id, coll);
+    dispatch(deleteNoteImage(id, coll));
   };
 
   useEffect(() => setFormData({ ...note }), [note]);
@@ -81,7 +75,11 @@ const DialogNote = (props) => {
   const date = createdAt ? moment(createdAt).format('MMM Do YY') : null;
 
   return (
-    <DialogWindow handleClose={handleModalClose} open={open} isFullScreen={fullScreen}>
+    <DialogWindow
+      handleClose={handleModalClose}
+      open={open}
+      isFullScreen={fullScreen}
+    >
       <Paper
         className={classes.container}
         style={color ? { backgroundColor: color } : null}
@@ -113,14 +111,12 @@ DialogNote.propTypes = {
   note: PropTypes.oneOfType([PropTypes.object]).isRequired,
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-  updateNote: PropTypes.func.isRequired,
   color: PropTypes.string,
   handleNoteMove: PropTypes.func,
   handleColor: PropTypes.func,
   handleStar: PropTypes.func,
   isStarred: PropTypes.bool,
   coll: PropTypes.string.isRequired,
-  deleteNoteImage: PropTypes.func.isRequired,
 };
 
-export default connect(null, { updateNote, deleteNoteImage })(DialogNote);
+export default DialogNote;

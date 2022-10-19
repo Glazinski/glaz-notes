@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Note from '../components/notes/Note';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+
+import Note from '../components/notes/Note';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -29,21 +30,24 @@ const useStyles = makeStyles((theme) => ({
 
 const Column = (props) => {
   const classes = useStyles();
-  const { notes, title, column: { id } } = props;
+  const {
+    notes,
+    title,
+    column: { id },
+  } = props;
 
   return (
     <div className={classes.container}>
       <Typography variant="overline" className={classes.title}>
         {id[id.length - 1] === '1' ? title : null}
       </Typography>
-      <div
-        className={classes.list}
-      >
-        {!notes.includes(null) ? notes.map((note, index) => (
-          <Note key={note.id} note={note} index={index} />
-        )) : null}
+      <div className={classes.list}>
+        {!notes.includes(null)
+          ? notes.map((note, index) => (
+              <Note key={note.id} note={note} index={index} />
+            ))
+          : null}
       </div>
-
     </div>
   );
 };

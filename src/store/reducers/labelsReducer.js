@@ -17,11 +17,9 @@ const initState = {
 export default (state = initState, action) => {
   switch (action.type) {
     case FETCH_LABELS:
-      // console.log(action);
       return { ...state, labels: { ...action.payload } };
 
     case CREATE_LABEL:
-      // console.log(state, action);
       return {
         ...state,
         labels: {

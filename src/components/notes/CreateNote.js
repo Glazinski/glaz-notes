@@ -73,15 +73,7 @@ const CreateNote = (props) => {
   });
   const [tmpImage, setTmpImage] = useState(null);
   const [tmpFD, setTmpFD] = useState(null);
-  const [isFocused, setIsFocused] = useState(false);
-
-  const handleFocus = () => {
-    setIsFocused(true);
-  };
-
-  const handleClose = () => {
-    setIsFocused(false);
-  };
+  const [isOpened, setIsOpened] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -111,8 +103,7 @@ const CreateNote = (props) => {
   };
 
   const resetForm = () => {
-    setTmpImage(null);
-    setTmpFD(null);
+    handleImageDelete();
     setFormData({
       ...formData,
       title: '',
@@ -133,20 +124,23 @@ const CreateNote = (props) => {
     }
   };
 
-  useEffect(() => {
+  const handleOpen = () => {
+    setIsOpened(true);
+  };
+
+  const handleSubmit = () => {
     const { title, content } = formData;
 
     if (
-      (!isFocused &&
-        (title.length > 0 || content.length > 0) &&
+      ((title.length > 0 || content.length > 0) &&
         (title.trim().length || content.trim().length)) ||
       tmpImage
     ) {
-      setFormData({ ...formData });
       const noteId = uniqid();
+
       if (
         labelIdParam &&
-        _.includes(formData.labels, labelsList[labelIdParam].labelId) === false
+        !_.includes(formData.labels, labelsList[labelIdParam].labelId)
       ) {
         changeNoteIdsHelper(noteId);
         // True as a third argument means that I don't want to
@@ -154,18 +148,22 @@ const CreateNote = (props) => {
         dispatch(createNote(noteId, formData, false));
       } else {
         changeNoteIdsHelper(noteId);
-
         dispatch(createNote(noteId, formData, true));
       }
 
       if (tmpFD) {
         dispatch(uploadNoteImage(noteId, tmpFD, 'notes'));
       }
-      resetForm();
-    } else {
-      resetForm();
     }
-  }, [isFocused]);
+  };
+
+  const handleClose = () => {
+    setIsOpened(false);
+
+    handleSubmit();
+
+    resetForm();
+  };
 
   useEffect(() => setFormData({ ...formData, labels }), [labels]);
 
@@ -173,13 +171,13 @@ const CreateNote = (props) => {
 
   return (
     <Paper
-      onClick={!isFocused ? handleFocus : null}
+      onClick={!isOpened ? handleOpen : null}
       className={classes.paper}
       elevation={5}
       variant="outlined"
       style={{ backgroundColor: color }}
     >
-      {isFocused ? (
+      {isOpened ? (
         <NoteForm
           note={formData}
           image={tmpImage}

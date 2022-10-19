@@ -1,18 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
 import CustomSnackbar from '../CustomSnackbar';
 import { moveNoteBack, moveNoteClear } from '../../store/actions/notesActions';
 
 const UndoNoteOperation = (props) => {
   const {
-    noteMoved: {
-      open,
-      from,
-      to,
-      noteId,
-      msg,
-    },
+    noteMoved: { open, from, to, noteId, msg },
     moveNoteClear,
     moveNoteBack,
   } = props;
@@ -43,4 +38,6 @@ UndoNoteOperation.propTypes = {
   moveNoteBack: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, { moveNoteBack, moveNoteClear })(UndoNoteOperation);
+export default connect(mapStateToProps, { moveNoteBack, moveNoteClear })(
+  UndoNoteOperation
+);

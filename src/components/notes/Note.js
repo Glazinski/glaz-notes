@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import _ from 'lodash';
-import PropTypes from 'prop-types';
-import DialogNote from './DialogNote';
-import NoteSettings from './NoteSettings';
-import ChipList from './labels/ChipList';
-import ImageContainer from '../ImageContainer';
-import { useLocation, useParams } from 'react-router-dom';
-
-// Redux
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import _ from 'lodash';
+import { useLocation, useParams } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+
+import { changeLabelNoteIds } from '../../store/actions/labelsActions';
 import {
   moveNoteFromTo,
   changeNoteColor,
@@ -17,23 +17,15 @@ import {
   deleteNoteFromState,
   uploadNoteImage,
 } from '../../store/actions/notesActions';
-
-import {
-  changeLabelNoteIds,
-} from '../../store/actions/labelsActions';
-
-// MUI
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import DialogNote from './DialogNote';
+import NoteSettings from './NoteSettings';
+import ChipList from './labels/ChipList';
+import ImageContainer from '../ImageContainer';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     position: 'relative',
-    // minHeight: 100,
     maxWidth: 238,
-    // maxWidth: '80%',
     backgroundColor: theme.palette.background.default,
     padding: '10px',
     margin: '10px 0',
@@ -67,7 +59,8 @@ const useStyles = makeStyles((theme) => ({
     overflowWrap: 'anywhere',
   },
   note: {
-    justifyContent: ({ view }) => (view === 'list' ? 'normal' : 'space-between'),
+    justifyContent: ({ view }) =>
+      view === 'list' ? 'normal' : 'space-between',
     marginRight: ({ view }) => (view === 'list' ? 'auto' : 'none'),
     '& > *': {
       margin: ({ view }) => (view === 'list' ? '0 10px' : '0'),
@@ -79,7 +72,6 @@ const Note = (props) => {
   const classes = useStyles(props);
   const {
     colors,
-    index,
     moveNoteFromTo,
     changeNoteColor,
     changeNoteLabels,
@@ -89,13 +81,14 @@ const Note = (props) => {
     uploadNoteImage,
     labelsList,
     view,
-    note: {
-      id, title, content, colorName, labels, imageUrl,
-    },
+    note: { id, title, content, colorName, labels, imageUrl },
   } = props;
   const { pathname } = useLocation();
   const { labelId: labelIdParam } = useParams();
-  const coll = pathname === '/' || pathname.includes('label') ? 'notes' : pathname.substr(1);
+  const coll =
+    pathname === '/' || pathname.includes('label')
+      ? 'notes'
+      : pathname.substr(1);
 
   const [open, setOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -134,11 +127,13 @@ const Note = (props) => {
 
   const handleLabels = (labelsArr, labelId, type) => {
     if (labelId && type) {
-      const shouldBeMoved = labelIdParam === labelsList[labelId].labelId && type === 'del';
+      const shouldBeMoved =
+        labelIdParam === labelsList[labelId].labelId && type === 'del';
 
-      const newNoteIds = type === 'del'
-        ? labelsList[labelId].noteIds.filter((item) => item !== id)
-        : [id, ...labelsList[labelId].noteIds];
+      const newNoteIds =
+        type === 'del'
+          ? labelsList[labelId].noteIds.filter((item) => item !== id)
+          : [id, ...labelsList[labelId].noteIds];
 
       changeLabelNoteIds(labelId, newNoteIds);
       changeNoteLabels(id, labelsArr);
@@ -150,29 +145,30 @@ const Note = (props) => {
 
   return (
     <ClickAwayListener onClickAway={handleHoverOff}>
-      <div
-        onMouseEnter={handleHoverOn}
-        onMouseLeave={handleHoverOff}
-      >
+      <div onMouseEnter={handleHoverOn} onMouseLeave={handleHoverOff}>
         <Paper
           className={classes.container}
           variant="outlined"
-          style={open ? {
-            backgroundColor: color,
-            opacity: '0',
-            maxWidth: view === 'list' ? '525px' : null,
-          } : {
-            backgroundColor: color,
-            opacity: '1',
-            maxWidth: view === 'list' ? '525px' : null,
-          }}
+          style={
+            open
+              ? {
+                  backgroundColor: color,
+                  opacity: '0',
+                  maxWidth: view === 'list' ? '525px' : null,
+                }
+              : {
+                  backgroundColor: color,
+                  opacity: '1',
+                  maxWidth: view === 'list' ? '525px' : null,
+                }
+          }
         >
           <div
             aria-hidden="true"
             className={classes.btn}
             onClick={handleClickOpen}
           />
-          {open ? (
+          {open && (
             <DialogNote
               handleClose={handleClose}
               open={open}
@@ -186,12 +182,10 @@ const Note = (props) => {
               handleImageUpload={handleImageUpload}
               coll={coll}
             />
-          ) : null}
+          )}
           <ImageContainer id={id} imageUrl={imageUrl} preview />
           {title.length <= 0 ? (
-            <div className={classes.content}>
-              {content}
-            </div>
+            <div className={classes.content}>{content}</div>
           ) : (
             <Typography className={classes.title} variant="h6">
               {title}
@@ -201,10 +195,7 @@ const Note = (props) => {
             {title.length <= 0 ? null : content}
           </div>
           <div style={{ margin: '10px 0' }}>
-            <ChipList
-              labels={labels}
-              handleLabels={handleLabels}
-            />
+            <ChipList labels={labels} handleLabels={handleLabels} />
           </div>
           <NoteSettings
             settingsClassName={classes.note}
@@ -225,7 +216,6 @@ const Note = (props) => {
 };
 
 Note.propTypes = {
-  index: PropTypes.number.isRequired,
   note: PropTypes.oneOfType([PropTypes.object]).isRequired,
   colors: PropTypes.oneOfType([PropTypes.object]).isRequired,
   labelsList: PropTypes.oneOfType([PropTypes.object]).isRequired,
@@ -245,15 +235,12 @@ const mapStateToProps = (state) => ({
   view: state.ui.view,
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    moveNoteFromTo,
-    changeNoteColor,
-    starNote,
-    changeNoteLabels,
-    changeLabelNoteIds,
-    deleteNoteFromState,
-    uploadNoteImage,
-  },
-)(Note);
+export default connect(mapStateToProps, {
+  moveNoteFromTo,
+  changeNoteColor,
+  starNote,
+  changeNoteLabels,
+  changeLabelNoteIds,
+  deleteNoteFromState,
+  uploadNoteImage,
+})(Note);
