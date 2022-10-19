@@ -1,34 +1,33 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { signOut } from '../../store/actions/authActions';
-import { changeTheme } from '../../store/actions/uiActions';
-import View from './View';
-
-// MUI
+import { useSelector, useDispatch } from 'react-redux';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import Hidden from '@material-ui/core/Hidden';
-
-// MUI icons
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 
-const Settings = (props) => {
-  const { signOut, changeTheme, theme } = props;
+import View from './View';
+import { changeTheme } from '../../store/actions/uiActions';
+import { signOut } from '../../store/actions/authActions';
+
+const Settings = () => {
+  const theme = useSelector((state) => state.ui.theme);
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
+
   const handleClick = (event) => setAnchorEl(event.currentTarget);
+
   const handleClose = () => setAnchorEl(null);
 
   const handleSignOut = () => {
-    signOut();
+    dispatch(signOut());
     handleClose();
   };
 
   const handleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
-    changeTheme(newTheme);
+    dispatch(changeTheme(newTheme));
     handleClose();
   };
 
@@ -58,9 +57,12 @@ const Settings = (props) => {
           horizontal: 'left',
         }}
       >
-        {/* <MenuItem onClick={handleClose}>Profile</MenuItem> */}
         <MenuItem onClick={handleTheme}>
-          {theme === 'dark' ? <span>Disable dark theme</span> : <span>Enable dark theme</span>}
+          {theme === 'dark' ? (
+            <span>Disable dark theme</span>
+          ) : (
+            <span>Enable dark theme</span>
+          )}
         </MenuItem>
         <MenuItem onClick={handleSignOut}>Logout</MenuItem>
       </Menu>
@@ -68,14 +70,4 @@ const Settings = (props) => {
   );
 };
 
-Settings.propTypes = {
-  signOut: PropTypes.func.isRequired,
-  changeTheme: PropTypes.func.isRequired,
-  theme: PropTypes.string.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  theme: state.ui.theme,
-});
-
-export default connect(mapStateToProps, { signOut, changeTheme })(Settings);
+export default Settings;

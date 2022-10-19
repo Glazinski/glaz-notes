@@ -1,8 +1,7 @@
 /* eslint-disable no-nested-ternary */
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
@@ -12,72 +11,34 @@ import MuiLink from '@material-ui/core/Link';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
-import validate from '../../utils/validate';
-import { signIn, clearForm } from '../../store/actions/authActions';
-
-const useStyles = makeStyles((theme) => ({
-  ...theme.spreadThis,
-  root: {
-    flexGrow: 1,
-    minHeight: '80vh',
-    textAlign: 'center',
-  },
-  avatarIcon: {
-    fontSize: 100,
-  },
-  paper: {
-    padding: theme.spacing(4),
-    width: '450px',
-    [theme.breakpoints.down('xs')]: {
-      backgroundColor: theme.palette.background.default,
-      border: 'none',
-    },
-  },
-  bottomContainer: {
-    marginTop: '20px',
-  },
-}));
+import { useStyles } from './styles';
+import { useForm } from '../../hooks/useForm';
+import { signIn } from '../../store/actions/authActions';
 
 const SignIn = () => {
   const dispatch = useDispatch();
-  const { loading, authErrors } = useSelector((state) => state.auth);
-  const form = useRef(null);
-
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+  const { loading } = useSelector((state) => state.auth);
+  const { formData, errors, handleChange, handleSubmit } = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+    onSubmit: (data) => {
+      dispatch(signIn(data));
+    },
   });
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    dispatch(signIn(formData));
-  };
-
   const classes = useStyles();
-  const [errors, setErrors] = useState({});
-
-  useEffect(() => () => dispatch(clearForm()), []);
-
-  useEffect(() => {
-    const err = validate(authErrors);
-    setErrors({ ...err });
-  }, [authErrors]);
 
   return (
-    <form ref={form} onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <Grid
         container
         alignItems="center"
-        justify="center"
+        justifyContent="center"
         className={classes.root}
       >
         <Paper className={classes.paper} variant="outlined">
-          <Grid container justify="center" spacing={2}>
+          <Grid container justifyContent="center" spacing={2}>
             <Grid item xs={12}>
               <AccountCircleIcon className={classes.avatarIcon} />
             </Grid>

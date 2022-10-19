@@ -1,12 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-// MUI
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
-
-// MUI icons
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined';
 
 const useStyles = makeStyles((theme) => ({
@@ -18,9 +14,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ArchiveNote = (props) => {
   const classes = useStyles();
-  const {
-    handleNoteMove,
-  } = props;
+  const { handleNoteMove } = props;
   const msg = 'Note archived';
 
   const onArchiveClick = () => {

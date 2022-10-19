@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import _ from 'lodash';
-
-// Redux
-import { connect } from 'react-redux';
-import { setFilteredNotes } from '../../store/actions/notesActions';
-
-// MUI
 import { alpha, makeStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
+
+import { setFilteredNotes } from '../../store/actions/notesActions';
 
 const useStyles = makeStyles((theme) => ({
   search: {
@@ -50,9 +46,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Search = (props) => {
+const Search = () => {
   const classes = useStyles();
-  const { notes, setFilteredNotes } = props;
+  const dispatch = useDispatch();
+  const notes = useSelector((state) => _.values(state.notes.notes));
   const [search, setSearch] = useState('');
 
   const handleChange = (event) => {
@@ -60,12 +57,19 @@ const Search = (props) => {
     setSearch(value);
   };
 
-  // TODO: Fix bug when user remove ltters from search bar
-  useEffect(() => {
+  const handleSearch = useCallback(() => {
     const filteredNotes = notes.filter((note) => {
-      const cond1 = note.title.toLowerCase().indexOf(search.toLowerCase());
-      const cond2 = note.content.toLowerCase().indexOf(search.toLowerCase());
-      if ((cond1 !== -1 || cond2 !== -1) && search.length > 0) {
+      const isSearchPhraseInTitle = note.title
+        .toLowerCase()
+        .indexOf(search.toLowerCase());
+      const isSearchPhraseInContent = note.content
+        .toLowerCase()
+        .indexOf(search.toLowerCase());
+
+      if (
+        (isSearchPhraseInTitle !== -1 || isSearchPhraseInContent !== -1) &&
+        search.length > 0
+      ) {
         return note;
       }
 
@@ -73,13 +77,21 @@ const Search = (props) => {
     });
 
     if (filteredNotes.length > 0) {
-      setFilteredNotes(_.keyBy(filteredNotes, 'id'));
-    } else if (search.length > 0) {
-      setFilteredNotes({ msg: 'No matching results.' });
-    } else {
-      setFilteredNotes({});
+      dispatch(setFilteredNotes(_.keyBy(filteredNotes, 'id')));
+      return;
     }
-  }, [search, _.values(notes).length]);
+
+    if (search.length > 0) {
+      dispatch(setFilteredNotes({ msg: 'No matching results.' }));
+      return;
+    }
+
+    dispatch(setFilteredNotes({}));
+  }, [search, notes.length]);
+
+  useEffect(() => {
+    handleSearch();
+  }, [handleSearch]);
 
   return (
     <div className={classes.search}>
@@ -100,13 +112,4 @@ const Search = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  notes: _.values(state.notes.notes),
-});
-
-Search.propTypes = {
-  notes: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object])).isRequired,
-  setFilteredNotes: PropTypes.func.isRequired,
-};
-
-export default connect(mapStateToProps, { setFilteredNotes })(Search);
+export default Search;
