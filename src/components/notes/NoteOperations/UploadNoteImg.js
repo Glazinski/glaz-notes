@@ -1,12 +1,8 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-
-// MUI
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
-
-// MUI icons
 import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,7 +38,10 @@ const UploadNoteImg = (props) => {
         ref={fileInput}
       />
       <Tooltip title="Add image" aria-label="Add image">
-        <IconButton onClick={() => fileInput.current.click()} className={classes.iconBtn}>
+        <IconButton
+          onClick={() => fileInput.current.click()}
+          className={classes.iconBtn}
+        >
           <ImageOutlinedIcon fontSize="small" />
         </IconButton>
       </Tooltip>

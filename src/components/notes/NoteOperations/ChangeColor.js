@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import ColorList from './ColorList';
-
-// MUI
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
-
-// MUI icons
 import PaletteOutlinedIcon from '@material-ui/icons/PaletteOutlined';
+
+import ColorList from './ColorList';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,9 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ChangeColor = (props) => {
   const classes = useStyles();
-  const {
-    colorId, handleColor,
-  } = props;
+  const { colorId, handleColor } = props;
   const [isHovered, setIsHovered] = useState(false);
 
   const handleHoverOn = () => {
@@ -52,14 +47,13 @@ const ChangeColor = (props) => {
       onMouseLeave={handleHoverOut}
     >
       <Tooltip title="Change color" aria-label="Change color">
-        <IconButton
-          className={classes.iconBtn}
-          aria-haspopup="true"
-        >
+        <IconButton className={classes.iconBtn} aria-haspopup="true">
           <PaletteOutlinedIcon fontSize="small" />
         </IconButton>
       </Tooltip>
-      {isHovered ? <ColorList colorId={colorId} handleColorChange={handleColorChange} /> : null}
+      {isHovered && (
+        <ColorList colorId={colorId} handleColorChange={handleColorChange} />
+      )}
     </div>
   );
 };

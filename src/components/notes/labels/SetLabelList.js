@@ -58,7 +58,7 @@ const SetLabelList = (props) => {
   return (
     <Paper className={classes.list}>
       <List subheader={<ListSubheader>Label note</ListSubheader>}>
-        {_.values(_.mapValues(labelsList, 'labelId')).map((labelId) => {
+        {_.keys(labelsList).map((labelId) => {
           const id = `checkbox-list-label-${labelId}`;
 
           return (

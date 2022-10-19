@@ -1,16 +1,5 @@
 import React, { useState, useRef } from 'react';
-import PropTypes from 'prop-types';
-import DialogWindow from '../../DialogWindow';
-import EditLabelList from './EditLabelList';
-
-// Redux
-import { connect } from 'react-redux';
-import {
-  createLabel,
-  closeEditLabels,
-} from '../../../store/actions/labelsActions';
-
-// MUI
+import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -19,11 +8,16 @@ import TextField from '@material-ui/core/TextField';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-
-// MUI icons
 import ClearIcon from '@material-ui/icons/Clear';
 import CheckIcon from '@material-ui/icons/Check';
 import AddIcon from '@material-ui/icons/Add';
+
+import EditLabelList from './EditLabelList';
+import DialogWindow from '../../DialogWindow';
+import {
+  createLabel,
+  closeEditLabels,
+} from '../../../store/actions/labelsActions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,13 +40,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditLabels = (props) => {
+const EditLabels = () => {
   const classes = useStyles();
-  const {
-    open,
-    createLabel,
-    closeEditLabels,
-  } = props;
+  const dispatch = useDispatch();
+  const open = useSelector((state) => state.labels.isEditLabelsOpen);
   const [isFocused, setIsFocused] = useState(false);
   const [newLabel, setNewLabel] = useState('');
   const textFieldEl = useRef(null);
@@ -75,12 +66,12 @@ const EditLabels = (props) => {
 
   const handleSubmit = () => {
     if (newLabel.trim().length > 0) {
-      createLabel(newLabel);
+      dispatch(createLabel(newLabel));
       setNewLabel('');
     }
   };
 
-  const handleClose = () => closeEditLabels();
+  const handleClose = () => dispatch(closeEditLabels());
 
   return (
     <DialogWindow open={open} handleClose={handleClose}>
@@ -92,13 +83,19 @@ const EditLabels = (props) => {
             <div className={classes.content}>
               {isFocused ? (
                 <Tooltip title="Cancel" aria-label="Cancel">
-                  <IconButton onClick={handleFocusOut} className={classes.iconBtn}>
+                  <IconButton
+                    onClick={handleFocusOut}
+                    className={classes.iconBtn}
+                  >
                     <ClearIcon fontSize="small" />
                   </IconButton>
                 </Tooltip>
               ) : (
                 <Tooltip title="Create lable" aria-label="Create lable">
-                  <IconButton onClick={handleFocusOn} className={classes.iconBtn}>
+                  <IconButton
+                    onClick={handleFocusOn}
+                    className={classes.iconBtn}
+                  >
                     <AddIcon fontSize="small" />
                   </IconButton>
                 </Tooltip>
@@ -117,7 +114,11 @@ const EditLabels = (props) => {
                 />
               </div>
               <Tooltip
-                style={isFocused ? { visibility: 'visible' } : { visibility: 'hidden' }}
+                style={
+                  isFocused
+                    ? { visibility: 'visible' }
+                    : { visibility: 'hidden' }
+                }
                 title="Create label"
                 aria-label="Create label"
               >
@@ -139,17 +140,4 @@ const EditLabels = (props) => {
   );
 };
 
-EditLabels.propTypes = {
-  open: PropTypes.bool.isRequired,
-  createLabel: PropTypes.func.isRequired,
-  closeEditLabels: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  open: state.labels.isEditLabelsOpen,
-});
-
-export default connect(mapStateToProps, {
-  createLabel,
-  closeEditLabels,
-})(EditLabels);
+export default EditLabels;

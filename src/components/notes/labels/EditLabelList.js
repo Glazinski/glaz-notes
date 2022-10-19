@@ -40,8 +40,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const EditLabelList = () => {
-  const labels = useSelector((state) => state.labels.labels);
   const dispatch = useDispatch();
+  const labels = useSelector((state) => state.labels.labels);
   const classes = useStyles();
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [isHoveredIndex, setIsHoveredIndex] = useState(null);
@@ -94,10 +94,10 @@ const EditLabelList = () => {
   const handleLabelDelete = (labelId) => {
     if (labelIdParam === labelId) {
       dispatch(removeLabel(labelId, true));
-      return;
+    } else {
+      dispatch(removeLabel(labelId));
     }
 
-    dispatch(removeLabel(labelId));
     handleClose();
   };
 
