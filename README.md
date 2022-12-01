@@ -18,7 +18,7 @@
 
 If you don't want to create an account you can log in using these credentials
 
-- email: textx@email.com
+- email: testx@email.com
 - pass: test1234
 
 ## Explanation
