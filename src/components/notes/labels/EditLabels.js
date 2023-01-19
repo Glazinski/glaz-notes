@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
@@ -12,30 +11,10 @@ import ClearIcon from '@material-ui/icons/Clear';
 import CheckIcon from '@material-ui/icons/Check';
 import AddIcon from '@material-ui/icons/Add';
 
+import { useStyles } from './EditLabelList.styles';
 import EditLabelList from './EditLabelList';
 import DialogWindow from '../../DialogWindow';
 import { createLabel, closeEditLabels } from '../../../store/labels/actions';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: 300,
-    padding: theme.spacing(2),
-  },
-  content: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    margin: '10px 0',
-  },
-  iconBtn: {
-    padding: 5,
-  },
-  footer: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    margin: '10px 0 0 0',
-  },
-}));
 
 const EditLabels = () => {
   const classes = useStyles();

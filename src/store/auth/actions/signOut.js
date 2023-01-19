@@ -1,5 +1,5 @@
 import { CLEAR_ERRORS } from '../types';
-import history from '../../../utils/history';
+import history from '../../../lib/router/history';
 
 export const signOut =
   () =>

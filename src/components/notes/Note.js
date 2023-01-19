@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { useLocation, useParams } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
+import { useStyles } from './Note.styles';
 import { changeLabelNoteIds } from '../../store/labels/actions';
 import {
   moveNoteFromTo,
@@ -22,54 +22,8 @@ import NoteSettings from './NoteSettings';
 import ChipList from './labels/ChipList';
 import ImageContainer from '../ImageContainer';
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    position: 'relative',
-    maxWidth: 238,
-    backgroundColor: theme.palette.background.default,
-    padding: '10px',
-    margin: '10px 0',
-    transition: 'background-color .3s ease, opacity .3s ease',
-    '&:hover': {
-      boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
-      cursor: 'default',
-    },
-    [theme.breakpoints.down('xs')]: {
-      maxWidth: 'none',
-      width: '100%',
-    },
-  },
-  title: {
-    wordBreak: 'break-word',
-    direction: 'rtl',
-    textAlign: 'left',
-    textIndent: '12%',
-  },
-  btn: {
-    position: 'absolute',
-    top: '0',
-    left: '0',
-    width: '100%',
-    height: '100%',
-    opacity: '0',
-  },
-  content: {
-    margin: '5px 0 5px 0',
-    minHeight: '20px',
-    overflowWrap: 'anywhere',
-  },
-  note: {
-    justifyContent: ({ view }) =>
-      view === 'list' ? 'normal' : 'space-between',
-    marginRight: ({ view }) => (view === 'list' ? 'auto' : 'none'),
-    '& > *': {
-      margin: ({ view }) => (view === 'list' ? '0 10px' : '0'),
-    },
-  },
-}));
-
 const Note = (props) => {
-  const classes = useStyles(props);
+  const classes = useStyles();
   const {
     colors,
     moveNoteFromTo,

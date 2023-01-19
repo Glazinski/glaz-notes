@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
-import calculateLayout from '../utils/calculateLayout';
+import calculateLayout from '../Layout/calculateLayout';
 
 const columnNumMap = {
   xs: 1,

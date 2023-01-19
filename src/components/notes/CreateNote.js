@@ -5,55 +5,13 @@ import PropTypes from 'prop-types';
 import uniqid from 'uniqid';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
+import { useStyles } from './CreateNote.styles';
 import NoteForm from './NoteForm';
 import { createNote, uploadNoteImage } from '../../store/notes/actions';
 import { changeLabelNoteIds } from '../../store/labels/actions';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    position: 'relative',
-    maxWidth: 520,
-    maxHeight: 620,
-    backgroundColor: theme.palette.background.default,
-    boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
-    margin: '0 auto 80px auto',
-    transition: 'background-color .3s ease',
-    overflowY: 'auto',
-  },
-  content: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: theme.spacing(1),
-  },
-  title: {
-    color: theme.palette.text.disabled,
-    marginLeft: '10px',
-  },
-  textField: {
-    borderBottom: 'none',
-    padding: '0 10px 0 10px',
-  },
-  button: {
-    color: theme.palette.text.primary,
-  },
-  textFieldLabel: {
-    '&::placeholder': {
-      color: theme.palette.text.primary,
-      fontWeight: 'bold',
-    },
-    resize: {
-      fontSize: 5,
-    },
-  },
-}));
 
 const CreateNote = (props) => {
   const classes = useStyles();

@@ -3,8 +3,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 
+import { useStyles } from './NoteSettings.styles';
 import UploadNoteImg from './NoteOperations/UploadNoteImg';
 import ChangeColor from './NoteOperations/ChangeColor';
 import DeleteNote from './NoteOperations/Delete';
@@ -14,28 +14,6 @@ import ArchiveNote from './NoteOperations/ArchiveNote';
 import UnArchiveNote from './NoteOperations/UnArchiveNote';
 import StarNote from './NoteOperations/StarNote';
 import SetLabel from './NoteOperations/SetLabel';
-
-const useStyles = makeStyles((theme) => ({
-  container: {
-    display: 'flex',
-    flexGrow: 1,
-    justifyContent: 'space-between',
-    transition: 'opacity .3s ease',
-  },
-  binContainer: {
-    display: 'flex',
-    marginTop: '5px',
-    marginLeft: '-6px',
-    transition: 'opacity .3s ease',
-  },
-  iconBtn: {
-    padding: '7px',
-    color: theme.palette.text.primary,
-  },
-  date: {
-    color: theme.palette.text.disabled,
-  },
-}));
 
 const NoteSettings = (props) => {
   const {

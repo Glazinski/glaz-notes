@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import _ from 'lodash';
-import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
@@ -12,29 +11,9 @@ import LabelIcon from '@material-ui/icons/Label';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import { useStyles } from './EditLabelList.styles';
 import { editLabelName, removeLabel } from '../../../store/labels/actions';
 import Confirm from '../../Confirm';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: 300,
-    padding: theme.spacing(2),
-  },
-  content: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    margin: '10px 0',
-  },
-  iconBtn: {
-    padding: 5,
-  },
-  footer: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    margin: '10px 0 0 0',
-  },
-}));
 
 const EditLabelList = () => {
   const dispatch = useDispatch();

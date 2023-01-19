@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { SET_NOTES } from '../../notes/types';
 import { DELETE_LABEL } from '../types';
-import history from '../../../utils/history';
+import history from '../../../lib/router/history';
 
 export const removeLabel =
   (labelId, move) =>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { clearForm } from '../store/auth/actions';
-import validate from '../utils/validate';
+import validate from '../validators/formValidator';
 
 export const useForm = (props) => {
   const { defaultValues, onSubmit } = props;

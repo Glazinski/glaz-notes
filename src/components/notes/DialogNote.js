@@ -3,37 +3,13 @@ import PropTypes from 'prop-types';
 import NoteForm from './NoteForm';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
+import { useStyles } from './DialogNote.styles';
 import DialogWindow from '../DialogWindow';
 import { deleteNoteImage, updateNote } from '../../store/notes/actions';
-
-const useStyles = makeStyles((theme) => ({
-  container: {
-    width: 500,
-    padding: '10px',
-    overflowWrap: 'anywhere',
-    transition: 'background-color .3s ease',
-    [theme.breakpoints.down('sm')]: {
-      width: 'auto',
-      padding: '0',
-    },
-  },
-  dialog: {
-    marginBottom: '200px',
-  },
-  formContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    flexGrow: 1,
-    padding: theme.spacing(2),
-    [theme.breakpoints.down('sm')]: {
-      minHeight: '100vh',
-    },
-  },
-}));
 
 const DialogNote = (props) => {
   const {

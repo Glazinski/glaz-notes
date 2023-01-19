@@ -14,12 +14,11 @@ const useStyles = makeStyles(() => ({
 const Container = (props) => {
   const { layout, msg } = props;
   const [initData, setInitData] = useState(layout);
+  const classes = useStyles();
 
   useEffect(() => {
     setInitData(layout);
   }, [layout]);
-
-  const classes = useStyles();
 
   if (msg)
     return (

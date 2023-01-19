@@ -2,20 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
 
+import { useStyles } from './NotesList.styles';
 import Container from '../../Layout/Container';
 import useResponsiveBreakpoints from '../../hooks/useResponsiveBreakpoints';
 import useMasonryLayout from '../../hooks/useMasonryLayout';
 import { fetchNotes } from '../../store/notes/actions';
-
-const useStyles = makeStyles(() => ({
-  container: {
-    width: '100%',
-    margin: '0 auto',
-  },
-}));
 
 const NoteList = (props) => {
   const classes = useStyles();

@@ -1,5 +1,5 @@
 import { LOADING_USER, CLEAR_ERRORS, SET_ERRORS } from '../types';
-import history from '../../../utils/history';
+import history from '../../../lib/router/history';
 
 export const signUp =
   (newUser) =>
