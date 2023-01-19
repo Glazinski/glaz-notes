@@ -8,7 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import DialogWindow from '../DialogWindow';
-import { deleteNoteImage, updateNote } from '../../store/actions/notesActions';
+import { deleteNoteImage, updateNote } from '../../store/notes/actions';
 
 const useStyles = makeStyles((theme) => ({
   container: {

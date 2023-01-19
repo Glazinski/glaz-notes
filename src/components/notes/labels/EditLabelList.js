@@ -12,10 +12,7 @@ import LabelIcon from '@material-ui/icons/Label';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import {
-  editLabelName,
-  removeLabel,
-} from '../../../store/actions/labelsActions';
+import { editLabelName, removeLabel } from '../../../store/labels/actions';
 import Confirm from '../../Confirm';
 
 const useStyles = makeStyles((theme) => ({

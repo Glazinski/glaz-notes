@@ -5,7 +5,7 @@ import { alpha, makeStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 
-import { setFilteredNotes } from '../../store/actions/notesActions';
+import { setFilteredNotes } from '../../store/notes/actions';
 
 const useStyles = makeStyles((theme) => ({
   search: {

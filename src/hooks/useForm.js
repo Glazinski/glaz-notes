@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { clearForm } from '../store/actions/authActions';
+import { clearForm } from '../store/auth/actions';
 import validate from '../utils/validate';
 
 export const useForm = (props) => {

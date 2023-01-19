@@ -14,8 +14,8 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined';
 
-import { moveNoteClear } from '../store/actions/notesActions';
-import { openEditLabels } from '../store/actions/labelsActions';
+import { moveNoteClear } from '../store/notes/actions';
+import { openEditLabels } from '../store/labels/actions';
 import DrawerLabelList from '../components/notes/labels/DrawerLabelList';
 
 const useStyles = makeStyles(() => ({

@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 import Confirm from '../../Confirm';
-import { deleteNoteForever } from '../../../store/actions/notesActions';
+import { deleteNoteForever } from '../../../store/notes/actions';
 
 const useStyles = makeStyles((theme) => ({
   iconBtn: {

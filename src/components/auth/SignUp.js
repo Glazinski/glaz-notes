@@ -11,7 +11,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import { useStyles } from './styles';
-import { signUp } from '../../store/actions/authActions';
+import { signUp } from '../../store/auth/actions';
 import { useForm } from '../../hooks/useForm';
 
 const SignUp = () => {

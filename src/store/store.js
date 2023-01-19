@@ -12,7 +12,7 @@ import {
 import { getFirebase } from 'react-redux-firebase';
 
 import firebase, { firebaseConfig } from '../lib/firebase/config';
-import reducers from './reducers';
+import reducers from './combinedReducers';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 export const store = createStore(

@@ -13,7 +13,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import { useStyles } from './styles';
 import { useForm } from '../../hooks/useForm';
-import { signIn } from '../../store/actions/authActions';
+import { signIn } from '../../store/auth/actions';
 
 const SignIn = () => {
   const dispatch = useDispatch();

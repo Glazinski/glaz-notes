@@ -8,7 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
-import { changeLabelNoteIds } from '../../store/actions/labelsActions';
+import { changeLabelNoteIds } from '../../store/labels/actions';
 import {
   moveNoteFromTo,
   changeNoteColor,
@@ -16,7 +16,7 @@ import {
   changeNoteLabels,
   deleteNoteFromState,
   uploadNoteImage,
-} from '../../store/actions/notesActions';
+} from '../../store/notes/actions';
 import DialogNote from './DialogNote';
 import NoteSettings from './NoteSettings';
 import ChipList from './labels/ChipList';

@@ -10,8 +10,8 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
 import NoteForm from './NoteForm';
-import { createNote, uploadNoteImage } from '../../store/actions/notesActions';
-import { changeLabelNoteIds } from '../../store/actions/labelsActions';
+import { createNote, uploadNoteImage } from '../../store/notes/actions';
+import { changeLabelNoteIds } from '../../store/labels/actions';
 
 const useStyles = makeStyles((theme) => ({
   root: {

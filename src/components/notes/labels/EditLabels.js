@@ -14,10 +14,7 @@ import AddIcon from '@material-ui/icons/Add';
 
 import EditLabelList from './EditLabelList';
 import DialogWindow from '../../DialogWindow';
-import {
-  createLabel,
-  closeEditLabels,
-} from '../../../store/actions/labelsActions';
+import { createLabel, closeEditLabels } from '../../../store/labels/actions';
 
 const useStyles = makeStyles((theme) => ({
   root: {

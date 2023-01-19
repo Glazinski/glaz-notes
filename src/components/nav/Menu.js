@@ -8,8 +8,8 @@ import Hidden from '@material-ui/core/Hidden';
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 
 import View from './View';
-import { changeTheme } from '../../store/actions/uiActions';
-import { signOut } from '../../store/actions/authActions';
+import { changeTheme } from '../../store/ui/actions';
+import { signOut } from '../../store/auth/actions';
 
 const Settings = () => {
   const theme = useSelector((state) => state.ui.theme);

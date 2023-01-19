@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ViewAgendaOutlinedIcon from '@material-ui/icons/ViewAgendaOutlined';
 import ViewCompactOutlinedIcon from '@material-ui/icons/ViewCompactOutlined';
 
-import { changeView } from '../../store/actions/uiActions';
+import { changeView } from '../../store/ui/actions';
 
 const View = () => {
   const dispatch = useDispatch();

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import CustomSnackbar from '../CustomSnackbar';
-import { moveNoteBack, moveNoteClear } from '../../store/actions/notesActions';
+import { moveNoteBack, moveNoteClear } from '../../store/notes/actions';
 
 const UndoNoteOperation = (props) => {
   const {

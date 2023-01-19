@@ -8,7 +8,7 @@ import _ from 'lodash';
 import Container from '../../Layout/Container';
 import useResponsiveBreakpoints from '../../hooks/useResponsiveBreakpoints';
 import useMasonryLayout from '../../hooks/useMasonryLayout';
-import { fetchNotes } from '../../store/actions/notesActions';
+import { fetchNotes } from '../../store/notes/actions';
 
 const useStyles = makeStyles(() => ({
   container: {

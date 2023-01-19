@@ -1,0 +1,7 @@
+export const FETCH_LABELS = 'FETCH_LABELS';
+export const CREATE_LABEL = 'CREATE_LABEL';
+export const EDIT_LABEL_NAME = 'EDIT_LABEL_NAME';
+export const ADD_NOTE_TO_LABEL = 'ADD_NOTE_TO_LABEL';
+export const OPEN_EDIT_LABELS = 'OPEN_EDIT_LABELS';
+export const CLOSE_EDIT_LABELS = 'CLOSE_EDIT_LABELS';
+export const DELETE_LABEL = 'DELETE_LABEL';
