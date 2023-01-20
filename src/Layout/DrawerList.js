@@ -14,22 +14,10 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined';
 
+import { useStyles } from './DrawerList.styles';
 import { moveNoteClear } from '../store/notes/actions';
 import { openEditLabels } from '../store/labels/actions';
 import DrawerLabelList from '../components/notes/labels/DrawerLabelList';
-
-const useStyles = makeStyles(() => ({
-  item: {
-    margin: '10px 0',
-    borderRadius: '0 50px 50px 0',
-  },
-  subtitle: {
-    margin: '15px 0 15px 15px',
-  },
-  selected: {
-    backgroundColor: 'red',
-  },
-}));
 
 const DrawerList = (props) => {
   const classes = useStyles();

@@ -1,27 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import PaletteOutlinedIcon from '@material-ui/icons/PaletteOutlined';
 
 import ColorList from './ColorList';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    position: 'relative',
-    zIndex: 1200,
-  },
-  iconBtn: {
-    padding: '7px',
-    color: theme.palette.text.primary,
-  },
-  test: {
-    position: 'absolute',
-    top: '-15px',
-    left: 0,
-  },
-}));
+import { useStyles } from './ChangeColor.styles';
 
 const ChangeColor = (props) => {
   const classes = useStyles();

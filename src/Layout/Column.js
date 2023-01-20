@@ -1,32 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
+import { useStyles } from './Column.styles';
 import Note from '../components/notes/Note';
-
-const useStyles = makeStyles((theme) => ({
-  container: {
-    position: 'relative',
-    minWidth: '256px',
-    borderRadius: '4px',
-    display: 'flex',
-    justifyContent: 'center',
-
-    [theme.breakpoints.down('xs')]: {
-      width: '100%',
-    },
-  },
-  title: {
-    position: 'absolute',
-    top: -20,
-    left: 10,
-  },
-  list: {
-    padding: '8px',
-    flexGrow: 1,
-  },
-}));
 
 const Column = (props) => {
   const classes = useStyles();

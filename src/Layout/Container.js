@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 
+import { useStyles } from './Container.styles';
 import Column from './Column';
-
-const useStyles = makeStyles(() => ({
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-}));
 
 const Container = (props) => {
   const { layout, msg } = props;

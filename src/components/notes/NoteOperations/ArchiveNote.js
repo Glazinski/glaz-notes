@@ -1,16 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined';
 
-const useStyles = makeStyles((theme) => ({
-  iconBtn: {
-    padding: '7px',
-    color: theme.palette.text.primary,
-  },
-}));
+import { useStyles } from './ArchiveNote.styles';
 
 const ArchiveNote = (props) => {
   const classes = useStyles();

@@ -1,16 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 
-const useStyles = makeStyles((theme) => ({
-  dialog: {
-    marginBottom: '200px',
-  },
-  [theme.breakpoints.down('sm')]: {
-    marginBottom: '0',
-  },
-}));
+import { useStyles } from './DialogWindow.styles';
 
 const DialogWindow = (props) => {
   const { open, handleClose, children, isFullScreen } = props;

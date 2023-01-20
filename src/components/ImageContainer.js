@@ -2,39 +2,12 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    position: 'relative',
-    marginBottom: 5,
-  },
-  image: {
-    width: '100%',
-  },
-  viewImage: {
-    display: 'block',
-    maxWidth: '100%',
-    maxHeight: '100%',
-    margin: 'auto',
-  },
-  delImage: {
-    position: 'absolute',
-    bottom: 10,
-    right: 10,
-    backgroundColor: theme.palette.background.default,
-    transition: 'opacity .3s ease',
-  },
-  loadingContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-}));
+import { useStyles } from './ImageContainer.styles';
 
 const ImageContainer = (props) => {
   const { id, imageUrl, handleImageDelete, preview } = props;

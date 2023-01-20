@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -9,22 +8,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 
-const listHeight = 50;
-
-const useStyles = makeStyles((theme) => ({
-  list: {
-    width: 225,
-    minHeight: listHeight,
-  },
-  item: {
-    height: 25,
-    margin: '5px 0',
-  },
-  iconBtn: {
-    padding: '7px',
-    color: theme.palette.text.primary,
-  },
-}));
+import { useStyles } from './SetLabelList.styles';
 
 const SetLabelList = (props) => {
   const classes = useStyles();

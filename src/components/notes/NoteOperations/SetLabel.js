@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
 import Popover from '@material-ui/core/Popover';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
@@ -9,23 +8,7 @@ import LabelOutlinedIcon from '@material-ui/icons/LabelOutlined';
 
 import SetLabelList from '../labels/SetLabelList';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    position: 'relative',
-  },
-  list: {
-    position: 'absolute',
-    top: '100%',
-    right: 0,
-    width: 225,
-    minHeight: 50,
-    zIndex: 99999,
-  },
-  iconBtn: {
-    padding: '7px',
-    color: theme.palette.text.primary,
-  },
-}));
+import { useStyles } from './SetLabel.styles';
 
 const SetLabel = (props) => {
   const classes = useStyles();

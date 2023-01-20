@@ -2,18 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { makeStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    position: 'relative',
-    zIndex: 1100,
-  },
-  chip: {
-    margin: '5px 0 5px 5px',
-  },
-}));
+import { useStyles } from './ChipList.styles';
 
 const ChipList = (props) => {
   const classes = useStyles();
